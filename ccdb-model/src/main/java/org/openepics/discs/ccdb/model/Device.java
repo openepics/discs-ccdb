@@ -75,10 +75,25 @@ public class Device extends ConfigurationEntity
     @Column(name = "serial_number")
     private String serialNumber; // TODO: rename to inventoryID
 
-    @Size(max = 64)
-    @Column(name = "asm_slot_name")
-    private String asmSlotName;
+    @JoinColumn(name = "component_type")
+    @ManyToOne(optional = false)
+    private ComponentType componentType;
+    
+    //-- assembly 
+    
+    @ManyToOne
+    @JoinColumn(name = "asm_slot")
+    private ComptypeAsm asmSlot;
 
+    @JoinColumn(name = "asm_parent")
+    @ManyToOne
+    private Device asmParent;
+    
+    @OneToMany(mappedBy = "asmParent")
+    private List<Device> asmChildren = new ArrayList<>();
+
+    // --- assembly
+    
 //    @Size(max = 255)
 //    @Column(name = "asm_description")
 //    private String asmDescription;
@@ -93,19 +108,10 @@ public class Device extends ConfigurationEntity
     private List<InstallationRecord> installationRecordList = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "device")
-    private List<DeviceArtifact> deviceArtifactList = new ArrayList<>();
+    private List<DeviceArtifact> deviceArtifactList = new ArrayList<>();  
 
-    @JoinColumn(name = "component_type")
-    @ManyToOne(optional = false)
-    private ComponentType componentType;
-
-    @OneToMany(mappedBy = "asmParent")
-    private List<Device> deviceList = new ArrayList<>();
-
-    @JoinColumn(name = "asm_parent")
-    @ManyToOne
-    private Device asmParent;
-
+    
+    
     @ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "device_tag",
                joinColumns = { @JoinColumn(name = "device_id") }, inverseJoinColumns = { @JoinColumn(name = "tag_id") })
@@ -136,12 +142,12 @@ public class Device extends ConfigurationEntity
         this.serialNumber = serialNumber;
     }
 
-    public String getAsmSlotName() {
-        return asmSlotName;
+    public ComptypeAsm getAsmSlot() {
+        return asmSlot;
     }
 
-    public void setAsmSlotName(String asmSlotName) {
-        this.asmSlotName = asmSlotName;
+    public void setAsmSlot(ComptypeAsm asmSlot) {
+        this.asmSlot = asmSlot;
     }
 
     public Device getAsmParent() {
@@ -199,9 +205,16 @@ public class Device extends ConfigurationEntity
 
     @XmlTransient
     @JsonIgnore
-    public List<Device> getDeviceList() {
-        return deviceList;
+    public List<Device> getAsmChildren() {
+        return asmChildren;
     }
+
+    
+//    @XmlTransient
+//    @JsonIgnore
+//    public List<Device> getDeviceList() {
+//        return deviceList;
+//    }
 
     public Device getAssemblyParent() {
         return asmParent;

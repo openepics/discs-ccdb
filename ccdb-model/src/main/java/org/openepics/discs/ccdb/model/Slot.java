@@ -87,9 +87,9 @@ public class Slot extends ConfigurationEntity implements EntityWithProperties, E
 //    @Column(name = "asm_comment")
 //    private String asmComment;
 
-    @Size(max = 64)
-    @Column(name = "asm_slot_name")
-    private String asmName;
+    @ManyToOne
+    @JoinColumn(name = "asm_slot")
+    private ComptypeAsm asmSlot;
 
     @Size(max = 255)
     @Column(name = "comment")
@@ -102,13 +102,20 @@ public class Slot extends ConfigurationEntity implements EntityWithProperties, E
     @ManyToOne(optional = false)
     private ComponentType componentType;
 
-    @OneToMany(mappedBy = "asmSlot")
-    private List<Slot> slotList = new ArrayList<>();
+    // -- assembly
+    
+//    @OneToMany(mappedBy = "asmSlot")
+//    private List<Slot> slotList = new ArrayList<>();
 
     @JoinColumn(name = "asm_parent")
     @ManyToOne
     private Slot asmParent;
 
+    @OneToMany(mappedBy = "asmParent")
+    private List<Slot> asmChildren = new ArrayList<>();
+    
+    // --- assembly
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "childSlot")
     private List<SlotPair> pairsInWhichThisSlotIsAChild = new ArrayList<>();
 
@@ -167,13 +174,13 @@ public class Slot extends ConfigurationEntity implements EntityWithProperties, E
         this.isHostingSlot = isHostingSlot;
     }
 
-    public String getAsmName() {
-        return asmName;
+    public ComptypeAsm getAsmSlot() {
+        return asmSlot;
     }
 
-    public void setAsmName(String asmName) {
-        this.asmName = asmName;
-    }
+    public void setAsmSlot(ComptypeAsm asmSlot) {
+        this.asmSlot = asmSlot;
+    }    
 
     public Slot getAsmParent() {
         return asmParent;
@@ -182,6 +189,8 @@ public class Slot extends ConfigurationEntity implements EntityWithProperties, E
     public void setAsmParent(Slot asmParent) {
         this.asmParent = asmParent;
     }
+
+    
 
 //    public String getAssemblyComment() {
 //        return asmComment;
@@ -217,11 +226,19 @@ public class Slot extends ConfigurationEntity implements EntityWithProperties, E
         this.componentType = componentType;
     }
 
+//    @XmlTransient
+//    @JsonIgnore
+//    public List<Slot> getSlotList() {
+//        return slotList;
+//    }
+
     @XmlTransient
     @JsonIgnore
-    public List<Slot> getSlotList() {
-        return slotList;
+    public List<Slot> getAsmChildren() {
+        return asmChildren;
     }
+    
+    
 
 //    public Slot getAssemblySlot() {
 //        return asmSlot;
