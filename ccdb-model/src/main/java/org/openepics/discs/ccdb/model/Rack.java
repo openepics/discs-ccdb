@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 /**
  * A rack for holding devices.
  * 
- * @author vuppala
+ * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
 @Table(name = "rack")

@@ -2,9 +2,9 @@
  * Copyright (c) 2014 European Spallation Source
  * Copyright (c) 2014 Cosylab d.d.
  *
- * This file is part of Controls Configuration Database.
+ * This file is part of CCDB System.
  *
- * Controls Configuration Database is free software: you can redistribute it
+ * CCDB is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the License,
  * or any newer version.
@@ -46,7 +46,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  *
- * @author vuppala
+ *  A device. See DISCS nomenclature for definition of a device.
+ * 
+ * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
 @Table(name = "device", indexes = { @Index(columnList = "serial_number", unique = true), @Index(columnList = "component_type") })
@@ -71,15 +73,15 @@ public class Device extends ConfigurationEntity
     @NotNull
     @Size(min = 1, max = 64)
     @Column(name = "serial_number")
-    private String serialNumber;
+    private String serialNumber; // TODO: rename to inventoryID
 
-    @Size(max = 16)
-    @Column(name = "asm_position")
-    private String asmPosition;
+    @Size(max = 64)
+    @Column(name = "asm_slot_name")
+    private String asmSlotName;
 
-    @Size(max = 255)
-    @Column(name = "asm_description")
-    private String asmDescription;
+//    @Size(max = 255)
+//    @Column(name = "asm_description")
+//    private String asmDescription;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "device")
     private List<DevicePropertyValue> devicePropertyList = new ArrayList<>();
@@ -134,19 +136,35 @@ public class Device extends ConfigurationEntity
         this.serialNumber = serialNumber;
     }
 
-    public String getAssemblyPosition() {
-        return asmPosition;
-    }
-    public void setAssemblyPosition(String asmPosition) {
-        this.asmPosition = asmPosition;
+    public String getAsmSlotName() {
+        return asmSlotName;
     }
 
-    public String getAssemblyDescription() {
-        return asmDescription;
+    public void setAsmSlotName(String asmSlotName) {
+        this.asmSlotName = asmSlotName;
     }
-    public void setAssemblyDescription(String asmDescription) {
-        this.asmDescription = asmDescription;
+
+    public Device getAsmParent() {
+        return asmParent;
     }
+
+    public void setAsmParent(Device asmParent) {
+        this.asmParent = asmParent;
+    }
+
+//    public String getAssemblyPosition() {
+//        return asmPosition;
+//    }
+//    public void setAssemblyPosition(String asmPosition) {
+//        this.asmPosition = asmPosition;
+//    }
+//
+//    public String getAssemblyDescription() {
+//        return asmDescription;
+//    }
+//    public void setAssemblyDescription(String asmDescription) {
+//        this.asmDescription = asmDescription;
+//    }
 
     @XmlTransient
     @JsonIgnore

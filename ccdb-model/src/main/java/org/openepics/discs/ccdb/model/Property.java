@@ -2,9 +2,9 @@
  * Copyright (c) 2014 European Spallation Source
  * Copyright (c) 2014 Cosylab d.d.
  *
- * This file is part of Controls Configuration Database.
+ * This file is part of CCDB System.
  *
- * Controls Configuration Database is free software: you can redistribute it
+ * CCDB is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the License,
  * or any newer version.
@@ -76,6 +76,11 @@ public class Property extends ConfigurationEntity implements NamedEntity {
     private Unit unit;
 
     @Basic(optional = false)
+    @Column(name = "loc")
+    @Enumerated(EnumType.STRING)
+    private LevelOfControl levelOfControl = LevelOfControl.NONE;
+    
+    @Basic(optional = false)
     @Column(name = "value_unique")
     @Enumerated(EnumType.STRING)
     private PropertyValueUniqueness valueUniqueness = PropertyValueUniqueness.NONE;
@@ -144,6 +149,14 @@ public class Property extends ConfigurationEntity implements NamedEntity {
         this.unit = unit;
     }
 
+    public LevelOfControl getLevelOfControl() {
+        return levelOfControl;
+    }
+
+    public void setLevelOfControl(LevelOfControl levelOfControl) {
+        this.levelOfControl = levelOfControl;
+    }
+   
     /** @return the type of the property value uniqueness as defined in {@link PropertyValueUniqueness} enumeration */
     public PropertyValueUniqueness getValueUniqueness() {
         return valueUniqueness;

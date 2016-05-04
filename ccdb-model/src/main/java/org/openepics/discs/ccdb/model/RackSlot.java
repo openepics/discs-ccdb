@@ -35,7 +35,7 @@ import javax.validation.constraints.NotNull;
 /**
  * The slot in a rack. Note that this is very different from a device slot (Slot.java).
  * 
- * @author vuppala
+ * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
 @Table(name = "rack_slot", uniqueConstraints=@UniqueConstraint(columnNames={"rack", "side", "slot_number"}))

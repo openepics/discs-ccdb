@@ -2,9 +2,9 @@
  * Copyright (c) 2014 European Spallation Source
  * Copyright (c) 2014 Cosylab d.d.
  *
- * This file is part of Controls Configuration Database.
+ * This file is part of CCDB System.
  *
- * Controls Configuration Database is free software: you can redistribute it
+ * CCDB is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the License,
  * or any newer version.
@@ -81,15 +81,15 @@ public class Slot extends ConfigurationEntity implements EntityWithProperties, E
     @Basic(optional = false)
     @NotNull
     @Column(name = "is_hosting_slot")
-    private boolean isHostingSlot;
+    private boolean isHostingSlot; // TODO: rename to isInstallationSlot
 
-    @Size(max = 255)
-    @Column(name = "asm_comment")
-    private String asmComment;
+//    @Size(max = 255)
+//    @Column(name = "asm_comment")
+//    private String asmComment;
 
-    @Size(max = 16)
-    @Column(name = "asm_position")
-    private String asmPosition;
+    @Size(max = 64)
+    @Column(name = "asm_slot_name")
+    private String asmName;
 
     @Size(max = 255)
     @Column(name = "comment")
@@ -105,9 +105,9 @@ public class Slot extends ConfigurationEntity implements EntityWithProperties, E
     @OneToMany(mappedBy = "asmSlot")
     private List<Slot> slotList = new ArrayList<>();
 
-    @JoinColumn(name = "asm_slot")
+    @JoinColumn(name = "asm_parent")
     @ManyToOne
-    private Slot asmSlot;
+    private Slot asmParent;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "childSlot")
     private List<SlotPair> pairsInWhichThisSlotIsAChild = new ArrayList<>();
@@ -167,19 +167,35 @@ public class Slot extends ConfigurationEntity implements EntityWithProperties, E
         this.isHostingSlot = isHostingSlot;
     }
 
-    public String getAssemblyComment() {
-        return asmComment;
-    }
-    public void setAssemblyComment(String asmComment) {
-        this.asmComment = asmComment;
+    public String getAsmName() {
+        return asmName;
     }
 
-    public String getAssemblyPosition() {
-        return asmPosition;
+    public void setAsmName(String asmName) {
+        this.asmName = asmName;
     }
-    public void setAssemblyPosition(String asmPosition) {
-        this.asmPosition = asmPosition;
+
+    public Slot getAsmParent() {
+        return asmParent;
     }
+
+    public void setAsmParent(Slot asmParent) {
+        this.asmParent = asmParent;
+    }
+
+//    public String getAssemblyComment() {
+//        return asmComment;
+//    }
+//    public void setAssemblyComment(String asmComment) {
+//        this.asmComment = asmComment;
+//    }
+//
+//    public String getAssemblyPosition() {
+//        return asmPosition;
+//    }
+//    public void setAssemblyPosition(String asmPosition) {
+//        this.asmPosition = asmPosition;
+//    }
 
     public String getComment() {
         return comment;
@@ -207,12 +223,12 @@ public class Slot extends ConfigurationEntity implements EntityWithProperties, E
         return slotList;
     }
 
-    public Slot getAssemblySlot() {
-        return asmSlot;
-    }
-    public void setAssemblySlot(Slot asmSlot) {
-        this.asmSlot = asmSlot;
-    }
+//    public Slot getAssemblySlot() {
+//        return asmSlot;
+//    }
+//    public void setAssemblySlot(Slot asmSlot) {
+//        this.asmSlot = asmSlot;
+//    }
 
     @XmlTransient
     @JsonIgnore

@@ -2,9 +2,9 @@
  * Copyright (c) 2014 European Spallation Source
  * Copyright (c) 2014 Cosylab d.d.
  *
- * This file is part of Controls Configuration Database.
+ * This file is part of CCDB System.
  *
- * Controls Configuration Database is free software: you can redistribute it
+ * CCDB is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the License,
  * or any newer version.
