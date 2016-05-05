@@ -20,6 +20,6 @@ package org.openepics.discs.ccdb.model;
  *
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
-public enum ProcessStatus {
+public enum PhaseStatus {
     NOT_STARTED, IN_PROGRESS, COMPLETED;
 }

@@ -23,24 +23,34 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-public class CMStatus extends ConfigurationEntity {
+@Table(name = "lc_status")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "LifecycleStatus.findAll", query = "SELECT d FROM LifecycleStatus d"),
+    @NamedQuery(name = "LifecycleStatus.findByRequirement", query = "SELECT d FROM LifecycleStatus d WHERE d.requirement = :requirement")
+})
+public class LifecycleStatus extends ConfigurationEntity {
 
     private static final long serialVersionUID = 1L;
     
     @ManyToOne(optional = false)
-    @JoinColumn(name = "process")
-    private CMProcess process;
+    @JoinColumn(name = "requirement")
+    private LifecycleRequirement requirement;
     
     @Basic(optional = false)
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private ProcessStatus status = ProcessStatus.NOT_STARTED;
+    private PhaseStatus status = PhaseStatus.NOT_STARTED;
 
     @Override
     public int hashCode() {
@@ -52,10 +62,10 @@ public class CMStatus extends ConfigurationEntity {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CMStatus)) {
+        if (!(object instanceof LifecycleStatus)) {
             return false;
         }
-        CMStatus other = (CMStatus) object;
+        LifecycleStatus other = (LifecycleStatus) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -69,20 +79,20 @@ public class CMStatus extends ConfigurationEntity {
     
     // --
 
-    public CMProcess getProcess() {
-        return process;
-    }
-
-    public void setProcess(CMProcess process) {
-        this.process = process;
-    }
-
-    public ProcessStatus getStatus() {
+    public PhaseStatus getStatus() {
         return status;
     }
 
-    public void setStatus(ProcessStatus status) {
+    public void setStatus(PhaseStatus status) {
         this.status = status;
+    }
+
+    public LifecycleRequirement getRequirement() {
+        return requirement;
+    }
+
+    public void setRequirement(LifecycleRequirement requirement) {
+        this.requirement = requirement;
     }
     
 }

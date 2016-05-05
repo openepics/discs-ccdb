@@ -136,7 +136,7 @@ public class NewPropertyView extends PropertyView implements Iterable<String> {
         this.batchPropertyConflicts = batchPropertyConflicts;
     }
 
-    /** @see org.openepics.discs.conf.views.PropertyView#nameValidator(java.lang.String) */
+    /** @see org.openepics.discs.ccdb.gui.views.PropertyView#nameValidator(java.lang.String) */
     @Override
     public void nameValidator(String propertyName) {
         if (isBatchCreation) {

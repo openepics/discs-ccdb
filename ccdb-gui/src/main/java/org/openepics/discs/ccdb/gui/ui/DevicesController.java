@@ -219,7 +219,7 @@ public class DevicesController implements SimpleTableExporter, ExcelSingleFileIm
         }
     }
 
-    /** @see org.openepics.discs.conf.ui.common.ExcelImportUIHandlers#doImport() */
+    /** @see org.openepics.discs.ccdb.gui.ui.common.ExcelImportUIHandlers#doImport() */
     @Override
     public void doImport() {
         excelSingleFileImportUI.doImport();
@@ -227,39 +227,39 @@ public class DevicesController implements SimpleTableExporter, ExcelSingleFileIm
         prepareDevicesForDisplay(null);
     }
 
-    /** @see org.openepics.discs.conf.ui.common.ExcelImportUIHandlers#prepareImportPopup() */
+    /** @see org.openepics.discs.ccdb.gui.ui.common.ExcelImportUIHandlers#prepareImportPopup() */
     @Override
     public void prepareImportPopup() {
         excelSingleFileImportUI.prepareImportPopup();
     }
 
-    /** @see org.openepics.discs.conf.ui.common.ExcelImportUIHandlers#setDataLoader() */
+    /** @see org.openepics.discs.ccdb.gui.ui.common.ExcelImportUIHandlers#setDataLoader() */
     @Override
     public void setDataLoader() {
         excelSingleFileImportUI.setDataLoader();
     }
 
-    /** @see org.openepics.discs.conf.ui.common.ExcelImportUIHandlers#getLoaderResult() */
+    /** @see org.openepics.discs.ccdb.gui.ui.common.ExcelImportUIHandlers#getLoaderResult() */
     @Override
     public DataLoaderResult getLoaderResult() {
         return excelSingleFileImportUI.getLoaderResult();
     }
 
     /**
-     * @see org.openepics.discs.conf.ui.common.ExcelSingleFileImportUIHandlers#handleImportFileUpload(FileUploadEvent)
+     * @see org.openepics.discs.ccdb.gui.ui.common.ExcelSingleFileImportUIHandlers#handleImportFileUpload(FileUploadEvent)
      */
     @Override
     public void handleImportFileUpload(FileUploadEvent event) {
         excelSingleFileImportUI.handleImportFileUpload(event);
     }
 
-    /** @see org.openepics.discs.conf.ui.common.ExcelSingleFileImportUIHandlers#getExcelImportFileName() */
+    /** @see org.openepics.discs.ccdb.gui.ui.common.ExcelSingleFileImportUIHandlers#getExcelImportFileName() */
     @Override
     public String getExcelImportFileName() {
         return excelSingleFileImportUI.getExcelImportFileName();
     }
 
-    /** @see org.openepics.discs.conf.ui.common.ExcelImportUIHandlers#getImportedFileStatistics() */
+    /** @see org.openepics.discs.ccdb.gui.ui.common.ExcelImportUIHandlers#getImportedFileStatistics() */
     @Override
     public ImportFileStatistics getImportedFileStatistics() {
         return excelSingleFileImportUI.getImportedFileStatistics();
@@ -267,14 +267,14 @@ public class DevicesController implements SimpleTableExporter, ExcelSingleFileIm
 
     /**
      * @return the import statistics for the imported file
-     * @see org.openepics.discs.conf.ui.common.AbstractExcelSingleFileImportUI#getImportFileStatistics() */
+     * @see org.openepics.discs.ccdb.gui.ui.common.AbstractExcelSingleFileImportUI#getImportFileStatistics() */
     public ImportFileStatistics getImportFileStatistics() {
         return excelSingleFileImportUI.getImportFileStatistics();
     }
 
     /**
      * @return the dialog containing a simple error message
-     * @see org.openepics.discs.conf.ui.common.AbstractExcelSingleFileImportUI#getSimpleErrorTableExportDialog() */
+     * @see org.openepics.discs.ccdb.gui.ui.common.AbstractExcelSingleFileImportUI#getSimpleErrorTableExportDialog() */
     public ExportSimpleTableDialog getSimpleErrorTableExportDialog() {
         return excelSingleFileImportUI.getSimpleErrorTableExportDialog();
     }

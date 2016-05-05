@@ -19,15 +19,26 @@ package org.openepics.discs.ccdb.model;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-public class CMProcess extends ConfigurationEntity {
+@Table(name = "lc_phase", indexes = { @Index(columnList = "name", unique = true) })
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "LifecyclePhase.findAll", query = "SELECT d FROM LifecyclePhase d"),
+    @NamedQuery(name = "LifecyclePhase.findByName", query = "SELECT d FROM LifecyclePhase d WHERE d.name = :name")
+})
+public class LifecyclePhase extends ConfigurationEntity {
 
     private static final long serialVersionUID = 1L; 
 
@@ -53,10 +64,10 @@ public class CMProcess extends ConfigurationEntity {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CMProcess)) {
+        if (!(object instanceof LifecyclePhase)) {
             return false;
         }
-        CMProcess other = (CMProcess) object;
+        LifecyclePhase other = (LifecyclePhase) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
