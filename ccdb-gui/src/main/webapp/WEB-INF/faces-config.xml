@@ -66,7 +66,7 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>properties</from-outcome>
-            <to-view-id>/properties.xhtml</to-view-id>
+            <to-view-id>/property/properties.xhtml</to-view-id>
             <redirect/>
         </navigation-case>  
         <navigation-case>

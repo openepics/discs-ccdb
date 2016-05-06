@@ -75,13 +75,13 @@ public class ComponentType extends ConfigurationEntity
     @NotNull
     @Size(min = 1, max = 32)
     @Column(name = "comp_type_rev")
-    private String compTypeRev;
+    private String compTypeRev = "r0";
     
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 32)
     @Column(name = "comp_type_ver")
-    private String compTypeVersion;
+    private String compTypeVersion = "v0";
     
     @Size(max = 255)
     @Column(name = "description")
@@ -183,6 +183,7 @@ public class ComponentType extends ConfigurationEntity
 
     @XmlTransient
     @JsonIgnore
+    @Override
     public Set<Tag> getTags() {
         return tags;
     }

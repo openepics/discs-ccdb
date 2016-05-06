@@ -60,6 +60,8 @@ public class ConfigurationEntity implements Serializable {
     protected String modifiedBy;
 
     @Version
+    @Basic
+    @Column(name = "version")
     protected Long version;
 
     /**

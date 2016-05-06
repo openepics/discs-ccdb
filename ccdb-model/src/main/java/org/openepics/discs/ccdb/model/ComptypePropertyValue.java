@@ -25,7 +25,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -42,7 +41,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author vuppala
  */
 @Entity
-@Table(name = "comptype_property_value", indexes = { @Index(columnList = "component_type, prop_value") })
+//@Table(name = "comptype_property_value", indexes = { @Index(columnList = "component_type, prop_value") })
+@Table(name = "comptype_property_value")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ComptypePropertyValue.findAll", query = "SELECT c FROM ComptypePropertyValue c"),

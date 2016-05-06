@@ -26,14 +26,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import static javax.persistence.TemporalType.DATE;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
+@Table(name = "asm_archive_record")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "AsmArchiveRecord.findAll", query = "SELECT a FROM AsmArchiveRecord a ORDER BY a.id DESC"),
+    @NamedQuery(name = "AsmArchiveRecord.findByDevice", query = "SELECT a FROM AsmArchiveRecord a WHERE a.parent = :parent ORDER BY a.installedAt DESC")
+})
 public class AsmArchiveRecord implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,7 +66,7 @@ public class AsmArchiveRecord implements Serializable {
     @Basic(optional = false)
     @Column(name = "installed_at")
     @Temporal(DATE)
-    private Date installedOAt;
+    private Date installedAt;
     
     @Basic(optional = false)
     @Column(name = "uninstalled_at")
@@ -130,12 +140,12 @@ public class AsmArchiveRecord implements Serializable {
         this.slotName = slotName;
     }
 
-    public Date getInstalledOAt() {
-        return installedOAt;
+    public Date getInstalledAt() {
+        return installedAt;
     }
 
-    public void setInstalledOAt(Date installedOAt) {
-        this.installedOAt = installedOAt;
+    public void setInstalledAt(Date installedAt) {
+        this.installedAt = installedAt;
     }
 
     public Date getUninstalledAt() {
