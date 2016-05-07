@@ -61,7 +61,7 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>device-types</from-outcome>
-            <to-view-id>/type/index.xhtml</to-view-id>
+            <to-view-id>/type/device-types.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
@@ -81,7 +81,7 @@
         </navigation-case>   
         <navigation-case>
             <from-outcome>log</from-outcome>
-            <to-view-id>/base/log.xhtml</to-view-id>
+            <to-view-id>/admin/log.xhtml</to-view-id>
             <redirect/>
         </navigation-case>     
         <navigation-case>
@@ -111,7 +111,7 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>auth</from-outcome>
-            <to-view-id>/auth/index.xhtml</to-view-id>
+            <to-view-id>/admin/auth/index.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule>

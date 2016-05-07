@@ -1,4 +1,4 @@
-<ui:composition template="/template/template.xhtml" 
+<ui:composition template="/WEB-INF/template/template.xhtml" 
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html"
@@ -11,18 +11,17 @@
                 // <![CDATA[
                 function closeDialogActions(widgetVar) {
                     if (widgetVar != null) PF(widgetVar).hide();
-                    PF('unitsTableVar').clearFilters();
+                    PF('unitsTableVar').clearFilters();                    
                 }
                 // ]]>
             </script>
             <p:growl id="growl" showDetail="true" globalOnly="true"/>
-            <p:fieldset id="unitsFieldset" legend="Units" style="box-sizing: border-box; height: calc(100vh - 7em);">
-                <div style="height: calc(100% - 3em)">
+            
                     <p:dataTable widgetVar="unitsTableVar" var="unit" id="unitsTable" value="#{unitManager.unitViews}" 
-                            scrollable="true" scrollWidth="100%" scrollHeight="100%" emptyMessage="No records found." 
+                            scrollable="true"  emptyMessage="No records found." 
                             selection="#{unitManager.selectedUnits}" selectionMode="multiple" rowKey="#{unit.unit.id}" 
                             resizableColumns="true" tableStyle="word-wrap: break-word;" 
-                            filteredValue="#{unitManager.filteredUnits}" liveScroll="true" scrollRows="50">
+                            filteredValue="#{unitManager.filteredUnits}" scrollRows="20"  scrollHeight="600" styleClass="ccdbDatatable">
                         <p:ajax event="filter" update="unitsForm:exportButton" />
                         <p:ajax event="rowSelect" update=":unitsForm:deleteButton :unitsForm:editButton 
                                 :unitsForm:duplicateButton" />
@@ -44,7 +43,7 @@
                             <h:outputText value="#{unit.symbol}" />
                         </p:column>
                     </p:dataTable>
-                </div>
+            
 
                 <p:commandButton id="duplicateButton" icon="ui-icon-copy" value="Duplicate" title="Duplicate Selected" 
                     style="float: right; margin-top: 1em;" 
@@ -54,10 +53,6 @@
                     style="float: right; margin: 1em 1ex 0 0;" oncomplete="PF('exportUnits').show();" 
                     disabled="#{empty unitManager.filteredUnits}" update=":exportUnitsForm:exportUnits" 
                     actionListener="#{unitManager.simpleTableDialog.prepareTableExportPopup}" />
-                <p:commandButton id="importButton" icon="ui-icon-arrowthickstop-1-n" value="Import" title="Import Units" 
-                    style="float: right; margin: 1em 1ex 0 0;" oncomplete="PF('importUnits').show();" 
-                    disabled="#{not securityPolicy.getUIHint('UNIT_ALL')}" update=":importUnitsForm" 
-                    actionListener="#{unitManager.prepareImportPopup()}" />
                 <p:commandButton id="deleteButton" icon="ui-icon-trash" value="Delete" title="Delete" 
                     style="float: right; margin: 1em 1ex 0 0;" oncomplete="PF('deleteUnits').show();" 
                     disabled="#{empty unitManager.selectedUnits or not securityPolicy.getUIHint('UNIT_DELETE')}" 
@@ -70,7 +65,7 @@
                     update=":addUnitForm" title="Add New Unit" icon="ui-icon-plus" 
                     disabled="#{not securityPolicy.getUIHint('UNIT_CREATE')}" 
                     oncomplete="PF('addUnit').show()" style="float: right; margin: 1em 1ex 0 0;" />
-             </p:fieldset>
+         
         </h:form>
 
         <ui:include src="/resources/dialogs/delete-multi-confirmation.xhtml" >

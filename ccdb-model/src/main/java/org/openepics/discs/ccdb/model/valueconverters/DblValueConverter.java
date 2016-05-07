@@ -19,6 +19,7 @@
  */
 package org.openepics.discs.ccdb.model.valueconverters;
 
+import javax.enterprise.inject.Any;
 import org.openepics.discs.ccdb.model.values.DblValue;
 import org.openepics.seds.api.datatypes.SedsScalar;
 
@@ -26,6 +27,7 @@ import org.openepics.seds.api.datatypes.SedsScalar;
  * @author <a href="mailto:miha.vitorovic@cosylab.com">Miha Vitorovič</a>
  *
  */
+@Any
 public class DblValueConverter extends ValueConverter<DblValue> {
 
     @Override
