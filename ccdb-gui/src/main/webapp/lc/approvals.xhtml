@@ -1,0 +1,63 @@
+<ui:composition template="/WEB-INF/template/template.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <h:form id="approvalForm">
+            <p:panel>
+                <h:outputText value="Approvals" styleClass="heading"/>
+                <p:dataTable var="stat" id="approvalTable" value="#{lifecycleApprovalManager.approvalList}" 
+                             emptyMessage="No records found." 
+                             rowKey="#{stat.id}"  selectionMode="single"
+                             selection="#{lifecycleApprovalManager.selectedApproval}"
+                             resizableColumns="true" filteredValue="#{lifecycleApprovalManager.filteredList}" 
+                             currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
+                             rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">   
+
+
+                    <p:column headerText="Slot" sortBy="#{stat.requirement.slot.name}" filterBy="#{stat.requirement.slot.name}"
+                              filterMatchMode="contains" >
+                        <h:outputText value="#{stat.requirement.slot.name}" />
+                    </p:column>
+
+                    <p:column headerText="Phase" sortBy="#{stat.requirement.phase}"  >
+                        <h:outputText value="#{stat.requirement.phase.name}" />
+                    </p:column>
+
+                    <p:column headerText="Requestor" sortBy="#{stat.requirement.requestor.name}" filterBy="#{stat.requirement.requestor.name}"
+                              filterMatchMode="contains" >
+                        <h:outputText value="#{stat.requirement.requestor.name}" />
+                    </p:column>
+                    <p:column headerText="Assigned To" sortBy="#{stat.assignedApprover.roleId}"  >
+                        <h:outputText value="#{stat.assignedApprover.roleId}" />
+                    </p:column>
+                    <p:column headerText="Approved" sortBy="#{stat.approved}"  >
+                        <h:outputText value="#{stat.approved ? 'Yes': 'No'}"  rendered="#{stat.approved_at ne null}"/>
+                    </p:column>
+                    
+                    <p:column headerText="By" sortBy="#{stat.approved_by.userId}"  >
+                        <h:outputText value="#{stat.approved_by.userId}" />
+                    </p:column>
+                    <p:column headerText="Date" sortBy="#{stat.approved_at}"  >
+                        <h:outputText value="#{stat.approved_at}" />
+                    </p:column>
+                    <p:column headerText="Comment" >
+                        <h:outputText value="#{stat.comment}" />
+                    </p:column>
+                </p:dataTable>
+                
+                <p:commandButton id="editButton" icon="ui-icon-pencil" value="Edit" title="Edit" 
+                    style="float: right; margin: 1em 1ex 0 0;" update=":modifyApprovalForm:modifyApproval" 
+                    disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}" 
+                    oncomplete="PF('modifyApprovalWid').show();"  />
+            </p:panel>
+        </h:form> 
+                          
+        <ui:include src="add-or-modify-approval.xhtml"/>
+                
+    </ui:define>
+</ui:composition>

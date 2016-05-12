@@ -27,6 +27,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import static javax.persistence.TemporalType.DATE;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -64,6 +65,11 @@ public class LifecycleApprovalRecord extends ConfigurationEntity {
     @Basic
     @Temporal(DATE)
     private Date approved_at;
+    
+    @Column(name = "comment")
+    @Size(min = 1, max = 1024)
+    @Basic
+    private String comment;
     
     @Override
     public int hashCode() {
@@ -129,6 +135,14 @@ public class LifecycleApprovalRecord extends ConfigurationEntity {
 
     public void setApproved_at(Date approved_at) {
         this.approved_at = approved_at;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
     
 }

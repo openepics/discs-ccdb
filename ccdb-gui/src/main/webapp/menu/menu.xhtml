@@ -31,6 +31,7 @@
             <p:submenu label="Slots" icon="fa  fa-server">
                 <p:menuitem value="Slot Tree" icon="fa  fa-server" outcome="slottree" />
                 <p:menuitem value="Slot List" icon="fa  fa-server" outcome="slotlist" />
+                <p:menuitem value="Manage Slots" icon="fa  fa-server" outcome="slotmanage" />
             </p:submenu>
             
             <p:submenu label="Racks" icon="fa  fa-building-o">
@@ -67,7 +68,14 @@
                 <p:menuitem value="Units" icon="fa fa-database" outcome="units" />
             </p:submenu>
             
-             <p:submenu label="Import" icon="fa fa-upload">               
+            <p:submenu label="Approvals" icon="fa fa-database">
+                <p:menuitem value="Phases" icon="fa fa-database" outcome="phases" disabled="true"/>
+                <p:menuitem value="Requirements" icon="fa fa-database" outcome="phasereqs"/>
+                <p:menuitem value="Status" icon="fa fa-database" outcome="phasestatus" />                              
+                <p:menuitem value="Approvals" icon="fa fa-database" outcome="phaseapprovals" />
+            </p:submenu>
+            
+            <p:submenu label="Import" icon="fa fa-upload" rendered="false">               
                 <p:menuitem value="Devices" icon="fa fa-upload" url="#" disabled="true"/>
                 <p:menuitem value="Device Types" icon="fa fa-upload" url="#" disabled="true"/>
                 <p:menuitem value="Properties" icon="fa fa-upload" url="#" disabled="true"/> 

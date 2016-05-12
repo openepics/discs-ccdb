@@ -41,6 +41,10 @@
                                 <p:column>Modified By</p:column>  
                                 <p:column>#{cc.attrs.selectedSlot.modifiedBy}</p:column>                               
                             </p:row>
+                            <p:row >  
+                                <p:column>Rack</p:column>  
+                                <p:column></p:column>                               
+                            </p:row>
                             <p:row rendered="false">  
                                 <p:column>Date Modified</p:column>  
                                 <p:column>
@@ -52,7 +56,7 @@
                         </p:panelGrid >  
                     </p:column>
                     <p:column>
-                        <p:panelGrid >  
+<!--                        <p:panelGrid >  
                             <p:row>  
                                 <p:column>Area Manager</p:column>  
                                 <p:column><h:outputText value="#{fn:substringBefore(cc.attrs.selectedSlot.name,'_')}_AreaManager" /></p:column>                               
@@ -69,7 +73,7 @@
                                 <p:column><h:outputText value="CM Level" title="Configuration Management: Level of Care"/></p:column>  
                                 <p:column>Low</p:column>                               
                             </p:row>
-                        </p:panelGrid> 
+                        </p:panelGrid> -->
                     </p:column>
                 </p:row>
             </p:panelGrid>

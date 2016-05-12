@@ -78,7 +78,7 @@ public class Property extends ConfigurationEntity implements NamedEntity {
     @Basic(optional = false)
     @Column(name = "loc")
     @Enumerated(EnumType.STRING)
-    private LevelOfControl levelOfControl = LevelOfControl.NONE;
+    private LevelOfCare levelOfControl = LevelOfCare.NONE;
     
     @Basic(optional = false)
     @Column(name = "value_unique")
@@ -149,11 +149,11 @@ public class Property extends ConfigurationEntity implements NamedEntity {
         this.unit = unit;
     }
 
-    public LevelOfControl getLevelOfControl() {
+    public LevelOfCare getLevelOfControl() {
         return levelOfControl;
     }
 
-    public void setLevelOfControl(LevelOfControl levelOfControl) {
+    public void setLevelOfControl(LevelOfCare levelOfControl) {
         this.levelOfControl = levelOfControl;
     }
    

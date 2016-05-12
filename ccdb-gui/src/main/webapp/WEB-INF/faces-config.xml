@@ -31,12 +31,17 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>slottree</from-outcome>
-            <to-view-id>/slot/slots.xhtml</to-view-id>
+            <to-view-id>/slot/tree.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>slotlist</from-outcome>
             <to-view-id>/slot/slotlist.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>slotmanage</from-outcome>
+            <to-view-id>/slot/home.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
@@ -62,6 +67,26 @@
         <navigation-case>
             <from-outcome>device-types</from-outcome>
             <to-view-id>/type/device-types.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>phases</from-outcome>
+            <to-view-id>/lc/phases.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>phasereqs</from-outcome>
+            <to-view-id>/lc/requirements.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>phasestatus</from-outcome>
+            <to-view-id>/lc/status.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>phaseapprovals</from-outcome>
+            <to-view-id>/lc/approvals.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
@@ -106,7 +131,7 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>statusreport</from-outcome>
-            <to-view-id>/report/devicestatus.xhtml</to-view-id>
+            <to-view-id>/report/phasestatus.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>

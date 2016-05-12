@@ -29,6 +29,15 @@ import javax.ejb.Startup;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import org.openepics.discs.ccdb.model.values.DblTableValue;
+import org.openepics.discs.ccdb.model.values.DblValue;
+import org.openepics.discs.ccdb.model.values.DblVectorValue;
+import org.openepics.discs.ccdb.model.values.EnumValue;
+import org.openepics.discs.ccdb.model.values.IntValue;
+import org.openepics.discs.ccdb.model.values.IntVectorValue;
+import org.openepics.discs.ccdb.model.values.StrValue;
+import org.openepics.discs.ccdb.model.values.StrVectorValue;
+import org.openepics.discs.ccdb.model.values.TimestampValue;
 
 import org.openepics.discs.ccdb.model.values.Value;
 
@@ -67,6 +76,20 @@ public class SedsConverters {
         if (convertersFound != BuiltInDataType.values().length) {
             LOGGER.log(Level.SEVERE, "Converter data type implementation number mismatch. Expected: "
                     + BuiltInDataType.values().length + ", found: " + convertersFound);
+            
+            // TODO: Added as a workaround for CDI not injecting @Any above. Remove it when fixed.
+            LOGGER.log(Level.SEVERE, " Adding data type converters statically");
+            CONVERTERS.put(DblTableValue.class, new DblTableValueConverter());
+            CONVERTERS.put(DblValue.class, new DblValueConverter());
+            CONVERTERS.put(DblVectorValue.class, new DblVectorValueConverter());
+            CONVERTERS.put(EnumValue.class, new EnumValueConverter());
+            CONVERTERS.put(IntValue.class, new IntValueConverter());
+            CONVERTERS.put(IntVectorValue.class, new IntVectorValueConverter());
+            CONVERTERS.put(StrValue.class, new StrValueConverter());
+            CONVERTERS.put(StrVectorValue.class, new StrVectorValueConverter());
+            CONVERTERS.put(TimestampValue.class, new TimestampValueConverter());
+            LOGGER.log(Level.INFO, "Loaded " + CONVERTERS.size() + " data type converters.");
+            // TODO: Added as a workaround for CDI not injecting @Any above. Remove it when fixed.
         }
     }
 

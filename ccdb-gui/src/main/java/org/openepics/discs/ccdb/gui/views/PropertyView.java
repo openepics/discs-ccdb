@@ -34,6 +34,7 @@ import org.openepics.discs.ccdb.model.PropertyValueUniqueness;
 import org.openepics.discs.ccdb.model.Unit;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
 import org.openepics.discs.ccdb.core.util.BuiltInDataType;
+import org.openepics.discs.ccdb.model.LevelOfCare;
 
 /**
  * @author <a href="mailto:miha.vitorovic@cosylab.com">Miha Vitorovič</a>
@@ -142,6 +143,14 @@ public class PropertyView implements Serializable {
     /** @return the beingAdded */
     public boolean isBeingAdded() {
         return beingAdded;
+    }
+
+    public LevelOfCare getLoc() {
+        return prop.getLevelOfControl();
+    }
+
+    public void setLoc(LevelOfCare loc) {
+        prop.setLevelOfControl(loc);
     }
 
 

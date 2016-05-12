@@ -1,0 +1,62 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:form id="modifyApprovalForm">
+        <p:dialog widgetVar="modifyApprovalWid" id="modifyApproval" modal="true" resizable="false" closable="false" 
+            dynamic="true" width="25em" closeOnEscape="true">
+            <p:ajax event="close" resetValues="true" update="grp" />
+
+            <f:facet name="header">
+                <h:outputText value="Approval" />
+            </f:facet>
+
+            <div class="ui-fluid">
+                <p:panelGrid id="grp" styleClass="dialog-grid-panel noBorders">
+                    
+                    <p:row>
+                        <p:column styleClass="alignRight alignMiddle dialog-labels-width-2">
+                            <p:outputLabel  value="Slot:" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{lifecycleApprovalManager.selectedApproval.requirement.slot.name}" />                         
+                        </p:column>
+                    </p:row>
+                    
+                     <p:row>
+                        <p:column styleClass="alignRight alignMiddle dialog-labels-width-2">
+                            <p:outputLabel  value="Phase:" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{lifecycleApprovalManager.selectedApproval.requirement.phase.name}" />                         
+                        </p:column>
+                    </p:row>
+                    
+                    
+                    
+                    <p:row>
+                        <p:column styleClass="alignRight dialog-labels-width-2" style="padding-top: 0.5em;">
+                            <p:outputLabel for="approved" value="Approved:" />
+                        </p:column>
+                        <p:column>
+                            <p:selectBooleanCheckbox id="approved" value="#{lifecycleApprovalManager.selectedApproval.approved}" />
+                            <p:message for="approved" />
+                        </p:column>
+                    </p:row>               
+                </p:panelGrid>
+            </div>
+            
+            <p:panel style="text-align: right; padding: 0; border: 0;" styleClass="dialogButtonPanel">
+                <p:commandButton value="Save" id="save" styleClass="dialogButton defaultCommand" tabindex="4" 
+                                 action="#{lifecycleApprovalManager.onModify()}" 
+                        oncomplete="if (args &amp;&amp; !args.validationFailed) { closeDialogActions('modifyApprovalWid');}" 
+                        update=":approvalForm:approvalTable modifyApproval" />
+                <p:commandButton value="Cancel" styleClass="dialogButton" onclick="PF('modifyApprovalWid').hide();" 
+                        update="grp" resetValues="true" tabindex="5" />
+            </p:panel>
+
+            <p:defaultCommand target="save" />
+        </p:dialog>
+    </h:form>
+</ui:composition>

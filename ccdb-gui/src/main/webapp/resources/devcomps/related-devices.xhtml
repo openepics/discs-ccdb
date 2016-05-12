@@ -24,8 +24,7 @@
                 <p:column headerText="Relationship">
                     <h:outputText value="#{child.slotRelation.name} " /> 
                 </p:column>
-                <p:column headerText="Slot">
-                    <h:outputText value=" #{child.childSlot.name}" />
+                <p:column headerText="Slot">                
                     <p:link  value="#{child.childSlot.name}"  outcome="devices" target="_blank">
                         <f:param name="name" value="#{child.childSlot.name}" />
                     </p:link>

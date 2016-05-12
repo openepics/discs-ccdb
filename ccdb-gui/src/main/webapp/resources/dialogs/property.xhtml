@@ -86,6 +86,18 @@
                         </p:column>
                     </p:row>
     
+                     <p:row>
+                        <p:column styleClass="alignRight alignMiddle dialog-labels-width-2">
+                            <p:outputLabel for="propertyLoC" value="Level of Care:" />
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="propertyLoC" value="#{propertyManager.dialogProperty.loc}"                                    
+                                    disabled="#{not empty propertyManager.dialogProperty.usedBy}">
+                                <f:selectItems value="#{baseDataManager.levelOfCares}"/>                               
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    
                     <p:row>
                         <p:column styleClass="alignRight dialog-labels-width-2" style="padding-top: 1em;">
                             <p:outputLabel for="valueUniqueness" value="Uniqueness:" />

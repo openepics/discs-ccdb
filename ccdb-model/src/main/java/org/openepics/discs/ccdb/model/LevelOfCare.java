@@ -21,6 +21,6 @@ package org.openepics.discs.ccdb.model;
  * 
  *  @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
-public enum LevelOfControl {
+public enum LevelOfCare {
     NONE, LOW, MEDIUM, HIGH;
 }

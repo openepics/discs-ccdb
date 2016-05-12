@@ -21,12 +21,10 @@
                     <h:outputText value="Ports"/>
                 </f:facet>
                 <p:column id="component" headerText="Port" >
-                    <h:outputText value="#{rec.device.serialNumber}" />
+                   
                 </p:column> 
                 <p:column id="idate" headerText="Type"  >
-                    <h:outputText value="#{rec.installDate}" > 
-                        <f:convertDateTime pattern="MMM dd, yyyy" />
-                    </h:outputText>
+                    
                 </p:column>            
             </p:dataTable>
     </cc:implementation>

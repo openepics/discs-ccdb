@@ -59,7 +59,8 @@ public class RackEJB extends DAO<Rack> {
                     .setParameter("rackName", "%" + rackName + "%");
         } else {
 //            query = em.createQuery("SELECT DISTINCT rs.rack FROM RackSlot rs  WHERE rs.rack.name LIKE :rackName ", Rack.class);
-            query = em.createQuery("SELECT DISTINCT rs.rack FROM Slot s JOIN s.rackSlots rs WHERE s.name LIKE :deviceName AND rs.rack.name LIKE :rackName ESCAPE '\\'", Rack.class)
+//            query = em.createQuery("SELECT DISTINCT rs.rack FROM Slot s JOIN s.rackSlots rs WHERE s.name LIKE :deviceName AND rs.rack.name LIKE :rackName ESCAPE '\\'", Rack.class)
+            query = em.createQuery("SELECT DISTINCT rs.rack FROM RackSlot rs JOIN rs.deviceSlots s WHERE s.name LIKE :deviceName AND rs.rack.name LIKE :rackName ESCAPE '\\'", Rack.class)
                     .setParameter("rackName", rackName)
                     .setParameter("deviceName", deviceName);
         }
@@ -81,7 +82,8 @@ public class RackEJB extends DAO<Rack> {
                     .setParameter("rackName", rackName.toLowerCase());
         } else {
 //            query = em.createQuery("SELECT DISTINCT rs.rack FROM RackSlot rs  WHERE rs.rack.name LIKE :rackName ", Rack.class);
-            query = em.createQuery("SELECT COUNT(DISTINCT rs.rack) FROM Slot s JOIN s.rackSlots rs WHERE LOWER(s.name) LIKE :deviceName ESCAPE '\\' AND LOWER(rs.rack.name) LIKE :rackName ESCAPE '\\'", Long.class)
+//            query = em.createQuery("SELECT COUNT(DISTINCT rs.rack) FROM Slot s JOIN s.rackSlots rs WHERE LOWER(s.name) LIKE :deviceName ESCAPE '\\' AND LOWER(rs.rack.name) LIKE :rackName ESCAPE '\\'", Long.class)
+              query = em.createQuery("SELECT COUNT(DISTINCT rs.rack) FROM RackSlot rs JOIN rs.deviceSlots s WHERE LOWER(s.name) LIKE :deviceName ESCAPE '\\' AND LOWER(rs.rack.name) LIKE :rackName ESCAPE '\\'", Long.class)
                     .setParameter("rackName", rackName.toLowerCase())
                     .setParameter("deviceName", deviceName.toLowerCase());
         }

@@ -42,12 +42,17 @@
                                         </p:column>   
                                         <p:column styleClass="#{slot.frontMatch ? 'matchingSlot' : ''}" >
                                             <c:forEach items="#{slot.frontDevices}"  var="devslot">
-                                                <h:outputText value="#{devslot.name}" />
+                                                <p:link  value="#{devslot.name}"  outcome="devices" target="_blank">
+                                                    <f:param name="name" value="#{devslot.name}" />
+                                                </p:link>
+                                                
                                             </c:forEach>
                                         </p:column>
-                                        <p:column styleClass="#{slot.rearMatch} ? 'matchingSlot' : ''">
+                                        <p:column styleClass="#{slot.rearMatch ? 'matchingSlot' : ''}">
                                             <c:forEach items="#{slot.rearDevices}"  var="devslot">
-                                                <h:outputText value="#{devslot.name} " />
+                                                <p:link  value="#{devslot.name}"  outcome="devices" target="_blank" >
+                                                    <f:param name="name" value="#{devslot.name}" />
+                                                </p:link>                                             
                                             </c:forEach>
                                         </p:column>
                                     </p:row>
