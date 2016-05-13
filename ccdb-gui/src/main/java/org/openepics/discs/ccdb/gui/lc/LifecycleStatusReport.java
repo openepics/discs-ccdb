@@ -30,7 +30,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.openepics.discs.ccdb.core.ejb.LcStatusEJB;
-import org.openepics.discs.ccdb.model.LifecycleStatus;
+import org.openepics.discs.ccdb.model.cm.PhaseStatusRecord;
 import org.openepics.discs.ccdb.model.Slot;
 
 /**
@@ -66,8 +66,8 @@ public class LifecycleStatusReport implements Serializable {
     @EJB
     private LcStatusEJB lifecycleEJB;
     
-    private List<LifecycleStatus> statusList;
-    private List<LifecycleStatus> filteredStatus;
+    private List<PhaseStatusRecord> statusList;
+    private List<PhaseStatusRecord> filteredStatus;
     private Set<String> slotNames = new HashSet<>();
   
     private final static List<String> VALID_COLUMN_KEYS = Arrays.asList("ARR", "DHR");
@@ -87,7 +87,7 @@ public class LifecycleStatusReport implements Serializable {
     public void init() {
         statusList = lifecycleEJB.findAll();
         logger.log(Level.INFO, "Size of LC sttaus list: {0}", statusList.size());
-        for(LifecycleStatus lcstat: statusList) {
+        for(PhaseStatusRecord lcstat: statusList) {
               if (lcstat.getRequirement().getSlot() != null) {
                   slotNames.add(lcstat.getRequirement().getSlot().getName());
               }
@@ -123,7 +123,7 @@ public class LifecycleStatusReport implements Serializable {
               return "";
           }
           
-          for(LifecycleStatus lcstat: statusList) {
+          for(PhaseStatusRecord lcstat: statusList) {
               if (slot.equals(lcstat.getRequirement().getSlot().getName()) && phase.equals(lcstat.getRequirement().getPhase().getName())) {
                   return lcstat.getStatus().name();
               }
@@ -134,15 +134,15 @@ public class LifecycleStatusReport implements Serializable {
     
     // getters and setters
 
-    public List<LifecycleStatus> getFilteredStatus() {
+    public List<PhaseStatusRecord> getFilteredStatus() {
         return filteredStatus;
     }
 
-    public void setFilteredStatus(List<LifecycleStatus> filteredStatus) {
+    public void setFilteredStatus(List<PhaseStatusRecord> filteredStatus) {
         this.filteredStatus = filteredStatus;
     }
 
-    public List<LifecycleStatus> getStatusList() {
+    public List<PhaseStatusRecord> getStatusList() {
         return statusList;
     }
 

@@ -14,7 +14,7 @@
  *
  */
 
-package org.openepics.discs.ccdb.model;
+package org.openepics.discs.ccdb.model.cm;
 
 import java.util.Date;
 import javax.persistence.Basic;
@@ -29,25 +29,28 @@ import javax.persistence.Temporal;
 import static javax.persistence.TemporalType.DATE;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.openepics.discs.ccdb.model.ConfigurationEntity;
+import org.openepics.discs.ccdb.model.Role;
+import org.openepics.discs.ccdb.model.User;
 
 /**
  *
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "lc_approval_rec")
+@Table(name = "cm_review_approval")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "LifecycleApprovalRecord.findAll", query = "SELECT d FROM LifecycleApprovalRecord d"),
-    @NamedQuery(name = "LifecycleApprovalRecord.findByName", query = "SELECT d FROM LifecycleApprovalRecord d WHERE d.requirement = :requirement")
+    @NamedQuery(name = "ReviewApproval.findAll", query = "SELECT d FROM ReviewApproval d"),
+    @NamedQuery(name = "ReviewApproval.findByName", query = "SELECT d FROM ReviewApproval d WHERE d.requirement = :requirement")
 })
-public class LifecycleApprovalRecord extends ConfigurationEntity {
+public class ReviewApproval extends ConfigurationEntity {
 
     private static final long serialVersionUID = 1L;
    
     @ManyToOne(optional = false)
     @JoinColumn(name = "requirement")
-    private LifecycleRequirement requirement;
+    private ReviewRequirement requirement;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "assigned_approver")
@@ -81,10 +84,10 @@ public class LifecycleApprovalRecord extends ConfigurationEntity {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof LifecycleApprovalRecord)) {
+        if (!(object instanceof ReviewApproval)) {
             return false;
         }
-        LifecycleApprovalRecord other = (LifecycleApprovalRecord) object;
+        ReviewApproval other = (ReviewApproval) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -97,11 +100,11 @@ public class LifecycleApprovalRecord extends ConfigurationEntity {
     }
     // --
 
-    public LifecycleRequirement getRequirement() {
+    public ReviewRequirement getRequirement() {
         return requirement;
     }
 
-    public void setRequirement(LifecycleRequirement requirement) {
+    public void setRequirement(ReviewRequirement requirement) {
         this.requirement = requirement;
     }
 

@@ -8,7 +8,7 @@ package org.openepics.discs.ccdb.gui.ui;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
-import org.openepics.discs.ccdb.model.LevelOfCare;
+import org.openepics.discs.ccdb.model.cm.LevelOfCare;
 
 /**
  * Bean for basic data like level of care, checklists etc

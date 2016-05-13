@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
-import org.openepics.discs.ccdb.model.LifecycleApprovalRecord;
+import org.openepics.discs.ccdb.model.cm.ReviewApproval;
 import org.openepics.discs.ccdb.model.Rack;
 
 /**
@@ -30,12 +30,12 @@ import org.openepics.discs.ccdb.model.Rack;
  *
  */
 @Stateless
-public class LcApprovalEJB extends DAO<LifecycleApprovalRecord> {    
+public class LcApprovalEJB extends DAO<ReviewApproval> {    
     private static final Logger logger = Logger.getLogger(LcApprovalEJB.class.getName());
     
     @Override
-    protected Class<LifecycleApprovalRecord> getEntityClass() {
-        return LifecycleApprovalRecord.class;
+    protected Class<ReviewApproval> getEntityClass() {
+        return ReviewApproval.class;
     }
 
     /**
@@ -43,8 +43,8 @@ public class LcApprovalEJB extends DAO<LifecycleApprovalRecord> {
      * 
      * @return a list of all {@link Rack}s ordered by name.
      */
-    public List<LifecycleApprovalRecord> findAll() {
-        return em.createNamedQuery("LifecycleApprovalRecord.findAll", LifecycleApprovalRecord.class).getResultList();
+    public List<ReviewApproval> findAll() {
+        return em.createNamedQuery("LifecycleApprovalRecord.findAll", ReviewApproval.class).getResultList();
     }    
     
 }

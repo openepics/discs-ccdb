@@ -14,7 +14,7 @@
  *
  */
 
-package org.openepics.discs.ccdb.model;
+package org.openepics.discs.ccdb.model.cm;
 
 /**
  *  Level of Control of a device, slot or property- related to Configuration Management

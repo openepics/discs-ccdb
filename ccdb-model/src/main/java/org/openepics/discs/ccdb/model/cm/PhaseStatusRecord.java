@@ -14,46 +14,45 @@
  *
  */
 
-package org.openepics.discs.ccdb.model;
+package org.openepics.discs.ccdb.model.cm;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Index;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.openepics.discs.ccdb.model.ConfigurationEntity;
 
 /**
  *
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "lc_phase", indexes = { @Index(columnList = "name", unique = true) })
+@Table(name = "lc_status")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "LifecyclePhase.findAll", query = "SELECT d FROM LifecyclePhase d"),
-    @NamedQuery(name = "LifecyclePhase.findByName", query = "SELECT d FROM LifecyclePhase d WHERE d.name = :name")
+    @NamedQuery(name = "PhaseStatusRecord.findAll", query = "SELECT d FROM PhaseStatusRecord d"),
+    @NamedQuery(name = "PhaseStatusRecord.findByRequirement", query = "SELECT d FROM PhaseStatusRecord d WHERE d.requirement = :requirement")
 })
-public class LifecyclePhase extends ConfigurationEntity {
+public class PhaseStatusRecord extends ConfigurationEntity {
 
-    private static final long serialVersionUID = 1L; 
-
-    @Basic(optional = false)
-    @NotNull
-    @Size(min=1, max=64)
-    @Column(name = "name")
-    private String name;
+    private static final long serialVersionUID = 1L;
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "requirement")
+    private ReviewRequirement requirement;
     
     @Basic(optional = false)
-    @NotNull
-    @Size(min=1, max=255)
-    @Column(name = "description")
-    private String description;
-    
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private PhaseStatus status = PhaseStatus.NOT_STARTED;
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -64,10 +63,10 @@ public class LifecyclePhase extends ConfigurationEntity {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof LifecyclePhase)) {
+        if (!(object instanceof PhaseStatusRecord)) {
             return false;
         }
-        LifecyclePhase other = (LifecyclePhase) object;
+        PhaseStatusRecord other = (PhaseStatusRecord) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -76,25 +75,25 @@ public class LifecyclePhase extends ConfigurationEntity {
 
     @Override
     public String toString() {
-        return "org.openepics.discs.ccdb.model.CMProcess[ id=" + id + " ]";
+        return "org.openepics.discs.ccdb.model.CMStatus[ id=" + id + " ]";
     }
     
-    // getters and setters
+    // --
 
-    public String getName() {
-        return name;
+    public PhaseStatus getStatus() {
+        return status;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStatus(PhaseStatus status) {
+        this.status = status;
     }
 
-    public String getDescription() {
-        return description;
+    public ReviewRequirement getRequirement() {
+        return requirement;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRequirement(ReviewRequirement requirement) {
+        this.requirement = requirement;
     }
     
 }

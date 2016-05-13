@@ -14,44 +14,47 @@
  *
  */
 
-package org.openepics.discs.ccdb.model;
+package org.openepics.discs.ccdb.model.cm;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.Index;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.openepics.discs.ccdb.model.ConfigurationEntity;
 
 /**
  *
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "lc_status")
+@Table(name = "cm_review" )
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "LifecycleStatus.findAll", query = "SELECT d FROM LifecycleStatus d"),
-    @NamedQuery(name = "LifecycleStatus.findByRequirement", query = "SELECT d FROM LifecycleStatus d WHERE d.requirement = :requirement")
+    @NamedQuery(name = "Review.findAll", query = "SELECT d FROM Review d"),
+    @NamedQuery(name = "Review.findByName", query = "SELECT d FROM Review d WHERE d.name = :name")
 })
-public class LifecycleStatus extends ConfigurationEntity {
+public class Review extends ConfigurationEntity {
 
-    private static final long serialVersionUID = 1L;
-    
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "requirement")
-    private LifecycleRequirement requirement;
+    private static final long serialVersionUID = 1L; 
+
+    @Basic(optional = false)
+    @NotNull
+    @Size(min=1, max=64)
+    @Column(name = "name")
+    private String name;
     
     @Basic(optional = false)
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private PhaseStatus status = PhaseStatus.NOT_STARTED;
-
+    @NotNull
+    @Size(min=1, max=255)
+    @Column(name = "description")
+    private String description;
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -62,10 +65,10 @@ public class LifecycleStatus extends ConfigurationEntity {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof LifecycleStatus)) {
+        if (!(object instanceof Review)) {
             return false;
         }
-        LifecycleStatus other = (LifecycleStatus) object;
+        Review other = (Review) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -74,25 +77,25 @@ public class LifecycleStatus extends ConfigurationEntity {
 
     @Override
     public String toString() {
-        return "org.openepics.discs.ccdb.model.CMStatus[ id=" + id + " ]";
+        return "org.openepics.discs.ccdb.model.CMProcess[ id=" + id + " ]";
     }
     
-    // --
+    // getters and setters
 
-    public PhaseStatus getStatus() {
-        return status;
+    public String getName() {
+        return name;
     }
 
-    public void setStatus(PhaseStatus status) {
-        this.status = status;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public LifecycleRequirement getRequirement() {
-        return requirement;
+    public String getDescription() {
+        return description;
     }
 
-    public void setRequirement(LifecycleRequirement requirement) {
-        this.requirement = requirement;
+    public void setDescription(String description) {
+        this.description = description;
     }
     
 }

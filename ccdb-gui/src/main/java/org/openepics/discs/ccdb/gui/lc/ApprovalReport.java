@@ -31,8 +31,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.openepics.discs.ccdb.core.ejb.LcApprovalEJB;
 import org.openepics.discs.ccdb.core.ejb.LcStatusEJB;
-import org.openepics.discs.ccdb.model.LifecycleApprovalRecord;
-import org.openepics.discs.ccdb.model.LifecycleStatus;
+import org.openepics.discs.ccdb.model.cm.ReviewApproval;
+import org.openepics.discs.ccdb.model.cm.PhaseStatusRecord;
 import org.openepics.discs.ccdb.model.Slot;
 
 /**
@@ -68,8 +68,8 @@ public class ApprovalReport implements Serializable {
     @EJB
     private LcApprovalEJB lifecycleEJB;
     
-    private List<LifecycleApprovalRecord> statusList;
-    private List<LifecycleApprovalRecord> filteredStatus;
+    private List<ReviewApproval> statusList;
+    private List<ReviewApproval> filteredStatus;
     private Set<String> slotNames = new HashSet<>();
   
     private final static List<String> VALID_COLUMN_KEYS = Arrays.asList("ARR", "DHR");
@@ -89,7 +89,7 @@ public class ApprovalReport implements Serializable {
     public void init() {
         statusList = lifecycleEJB.findAll();
         logger.log(Level.INFO, "Size of LC sttaus list: {0}", statusList.size());
-        for(LifecycleApprovalRecord lcstat: statusList) {
+        for(ReviewApproval lcstat: statusList) {
               if (lcstat.getRequirement().getSlot() != null) {
                   slotNames.add(lcstat.getRequirement().getSlot().getName());
               }
@@ -125,7 +125,7 @@ public class ApprovalReport implements Serializable {
               return "";
           }
           
-          for(LifecycleApprovalRecord lcstat: statusList) {
+          for(ReviewApproval lcstat: statusList) {
               if (slot.equals(lcstat.getRequirement().getSlot().getName()) && phase.equals(lcstat.getRequirement().getPhase().getName())) {
                   if (lcstat.isApproved()) {
                       return "Approved by " + (lcstat.getApproved_by() == null? " " : lcstat.getApproved_by().getUserId()) + ", " + lcstat.getApproved_at();
@@ -138,15 +138,15 @@ public class ApprovalReport implements Serializable {
     
     // getters and setters
 
-    public List<LifecycleApprovalRecord> getFilteredStatus() {
+    public List<ReviewApproval> getFilteredStatus() {
         return filteredStatus;
     }
 
-    public void setFilteredStatus(List<LifecycleApprovalRecord> filteredStatus) {
+    public void setFilteredStatus(List<ReviewApproval> filteredStatus) {
         this.filteredStatus = filteredStatus;
     }
 
-    public List<LifecycleApprovalRecord> getStatusList() {
+    public List<ReviewApproval> getStatusList() {
         return statusList;
     }
 

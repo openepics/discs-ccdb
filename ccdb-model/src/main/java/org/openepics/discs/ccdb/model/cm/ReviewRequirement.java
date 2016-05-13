@@ -14,7 +14,7 @@
  *
  */
 
-package org.openepics.discs.ccdb.model;
+package org.openepics.discs.ccdb.model.cm;
 
 import java.util.List;
 import javax.persistence.Entity;
@@ -25,6 +25,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.openepics.discs.ccdb.model.ConfigurationEntity;
+import org.openepics.discs.ccdb.model.Device;
+import org.openepics.discs.ccdb.model.Slot;
+import org.openepics.discs.ccdb.model.User;
 
 /**
  * Configuration Management requirements for slot or device
@@ -32,15 +36,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "lc_requirement")
+@Table(name = "cm_review_equirement")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "LifecycleRequirement.findAll", query = "SELECT d FROM LifecycleRequirement d"),
-    @NamedQuery(name = "LifecycleRequirement.findBySlot", query = "SELECT d FROM LifecycleRequirement d WHERE d.slot = :slot"),
-    @NamedQuery(name = "LifecycleRequirement.findByDevice", query = "SELECT d FROM LifecycleRequirement d WHERE d.device = :device"),
-    @NamedQuery(name = "LifecycleRequirement.findByProcess", query = "SELECT d FROM LifecycleRequirement d WHERE d.phase = :phase")
+    @NamedQuery(name = "ReviewRequirement.findAll", query = "SELECT d FROM ReviewRequirement d"),
+    @NamedQuery(name = "ReviewRequirement.findBySlot", query = "SELECT d FROM ReviewRequirement d WHERE d.slot = :slot"),
+    @NamedQuery(name = "ReviewRequirement.findByDevice", query = "SELECT d FROM ReviewRequirement d WHERE d.device = :device"),
+    @NamedQuery(name = "ReviewRequirement.findByProcess", query = "SELECT d FROM ReviewRequirement d WHERE d.phase = :phase")
 })
-public class LifecycleRequirement extends ConfigurationEntity {
+public class ReviewRequirement extends ConfigurationEntity {
 
     private static final long serialVersionUID = 1L;
     
@@ -54,14 +58,14 @@ public class LifecycleRequirement extends ConfigurationEntity {
     
     @ManyToOne
     @JoinColumn(name = "phase")
-    private LifecyclePhase phase;
+    private Review phase;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "requestor")
     private User requestor;    
     
     @OneToMany(mappedBy = "requirement")
-    private List<LifecycleApprovalRecord> approvals;
+    private List<ReviewApproval> approvals;
     
     @Override
     public int hashCode() {
@@ -73,10 +77,10 @@ public class LifecycleRequirement extends ConfigurationEntity {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof LifecycleRequirement)) {
+        if (!(object instanceof ReviewRequirement)) {
             return false;
         }
-        LifecycleRequirement other = (LifecycleRequirement) object;
+        ReviewRequirement other = (ReviewRequirement) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -85,7 +89,7 @@ public class LifecycleRequirement extends ConfigurationEntity {
 
     @Override
     public String toString() {
-        return "org.openepics.discs.ccdb.model.LifecycleRequirement[ id=" + id + " ]";
+        return "org.openepics.discs.ccdb.model.ReviewRequirement[ id=" + id + " ]";
     }
     
     // getters and setters
@@ -114,15 +118,15 @@ public class LifecycleRequirement extends ConfigurationEntity {
         this.device = device;
     }
 
-    public LifecyclePhase getPhase() {
+    public Review getPhase() {
         return phase;
     }
 
-    public void setPhase(LifecyclePhase phase) {
+    public void setPhase(Review phase) {
         this.phase = phase;
     }
 
-    public List<LifecycleApprovalRecord> getApprovals() {
+    public List<ReviewApproval> getApprovals() {
         return approvals;
     }
     

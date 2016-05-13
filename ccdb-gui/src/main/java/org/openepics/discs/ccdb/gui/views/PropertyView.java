@@ -34,7 +34,7 @@ import org.openepics.discs.ccdb.model.PropertyValueUniqueness;
 import org.openepics.discs.ccdb.model.Unit;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
 import org.openepics.discs.ccdb.core.util.BuiltInDataType;
-import org.openepics.discs.ccdb.model.LevelOfCare;
+import org.openepics.discs.ccdb.model.cm.LevelOfCare;
 
 /**
  * @author <a href="mailto:miha.vitorovic@cosylab.com">Miha Vitorovič</a>

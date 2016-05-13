@@ -28,7 +28,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.openepics.discs.ccdb.core.ejb.LcApprovalEJB;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
-import org.openepics.discs.ccdb.model.LifecycleApprovalRecord;
+import org.openepics.discs.ccdb.model.cm.ReviewApproval;
 import org.openepics.discs.ccdb.model.Unit;
 import org.openepics.discs.ccdb.model.User;
 
@@ -46,9 +46,9 @@ public class LifecycleApprovalManager implements Serializable {
     @EJB
     private LcApprovalEJB lifecycleEJB;
     
-    private List<LifecycleApprovalRecord> approvalList;
-    private List<LifecycleApprovalRecord> filteredList;
-    private LifecycleApprovalRecord selectedApproval;
+    private List<ReviewApproval> approvalList;
+    private List<ReviewApproval> filteredList;
+    private ReviewApproval selectedApproval;
     
     public LifecycleApprovalManager() {
         
@@ -63,11 +63,13 @@ public class LifecycleApprovalManager implements Serializable {
         logger.log(Level.INFO, "Size of LC approval list: {0}", approvalList.size());
     }
 
+    
     public void onModify() {
         try {
             Preconditions.checkNotNull(selectedApproval);
             // final Unit unitToSave = selectedApproval.getUnit();
             selectedApproval.setApproved_at(new Date());
+//            servletRequest.getUserPrincipal() != null ? servletRequest.getUserPrincipal().getName() : null
             User user = new User("admin");       
              selectedApproval.setApproved_by(user);
             lifecycleEJB.save(selectedApproval);
@@ -80,23 +82,23 @@ public class LifecycleApprovalManager implements Serializable {
     }
     // getters and setters
 
-    public List<LifecycleApprovalRecord> getApprovalList() {
+    public List<ReviewApproval> getApprovalList() {
         return approvalList;
     }
 
-    public List<LifecycleApprovalRecord> getFilteredList() {
+    public List<ReviewApproval> getFilteredList() {
         return filteredList;
     }
 
-    public void setFilteredList(List<LifecycleApprovalRecord> filteredList) {
+    public void setFilteredList(List<ReviewApproval> filteredList) {
         this.filteredList = filteredList;
     }
 
-    public LifecycleApprovalRecord getSelectedApproval() {
+    public ReviewApproval getSelectedApproval() {
         return selectedApproval;
     }
 
-    public void setSelectedApproval(LifecycleApprovalRecord selectedApproval) {
+    public void setSelectedApproval(ReviewApproval selectedApproval) {
         this.selectedApproval = selectedApproval;
     }
    

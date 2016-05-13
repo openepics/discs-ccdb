@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
-import org.openepics.discs.ccdb.model.LifecycleStatus;
+import org.openepics.discs.ccdb.model.cm.PhaseStatusRecord;
 
 /**
  *
@@ -29,12 +29,12 @@ import org.openepics.discs.ccdb.model.LifecycleStatus;
  *
  */
 @Stateless
-public class LcStatusEJB extends DAO<LifecycleStatus> {    
+public class LcStatusEJB extends DAO<PhaseStatusRecord> {    
     private static final Logger logger = Logger.getLogger(LcStatusEJB.class.getName());
     
     @Override
-    protected Class<LifecycleStatus> getEntityClass() {
-        return LifecycleStatus.class;
+    protected Class<PhaseStatusRecord> getEntityClass() {
+        return PhaseStatusRecord.class;
     }
 
     /**
@@ -43,8 +43,8 @@ public class LcStatusEJB extends DAO<LifecycleStatus> {
      * @return a list of all {@link Rack}s ordered by name.
      */
     @Override
-    public List<LifecycleStatus> findAll() {
-        return em.createNamedQuery("LifecycleStatus.findAll", LifecycleStatus.class).getResultList();
+    public List<PhaseStatusRecord> findAll() {
+        return em.createNamedQuery("LifecycleStatus.findAll", PhaseStatusRecord.class).getResultList();
     }    
     
 }

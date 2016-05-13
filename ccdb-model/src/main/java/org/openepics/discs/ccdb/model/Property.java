@@ -19,6 +19,7 @@
  */
 package org.openepics.discs.ccdb.model;
 
+import org.openepics.discs.ccdb.model.cm.LevelOfCare;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;

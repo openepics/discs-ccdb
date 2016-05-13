@@ -24,7 +24,7 @@ import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.openepics.discs.ccdb.core.ejb.LcStatusEJB;
-import org.openepics.discs.ccdb.model.LifecycleStatus;
+import org.openepics.discs.ccdb.model.cm.PhaseStatusRecord;
 
 /**
  * Bean to support rack layout view
@@ -40,8 +40,8 @@ public class LifecycleStatusManager implements Serializable {
     @EJB
     private LcStatusEJB lifecycleEJB;
     
-    private List<LifecycleStatus> statusList;
-    private List<LifecycleStatus> filteredStatus;
+    private List<PhaseStatusRecord> statusList;
+    private List<PhaseStatusRecord> filteredStatus;
   
     public LifecycleStatusManager() {
         
@@ -58,15 +58,15 @@ public class LifecycleStatusManager implements Serializable {
 
     // getters and setters
 
-    public List<LifecycleStatus> getFilteredStatus() {
+    public List<PhaseStatusRecord> getFilteredStatus() {
         return filteredStatus;
     }
 
-    public void setFilteredStatus(List<LifecycleStatus> filteredStatus) {
+    public void setFilteredStatus(List<PhaseStatusRecord> filteredStatus) {
         this.filteredStatus = filteredStatus;
     }
 
-    public List<LifecycleStatus> getStatusList() {
+    public List<PhaseStatusRecord> getStatusList() {
         return statusList;
     }
    
