@@ -44,7 +44,7 @@ public class LcApprovalEJB extends DAO<ReviewApproval> {
      * @return a list of all {@link Rack}s ordered by name.
      */
     public List<ReviewApproval> findAll() {
-        return em.createNamedQuery("LifecycleApprovalRecord.findAll", ReviewApproval.class).getResultList();
+        return em.createNamedQuery("ReviewApproval.findAll", ReviewApproval.class).getResultList();
     }    
     
 }

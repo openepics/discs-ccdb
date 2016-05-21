@@ -12,8 +12,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.inject.Named;
-import org.openepics.discs.ccdb.core.ejb.SlotEJB;
-import org.openepics.discs.ccdb.model.Slot;
+import org.openepics.discs.ccdb.core.ejb.AuthEJB;
+import org.openepics.discs.ccdb.model.User;
 
 /**
  *
@@ -21,14 +21,14 @@ import org.openepics.discs.ccdb.model.Slot;
  */
 @Named
 @RequestScoped // Can be ApplicationScoped but have to be careful with state
-public class SlotConverter implements Converter {
+public class UserConverter implements Converter {
 
-    @EJB private SlotEJB slotEJB;
+    @EJB private AuthEJB authEJB;
 
     /**
      * Creates a new instance of DeviceConverter
      */
-    public SlotConverter() {
+    public UserConverter() {
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SlotConverter implements Converter {
         } 
         
         try {
-            return slotEJB.findById(Long.valueOf(stringValue));
+            return authEJB.findUser(stringValue);
         } catch (Exception e){
             throw new ConverterException("Not a valid ID");
         }
@@ -50,8 +50,8 @@ public class SlotConverter implements Converter {
             return "";
         }
         
-        if (modelObject instanceof Slot) {
-            return ((Slot) modelObject).getId().toString();
+        if (modelObject instanceof User) {
+            return ((User) modelObject).getUserId();
         } else {
             throw new ConverterException("Not a valid entity");
         }

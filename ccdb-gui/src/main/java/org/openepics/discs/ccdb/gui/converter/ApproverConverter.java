@@ -12,8 +12,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.inject.Named;
-import org.openepics.discs.ccdb.core.ejb.SlotEJB;
-import org.openepics.discs.ccdb.model.Slot;
+import org.openepics.discs.ccdb.core.ejb.ReviewEJB;
+import org.openepics.discs.ccdb.model.cm.ReviewApproval;
 
 /**
  *
@@ -21,14 +21,14 @@ import org.openepics.discs.ccdb.model.Slot;
  */
 @Named
 @RequestScoped // Can be ApplicationScoped but have to be careful with state
-public class SlotConverter implements Converter {
+public class ApproverConverter implements Converter {
 
-    @EJB private SlotEJB slotEJB;
+    @EJB private ReviewEJB reviewEJB;
 
     /**
      * Creates a new instance of DeviceConverter
      */
-    public SlotConverter() {
+    public ApproverConverter() {
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SlotConverter implements Converter {
         } 
         
         try {
-            return slotEJB.findById(Long.valueOf(stringValue));
+            return reviewEJB.findReviewApproval(Long.valueOf(stringValue));
         } catch (Exception e){
             throw new ConverterException("Not a valid ID");
         }
@@ -50,8 +50,8 @@ public class SlotConverter implements Converter {
             return "";
         }
         
-        if (modelObject instanceof Slot) {
-            return ((Slot) modelObject).getId().toString();
+        if (modelObject instanceof ReviewApproval) {
+            return ((ReviewApproval) modelObject).getId().toString();
         } else {
             throw new ConverterException("Not a valid entity");
         }

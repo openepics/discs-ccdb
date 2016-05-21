@@ -1,43 +1,166 @@
-<ui:composition template="/WEB-INF/template/template.xhtml" 
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:h="http://java.sun.com/jsf/html"
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/WEB-INF/template/template.xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"              
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
-    <ui:define name="content">
-        <h:form id="racklistForm">
+    <ui:define name="content"> 
+
+        <h:form id="crudForm" > 
             <p:panel>
-                <h:outputText value="Phase Requirements" styleClass="heading"/>
-                <p:dataTable var="stat" id="statusTable" value="#{lifecycleStatusManager.statusList}" 
+                <h:outputText value="Process Requirements" styleClass="heading"/>
+                <p:dataTable id="entityTable" var="entity" value="#{requirementManager.entities}" 
                              emptyMessage="No records found." 
-                             rowKey="#{stat.id}" 
-                             resizableColumns="true" filteredValue="#{lifecycleStatusManager.filteredStatus}" 
+                             rowKey="#{entity.id}" selectionMode="single" selection="#{requirementManager.selectedEntity}"
+                             resizableColumns="true" filteredValue="#{requirementManager.filteredEntities}" 
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
-                             rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">   
-
+                             rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">
                     
-                    <p:column headerText="Slot" sortBy="#{stat.requirement.slot.name}" filterBy="#{stat.requirement.slot.name}"
+                    <p:ajax event="rowSelect" listener="#{requirementManager.onRowSelect}" update="commandButtons" />
+                    <p:column headerText="Slot" sortBy="#{entity.slot.name}" filterBy="#{entity.slot.name}"
                               filterMatchMode="contains" >
-                        <h:outputText value="#{stat.requirement.slot.name}" />
+                        <h:outputText value="#{entity.slot.name}" />
                     </p:column>
 
-                    <p:column headerText="Phase" sortBy="#{stat.requirement.phase}"  >
-                        <h:outputText value="#{stat.requirement.phase.name}" />
+                    <p:column headerText="Process" sortBy="#{entity.review.name}"  filterBy="#{entity.review.name}" filterMatchMode="contains" >
+                        <h:outputText value="#{entity.review.name}" />
                     </p:column>
 
-                    <p:column headerText="Requestor" sortBy="#{stat.requirement.requestor.name}" filterBy="#{stat.requirement.requestor.name}"
-                              filterMatchMode="contains" >
-                        <h:outputText value="#{stat.requirement.requestor.name}" />
+                    <p:column headerText="Approvers"  >
+                        <h:outputText value="#{entity.approvals}" />
+                        <c:forEach items="#{entity.approvals}"  var="arec" > <h:outputText value="#{arec.assignedApprover.name}" /> </c:forEach>
                     </p:column>
-
                     
-                    <p:column headerText="Date" sortBy="#{stat.modifiedAt}"  >
-                        <h:outputText value="#{stat.modifiedAt}" />
+                    <p:column headerText="Requestor" sortBy="#{entity.requestor.name}" filterBy="#{entity.requestor.name}"
+                              filterMatchMode="contains" >
+                        <h:outputText value="#{entity.requestor.name}" />
                     </p:column>
+                    
+                    <p:column headerText="Date" sortBy="#{entity.modifiedAt}"  >
+                        <h:outputText value="#{entity.modifiedAt}" />
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:toolbar id="commandButtons">
+                            <f:facet name="left">
+                                <p:commandButton title="Add" icon="ui-icon-document" update=":crudInputDlg" process="@this" 
+                                                 actionListener="#{requirementManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"/>   
+                                <p:commandButton title="Edit" icon="ui-icon-disk" update=":crudInputDlg"  process="@this"                                          
+                                                 actionListener="#{requirementManager.onEditCommand}"
+                                                 oncomplete="PF('crudInputWid').show()" disabled="#{empty requirementManager.selectedEntity}"/>
+                                <p:commandButton title="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
+                                                 actionListener="#{requirementManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
+                                                 disabled="#{empty requirementManager.selectedEntity}"/>
+                            </f:facet>
+                        </p:toolbar>
+                    </f:facet>
                 </p:dataTable>
             </p:panel>
-        </h:form>     
-    </ui:define>
+        </h:form>
+
+        <p:dialog id="crudInputDlg" widgetVar="crudInputWid">
+            <h:form id="objectInputForm">              
+                <p:panelGrid>
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column colspan="2">
+                                <h:outputText value="New Assignment" rendered="#{requirementManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update Existing Assignment" rendered="#{requirementManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete Assignment" rendered="#{requirementManager.inputAction == 'DELETE'}"/>
+                            </p:column>                
+                        </p:row>
+                    </f:facet>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="slotList" value="Slot"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="slotList" var="slot" converter="#{slotConverter}"
+                                             filter="true"
+                                             value="#{requirementManager.inputAction == 'CREATE'? requirementManager.inputEntity.slot : requirementManager.selectedEntity.slot}"                                            
+                                             disabled="#{requirementManager.inputAction == 'DELETE'}">
+                                <f:selectItems value="#{requirementManager.slots}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{slot.name}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{slot.description}" />
+                                </p:column>
+                            </p:selectOneMenu>                                                    
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="procList" value="Process"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="procList" var="proc" converter="#{processConverter}"
+                                             filter="true"
+                                             value="#{requirementManager.inputAction == 'CREATE'? requirementManager.inputEntity.review : requirementManager.selectedEntity.review}"                                            
+                                             disabled="#{requirementManager.inputAction == 'DELETE'}">
+                                <f:selectItems value="#{requirementManager.processes}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{proc.name}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{proc.description}" />
+                                </p:column>
+                            </p:selectOneMenu>                                                     
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="apprList" value="Approvers"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectManyMenu id="apprList" var="appr" converter="#{userConverter}"
+                                              filter="true" showCheckbox="true"
+                                              value="#{requirementManager.inputAction == 'CREATE'? requirementManager.inputApprovers : requirementManager.inputApprovers}"                                            
+                                             disabled="#{requirementManager.inputAction == 'DELETE'}">
+                                <f:selectItems value="#{requirementManager.users}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{appr.userId}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{appr.name}" />
+                                </p:column>
+                            </p:selectManyMenu>                                                     
+                        </p:column>
+                    </p:row>
+<!--                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="procDesc"  value="Description" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="procDesc" value="#{requirementManager.inputAction == 'CREATE'? requirementManager.inputEntity.description : requirementManager.selectedEntity.description}" 
+                                         required="true" 
+                                         validatorMessage="Description required" disabled="#{requirementManager.inputAction == 'DELETE'}"/>                            
+                        </p:column>
+                    </p:row>-->
+
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
+                                                 onclick="PF('crudInputWid').hide()"/>
+                                <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
+                                                 action="#{requirementManager.saveEntity()}"  
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{requirementManager.inputAction != 'DELETE'}"/>
+                                <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"
+                                                 action="#{requirementManager.deleteEntity()}" 
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form" update=":crudForm:entityTable" rendered="#{requirementManager.inputAction == 'DELETE'}"/>                                
+                            </p:column>                
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define> 
 </ui:composition>

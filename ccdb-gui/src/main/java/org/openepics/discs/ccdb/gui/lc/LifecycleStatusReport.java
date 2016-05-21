@@ -124,9 +124,9 @@ public class LifecycleStatusReport implements Serializable {
           }
           
           for(PhaseStatusRecord lcstat: statusList) {
-              if (slot.equals(lcstat.getRequirement().getSlot().getName()) && phase.equals(lcstat.getRequirement().getPhase().getName())) {
+//              if (slot.equals(lcstat.getRequirement().getSlot().getName()) && phase.equals(lcstat.getRequirement().getPhase().getName())) {
                   return lcstat.getStatus().name();
-              }
+//              }
           }
           
         return "N/R";

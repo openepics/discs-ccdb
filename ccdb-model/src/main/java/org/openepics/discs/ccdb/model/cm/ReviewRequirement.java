@@ -26,7 +26,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
-import org.openepics.discs.ccdb.model.Device;
 import org.openepics.discs.ccdb.model.Slot;
 import org.openepics.discs.ccdb.model.User;
 
@@ -36,13 +35,11 @@ import org.openepics.discs.ccdb.model.User;
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "cm_review_equirement")
+@Table(name = "cm_review_requirement")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ReviewRequirement.findAll", query = "SELECT d FROM ReviewRequirement d"),
-    @NamedQuery(name = "ReviewRequirement.findBySlot", query = "SELECT d FROM ReviewRequirement d WHERE d.slot = :slot"),
-    @NamedQuery(name = "ReviewRequirement.findByDevice", query = "SELECT d FROM ReviewRequirement d WHERE d.device = :device"),
-    @NamedQuery(name = "ReviewRequirement.findByProcess", query = "SELECT d FROM ReviewRequirement d WHERE d.phase = :phase")
+    @NamedQuery(name = "ReviewRequirement.findBySlot", query = "SELECT d FROM ReviewRequirement d WHERE d.slot = :slot")
 })
 public class ReviewRequirement extends ConfigurationEntity {
 
@@ -52,13 +49,9 @@ public class ReviewRequirement extends ConfigurationEntity {
     @JoinColumn(name = "slot")
     private Slot slot;
     
-    @ManyToOne
-    @JoinColumn(name = "device")
-    private Device device;
-    
-    @ManyToOne
-    @JoinColumn(name = "phase")
-    private Review phase;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "review")
+    private Review review;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "requestor")
@@ -110,20 +103,12 @@ public class ReviewRequirement extends ConfigurationEntity {
         this.slot = slot;
     }
 
-    public Device getDevice() {
-        return device;
+    public Review getReview() {
+        return review;
     }
 
-    public void setDevice(Device device) {
-        this.device = device;
-    }
-
-    public Review getPhase() {
-        return phase;
-    }
-
-    public void setPhase(Review phase) {
-        this.phase = phase;
+    public void setReview(Review review) {
+        this.review = review;
     }
 
     public List<ReviewApproval> getApprovals() {

@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/WEB-INF/template/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"              
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content"> 
+
+        <h:form id="crudForm" > 
+            <p:panel>
+                <h:outputText value="Manage Processes" styleClass="heading"/>
+                <p:dataTable id="entityTable" value="#{processManager.entities}" var="obj" 
+                             scrollRows="25" scrollable="true" scrollHeight="400" liveScroll="true" sortMode="multiple"
+                             rowKey="#{obj.id}" selectionMode="single" selection="#{processManager.selectedEntity}"                          
+                             filteredValue="#{processManager.filteredEntities}">  
+                    <!--                <f:facet name="header" >
+                                        <h:outputText value="Manage Processes"/>
+                                    </f:facet>-->
+                    <p:ajax event="rowSelect" listener="#{processManager.onRowSelect}" update="commandButtons" />
+                    <p:column headerText="Process" sortBy="#{obj.name}" 
+                              filterBy="#{obj.name}" filterMatchMode="contains" > 
+                        <h:outputText value="#{obj.name}" styleClass="colCenter"/>
+                    </p:column>
+                    <p:column headerText="Description" sortBy="#{obj.description}" 
+                              filterBy="#{obj.description}" filterMatchMode="contains" >
+                        <h:outputText value="#{obj.description}" styleClass="colCenter"/>
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:toolbar id="commandButtons">
+                            <f:facet name="left">
+                                <p:commandButton title="Add" icon="ui-icon-document" update=":crudInputDlg" process="@this" 
+                                                 actionListener="#{processManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"/>   
+                                <p:commandButton title="Edit" icon="ui-icon-disk" update=":crudInputDlg"  process="@this"                                          
+                                                 actionListener="#{processManager.onEditCommand}"
+                                                 oncomplete="PF('crudInputWid').show()" disabled="#{empty processManager.selectedEntity}"/>
+                                <p:commandButton title="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
+                                                 actionListener="#{processManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
+                                                 disabled="#{empty processManager.selectedEntity}"/>
+                            </f:facet>
+                        </p:toolbar>
+                    </f:facet>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+
+        <p:dialog id="crudInputDlg" widgetVar="crudInputWid">
+            <h:form id="objectInputForm">              
+                <p:panelGrid>
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column colspan="2">
+                                <h:outputText value="New Process" rendered="#{processManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update Existing Process" rendered="#{processManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete Process" rendered="#{processManager.inputAction == 'DELETE'}"/>
+                            </p:column>                
+                        </p:row>
+                    </f:facet>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="procName" value="Name"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="procName" value="#{processManager.inputAction == 'CREATE'? processManager.inputEntity.name: processManager.selectedEntity.name}" 
+                                         required="true" 
+                                         validatorMessage="Name required" disabled="#{processManager.inputAction == 'DELETE'}"/>                             
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="procDesc"  value="Description" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="procDesc" value="#{processManager.inputAction == 'CREATE'? processManager.inputEntity.description : processManager.selectedEntity.description}" 
+                                         required="true" 
+                                         validatorMessage="Description required" disabled="#{processManager.inputAction == 'DELETE'}"/>                            
+                        </p:column>
+                    </p:row>
+
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
+                                                 onclick="PF('crudInputWid').hide()"/>
+                                <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
+                                                 action="#{processManager.saveEntity()}"  
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{processManager.inputAction != 'DELETE'}"/>
+                                <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"
+                                                 action="#{processManager.deleteEntity()}" 
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form" update=":crudForm:entityTable" rendered="#{processManager.inputAction == 'DELETE'}"/>                                
+                            </p:column>                
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define> 
+</ui:composition>

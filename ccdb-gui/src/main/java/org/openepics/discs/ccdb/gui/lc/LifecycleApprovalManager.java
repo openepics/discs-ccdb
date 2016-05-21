@@ -28,9 +28,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.openepics.discs.ccdb.core.ejb.LcApprovalEJB;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
-import org.openepics.discs.ccdb.model.cm.ReviewApproval;
-import org.openepics.discs.ccdb.model.Unit;
 import org.openepics.discs.ccdb.model.User;
+import org.openepics.discs.ccdb.model.cm.ReviewApproval;
 
 /**
  * Bean to support rack layout view
@@ -48,7 +47,7 @@ public class LifecycleApprovalManager implements Serializable {
     
     private List<ReviewApproval> approvalList;
     private List<ReviewApproval> filteredList;
-    private ReviewApproval selectedApproval;
+    private List<ReviewApproval> selectedApprovals;
     
     public LifecycleApprovalManager() {
         
@@ -64,15 +63,44 @@ public class LifecycleApprovalManager implements Serializable {
     }
 
     
-    public void onModify() {
+    public void onApprove() {
         try {
-            Preconditions.checkNotNull(selectedApproval);
+            Preconditions.checkNotNull(selectedApprovals);
+            User user = new User("admin"); 
+            for (ReviewApproval selectedApproval: selectedApprovals) {
+                selectedApproval.setApproved_at(new Date());
+                selectedApproval.setApproved_by(user);
+                selectedApproval.setApproved(true);
+            }
             // final Unit unitToSave = selectedApproval.getUnit();
-            selectedApproval.setApproved_at(new Date());
+//            selectedApproval.setApproved_at(new Date());
 //            servletRequest.getUserPrincipal() != null ? servletRequest.getUserPrincipal().getName() : null
-            User user = new User("admin");       
-             selectedApproval.setApproved_by(user);
-            lifecycleEJB.save(selectedApproval);
+//            User user = new User("admin");       
+//             selectedApproval.setApproved_by(user);
+            //lifecycleEJB.save(selectedApproval);
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
+                                                                "Approval has been successfully modified.");
+        } finally {
+//            selectedApproval = null;
+            
+        }
+    }
+    
+    public void onDisapprove() {
+        try {
+            Preconditions.checkNotNull(selectedApprovals);
+            User user = new User("admin"); 
+            for (ReviewApproval selectedApproval: selectedApprovals) {
+                selectedApproval.setApproved_at(new Date());
+                selectedApproval.setApproved_by(user);
+                selectedApproval.setApproved(false);
+            }
+            // final Unit unitToSave = selectedApproval.getUnit();
+//            selectedApproval.setApproved_at(new Date());
+//            servletRequest.getUserPrincipal() != null ? servletRequest.getUserPrincipal().getName() : null
+//            User user = new User("admin");       
+//             selectedApproval.setApproved_by(user);
+            //lifecycleEJB.save(selectedApproval);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
                                                                 "Approval has been successfully modified.");
         } finally {
@@ -94,12 +122,12 @@ public class LifecycleApprovalManager implements Serializable {
         this.filteredList = filteredList;
     }
 
-    public ReviewApproval getSelectedApproval() {
-        return selectedApproval;
+    public List<ReviewApproval> getSelectedApprovals() {
+        return selectedApprovals;
     }
 
-    public void setSelectedApproval(ReviewApproval selectedApproval) {
-        this.selectedApproval = selectedApproval;
+    public void setSelectedApprovals(List<ReviewApproval> selectedApprovals) {
+        this.selectedApprovals = selectedApprovals;
     }
    
 }

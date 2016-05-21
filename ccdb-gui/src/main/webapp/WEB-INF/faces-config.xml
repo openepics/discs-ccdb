@@ -70,8 +70,8 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
-            <from-outcome>phases</from-outcome>
-            <to-view-id>/lc/phases.xhtml</to-view-id>
+            <from-outcome>processes</from-outcome>
+            <to-view-id>/lc/processes.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
@@ -131,7 +131,7 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>statusreport</from-outcome>
-            <to-view-id>/report/phasestatus.xhtml</to-view-id>
+            <to-view-id>/lc/approvalReport.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>

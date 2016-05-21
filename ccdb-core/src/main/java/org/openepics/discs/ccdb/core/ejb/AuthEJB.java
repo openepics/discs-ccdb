@@ -59,4 +59,8 @@ public class AuthEJB extends DAO<Role> {
     public List<UserRole> findAllUserRoles() {
         return em.createNamedQuery("UserRole.findAll", UserRole.class).getResultList();
     }
+    
+    public User findUser(String userid) {
+        return em.find(User.class, userid);
+    }
 }

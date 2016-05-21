@@ -18,22 +18,19 @@ package org.openepics.discs.ccdb.gui.lc;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static java.util.stream.Collectors.toSet;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import org.openepics.discs.ccdb.core.ejb.LcApprovalEJB;
-import org.openepics.discs.ccdb.core.ejb.LcStatusEJB;
+import org.openepics.discs.ccdb.core.ejb.ReviewEJB;
 import org.openepics.discs.ccdb.model.cm.ReviewApproval;
-import org.openepics.discs.ccdb.model.cm.PhaseStatusRecord;
-import org.openepics.discs.ccdb.model.Slot;
 
 /**
  * Bean to support lifecycle approval report
@@ -66,11 +63,11 @@ public class ApprovalReport implements Serializable {
     
     private static final Logger logger = Logger.getLogger(ApprovalReport.class.getName());
     @EJB
-    private LcApprovalEJB lifecycleEJB;
+    private ReviewEJB reviewEJB;
     
     private List<ReviewApproval> statusList;
     private List<ReviewApproval> filteredStatus;
-    private Set<String> slotNames = new HashSet<>();
+    private Set<String> slotNames;
   
     private final static List<String> VALID_COLUMN_KEYS = Arrays.asList("ARR", "DHR");
      
@@ -87,13 +84,18 @@ public class ApprovalReport implements Serializable {
      */
     @PostConstruct
     public void init() {
-        statusList = lifecycleEJB.findAll();
+        statusList = reviewEJB.findAllApprovals();
         logger.log(Level.INFO, "Size of LC sttaus list: {0}", statusList.size());
-        for(ReviewApproval lcstat: statusList) {
-              if (lcstat.getRequirement().getSlot() != null) {
-                  slotNames.add(lcstat.getRequirement().getSlot().getName());
-              }
-          }
+//        for( ReviewApproval lcstat: statusList ) {
+//              if (lcstat.getRequirement().getSlot() != null) {
+//                  slotNames.add(lcstat.getRequirement().getSlot().getName());
+//              }
+//          }
+        slotNames = statusList.stream()
+                  .filter(t -> t.getRequirement().getSlot() != null)
+                  .map(t -> t.getRequirement().getSlot().getName())
+                  .collect(toSet());
+        
         createDynamicColumns();
     }
 
@@ -126,11 +128,11 @@ public class ApprovalReport implements Serializable {
           }
           
           for(ReviewApproval lcstat: statusList) {
-              if (slot.equals(lcstat.getRequirement().getSlot().getName()) && phase.equals(lcstat.getRequirement().getPhase().getName())) {
+              
                   if (lcstat.isApproved()) {
                       return "Approved by " + (lcstat.getApproved_by() == null? " " : lcstat.getApproved_by().getUserId()) + ", " + lcstat.getApproved_at();
                   };
-              }
+              
           }
           
         return "";

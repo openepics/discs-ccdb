@@ -30,7 +30,6 @@ import static javax.persistence.TemporalType.DATE;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
-import org.openepics.discs.ccdb.model.Role;
 import org.openepics.discs.ccdb.model.User;
 
 /**
@@ -54,7 +53,7 @@ public class ReviewApproval extends ConfigurationEntity {
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "assigned_approver")
-    private Role assignedApprover;
+    private User assignedApprover;
     
     @Column(name = "approved")
     @Basic(optional = false)
@@ -108,11 +107,11 @@ public class ReviewApproval extends ConfigurationEntity {
         this.requirement = requirement;
     }
 
-    public Role getAssignedApprover() {
+    public User getAssignedApprover() {
         return assignedApprover;
     }
 
-    public void setAssignedApprover(Role assignedApprover) {
+    public void setAssignedApprover(User assignedApprover) {
         this.assignedApprover = assignedApprover;
     }
 
