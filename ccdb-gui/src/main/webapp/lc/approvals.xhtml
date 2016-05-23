@@ -1,37 +1,40 @@
-<ui:composition template="/WEB-INF/template/template.xhtml" 
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:h="http://java.sun.com/jsf/html"
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/WEB-INF/template/template.xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"              
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
-    <ui:define name="content">
-        <h:form id="approvalForm">
+    <ui:define name="content"> 
+
+        <h:form id="crudForm" > 
             <p:panel>
                 <h:outputText value="Approvals" styleClass="heading"/>
-                <p:dataTable var="stat" id="approvalTable" value="#{approvalManager.approvalList}" 
+                <p:dataTable var="stat" id="entityTable" value="#{approveManager.entities}" 
                              emptyMessage="No records found." 
                              rowKey="#{stat.id}" 
-                             selection="#{approvalManager.selectedApprovals}"
-                             resizableColumns="true" filteredValue="#{approvalManager.filteredList}" 
+                             selection="#{approveManager.selectedApprovals}"
+                             resizableColumns="true" filteredValue="#{approveManager.filteredEntities}" 
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
                              rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">   
 
-
+                    <p:ajax event="rowSelectCheckbox" listener="#{approveManager.onRowSelect}" update="commandButtons" />
                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-                    <p:column headerText="Slot" sortBy="#{stat.requirement.slot.name}" filterBy="#{stat.requirement.slot.name}"
+                    <p:column headerText="Slot" sortBy="#{stat.assignment.slot.name}" filterBy="#{stat.assignment.slot.name}"
                               filterMatchMode="contains" >
-                        <h:outputText value="#{stat.requirement.slot.name}" />
+                        <h:outputText value="#{stat.assignment.slot.name}" />
                     </p:column>
 
-                    <p:column headerText="Review" sortBy="#{stat.requirement.review.name}"  filterBy="#{stat.requirement.review.name}" >
-                        <h:outputText value="#{stat.requirement.review.name}" />
+                    <p:column headerText="Phase" sortBy="#{stat.assignment.phase.name}"  filterBy="#{stat.assignment.phase.name}" >
+                        <h:outputText value="#{stat.assignment.phase.name}" />
                     </p:column>
 
-                    <p:column headerText="Requestor" sortBy="#{stat.requirement.requestor.name}" filterBy="#{stat.requirement.requestor.name}"
+                    <p:column headerText="Requestor" sortBy="#{stat.assignment.requestor.name}" filterBy="#{stat.assignment.requestor.name}"
                               filterMatchMode="contains" >
-                        <h:outputText value="#{stat.requirement.requestor.name}" />
+                        <h:outputText value="#{stat.assignment.requestor.name}" />
                     </p:column>
                     <p:column headerText="Assigned To" sortBy="#{stat.assignedApprover.userId}"  filterBy="#{stat.assignedApprover.userId}" >
                         <h:outputText value="#{stat.assignedApprover.userId}" />
@@ -49,21 +52,62 @@
                     <p:column headerText="Comment" >
                         <h:outputText value="#{stat.comment}" />
                     </p:column>
-                </p:dataTable>
-                
-                
-                <p:commandButton id="disaprButton" icon="ui-icon-pencil" value="Disapprove" title="Disapprove" 
-                    style="float: right; margin: 1em 1ex 0 0;" update=":modifyApprovalForm:modifyApproval" 
-                    disabled="true" 
-                    oncomplete="PF('modifyApprovalWid').show();" />
-                <p:commandButton id="editButton" icon="ui-icon-pencil" value="Approve" title="Approve" 
-                    style="float: right; margin: 1em 1ex 0 0;" update=":modifyApprovalForm:modifyApproval" 
-                    disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}" 
-                    oncomplete="PF('modifyApprovalWid').show();"  />
+                    
+                    <f:facet name="footer">
+                        <p:toolbar id="commandButtons">
+                            <f:facet name="left">
+                                <p:commandButton title="Approve"  value="Approve" icon="ui-icon-document" update=":crudInputDlg" process="@this" 
+                                                 actionListener="#{approveManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty approveManager.selectedApprovals}" />   
+                                <p:commandButton title="Disapprove" value="Dispprove" icon="ui-icon-disk" update=":crudInputDlg"  process="@this"                                          
+                                                 actionListener="#{approveManager.onEditCommand}"
+                                                 oncomplete="PF('crudInputWid').show()" disabled="#{true or empty approveManager.selectedApprovals}"/>
+                                <p:commandButton title="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
+                                                 actionListener="#{approveManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
+                                                 disabled="#{true or empty approveManager.selectedApprovals}"/>
+                            </f:facet>
+                        </p:toolbar>
+                    </f:facet>
+                </p:dataTable>                             
             </p:panel>
-        </h:form> 
-                          
-        <ui:include src="add-or-modify-approval.xhtml"/>
-                
-    </ui:define>
+        </h:form>
+
+        <p:dialog id="crudInputDlg" widgetVar="crudInputWid">
+            <h:form id="objectInputForm" >              
+                <p:panelGrid columns="1">
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="Approve" rendered="#{approveManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Disapprove" rendered="#{approveManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete Approval" rendered="#{approveManager.inputAction == 'DELETE'}"/>
+                            </p:column>                
+                        </p:row>
+                        
+                    </f:facet>
+                    <p:row>
+                            <p:column >
+                                <h:outputText value="Are you sure?" />
+                            </p:column>                           
+                    </p:row>
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column>
+                                <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
+                                                 onclick="PF('crudInputWid').hide()"/>
+                                <p:commandButton icon="ui-icon-disk" value="Yes" style="float: right;"
+                                                 action="#{approveManager.onApprove()}"  
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{approveManager.inputAction != 'DELETE'}"/>
+                                <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"
+                                                 action="#{approveManager.deleteEntity()}" 
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form" update=":crudForm:entityTable" rendered="#{approveManager.inputAction == 'DELETE'}"/>                                
+                            </p:column>                
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define> 
 </ui:composition>

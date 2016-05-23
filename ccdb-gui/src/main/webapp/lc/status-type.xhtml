@@ -33,13 +33,15 @@
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">
                                 <p:commandButton title="Add" icon="ui-icon-document" update=":crudInputDlg" process="@this" 
-                                                 actionListener="#{statusTypeManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"/>   
+                                                 actionListener="#{statusTypeManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}"/>   
                                 <p:commandButton title="Edit" icon="ui-icon-disk" update=":crudInputDlg"  process="@this"                                          
                                                  actionListener="#{statusTypeManager.onEditCommand}"
-                                                 oncomplete="PF('crudInputWid').show()" disabled="#{empty statusTypeManager.selectedEntity}"/>
+                                                 oncomplete="PF('crudInputWid').show()" 
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty statusTypeManager.selectedEntity}"/>
                                 <p:commandButton title="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
                                                  actionListener="#{statusTypeManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
-                                                 disabled="#{empty statusTypeManager.selectedEntity}"/>
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty statusTypeManager.selectedEntity}"/>
                             </f:facet>
                         </p:toolbar>
                     </f:facet>

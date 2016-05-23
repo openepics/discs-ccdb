@@ -8,21 +8,24 @@
     <ui:define name="content">
         <h:form id="approvalForm">
             <p:panel>
-                <h:outputText value="Phase Status Report" styleClass="heading"/>
-                <p:dataTable var="stat" id="reportTable" value="#{approvalManager.approvalList}" 
+                <h:outputText value="Approvals" styleClass="heading"/>
+                <p:dataTable var="stat" id="approvalTable" value="#{approvalManager.approvalList}" 
                              emptyMessage="No records found." 
-                             rowKey="#{stat.id}"                        
+                             rowKey="#{stat.id}" 
+                             selection="#{approvalManager.selectedApprovals}"
                              resizableColumns="true" filteredValue="#{approvalManager.filteredList}" 
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
-                             rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">
-              
+                             rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">   
+
+
+                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                     <p:column headerText="Slot" sortBy="#{stat.assignment.slot.name}" filterBy="#{stat.assignment.slot.name}"
                               filterMatchMode="contains" >
                         <h:outputText value="#{stat.assignment.slot.name}" />
                     </p:column>
 
-                    <p:column headerText="Review" sortBy="#{stat.assignment.phase.name}"  filterBy="#{stat.assignment.phase.name}" >
+                    <p:column headerText="Phase" sortBy="#{stat.assignment.phase.name}"  filterBy="#{stat.assignment.phase.name}" >
                         <h:outputText value="#{stat.assignment.phase.name}" />
                     </p:column>
 
@@ -36,7 +39,7 @@
                     <p:column headerText="Approved" sortBy="#{stat.approved}"  >
                         <h:outputText value="#{stat.approved ? 'Yes': 'No'}"  rendered="#{stat.approved_at ne null}"/>
                     </p:column>
-
+                    
                     <p:column headerText="By" sortBy="#{stat.approved_by.userId}"  >
                         <h:outputText value="#{stat.approved_by.userId}" />
                     </p:column>
@@ -46,21 +49,21 @@
                     <p:column headerText="Comment" >
                         <h:outputText value="#{stat.comment}" />
                     </p:column>
-                </p:dataTable> 
+                </p:dataTable>
                 
-                <h:commandLink title="Export to Excel">  
-                    <p:graphicImage value="#{resource['images/excel.png']}" />                      
-                    <p:dataExporter type="xls"  target="reportTable" fileName="phase-status-report"  />  
-                </h:commandLink>  
-                <h:commandLink title="Export to CSV">  
-                    <p:graphicImage value="#{resource['images/csv.png']}" />  
-                    <p:dataExporter type="csv" target="reportTable" fileName="phase-status-report"  /> 
-                </h:commandLink>  
-                <h:commandLink title="Export to XML">  
-                    <p:graphicImage value="#{resource['images/xml.png']}" />  
-                    <p:dataExporter type="xml" target="reportTable" fileName="phase-status-report" />  
-                </h:commandLink>
+                
+                <p:commandButton id="disaprButton" icon="ui-icon-pencil" value="Disapprove" title="Disapprove" 
+                    style="float: right; margin: 1em 1ex 0 0;" update=":modifyApprovalForm:modifyApproval" 
+                    disabled="true" 
+                    oncomplete="PF('modifyApprovalWid').show();" />
+                <p:commandButton id="editButton" icon="ui-icon-pencil" value="Approve" title="Approve" 
+                    style="float: right; margin: 1em 1ex 0 0;" update=":modifyApprovalForm:modifyApproval" 
+                    disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}" 
+                    oncomplete="PF('modifyApprovalWid').show();"  />
             </p:panel>
-        </h:form>              
+        </h:form> 
+                          
+        <ui:include src="add-or-modify-approval.xhtml"/>
+                
     </ui:define>
 </ui:composition>

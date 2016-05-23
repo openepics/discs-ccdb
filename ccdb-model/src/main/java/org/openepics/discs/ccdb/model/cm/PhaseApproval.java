@@ -26,7 +26,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import static javax.persistence.TemporalType.DATE;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
@@ -67,7 +67,7 @@ public class PhaseApproval extends ConfigurationEntity {
     
     @Column(name = "approved_at")
     @Basic
-    @Temporal(DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date approved_at;
     
     @Column(name = "comment")

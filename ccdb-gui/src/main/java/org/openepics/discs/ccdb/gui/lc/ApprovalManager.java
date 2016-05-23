@@ -26,7 +26,6 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import org.openepics.discs.ccdb.core.ejb.LcApprovalEJB;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
 import org.openepics.discs.ccdb.model.User;
@@ -42,7 +41,7 @@ import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 @ViewScoped
 public class ApprovalManager implements Serializable {
 
-    private static final Logger logger = Logger.getLogger(ApprovalManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ApprovalManager.class.getName());
     @EJB
     private LifecycleEJB lifecycleEJB;
     
@@ -60,7 +59,7 @@ public class ApprovalManager implements Serializable {
     @PostConstruct
     public void init() {
         approvalList = lifecycleEJB.findAllApprovals();
-        logger.log(Level.INFO, "Size of LC approval list: {0}", approvalList.size());
+        LOGGER.log(Level.INFO, "Size of LC approval list: {0}", approvalList.size());
     }
 
     
@@ -72,18 +71,12 @@ public class ApprovalManager implements Serializable {
                 selectedApproval.setApproved_at(new Date());
                 selectedApproval.setApproved_by(user);
                 selectedApproval.setApproved(true);
-            }
-            // final Unit unitToSave = selectedApproval.getUnit();
-//            selectedApproval.setApproved_at(new Date());
-//            servletRequest.getUserPrincipal() != null ? servletRequest.getUserPrincipal().getName() : null
-//            User user = new User("admin");       
-//             selectedApproval.setApproved_by(user);
-            //lifecycleEJB.save(selectedApproval);
+                lifecycleEJB.saveApproval(selectedApproval);
+            }             
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
-                                                                "Approval has been successfully modified.");
+                                                                "Approval successful.");
         } finally {
-//            selectedApproval = null;
-            
+//            selectedApproval = null;           
         }
     }
     
@@ -95,18 +88,12 @@ public class ApprovalManager implements Serializable {
                 selectedApproval.setApproved_at(new Date());
                 selectedApproval.setApproved_by(user);
                 selectedApproval.setApproved(false);
-            }
-            // final Unit unitToSave = selectedApproval.getUnit();
-//            selectedApproval.setApproved_at(new Date());
-//            servletRequest.getUserPrincipal() != null ? servletRequest.getUserPrincipal().getName() : null
-//            User user = new User("admin");       
-//             selectedApproval.setApproved_by(user);
-            //lifecycleEJB.save(selectedApproval);
+                lifecycleEJB.saveApproval(selectedApproval);
+            }         
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
-                                                                "Approval has been successfully modified.");
+                                                                "Disappproval successful.");
         } finally {
-//            selectedApproval = null;
-            
+//            selectedApproval = null;           
         }
     }
     // getters and setters
@@ -129,6 +116,5 @@ public class ApprovalManager implements Serializable {
 
     public void setSelectedApprovals(List<PhaseApproval> selectedApprovals) {
         this.selectedApprovals = selectedApprovals;
-    }
-   
+    }  
 }

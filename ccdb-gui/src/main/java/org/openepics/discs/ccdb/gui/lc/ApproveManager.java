@@ -1,0 +1,227 @@
+/*
+ * This software is Copyright by the Board of Trustees of Michigan
+ *  State University (c) Copyright 2013, 2014.
+ *  
+ *  You may use this software under the terms of the GNU public license
+ *  (GPL). The terms of this license are described at:
+ *    http://www.gnu.org/licenses/gpl.txt
+ *  
+ *  Contact Information:
+ *       Facility for Rare Isotope Beam
+ *       Michigan State University
+ *       East Lansing, MI 48824-1321
+ *        http://frib.msu.edu
+ */
+
+package org.openepics.discs.ccdb.gui.lc;
+
+import com.google.common.base.Preconditions;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.event.ActionEvent;
+import javax.inject.Named;
+import javax.faces.view.ViewScoped;
+import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
+import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
+import org.openepics.discs.ccdb.model.User;
+import org.openepics.discs.ccdb.model.cm.PhaseApproval;
+
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
+
+/**
+ * Description: State for Manage Phase View
+ *
+ * Methods:
+ * <p>
+ * Init: to initialize the state
+ * <p>
+ * resetInput: reset all inputs on the view
+ * <p>
+ * onRowSelect: things to do when an item is selected
+ * <p>
+ * onAddCommand: things to do before adding an item
+ * <p>
+ * onEditCommand: things to do before editing an item
+ * <p>
+ * onDeleteCommand: things to do before deleting an item
+ * <p>
+ * saveXXXX: save the input or edited item
+ * <p>
+ * deleteXXXX: delete the selected item
+ *
+ * @author vuppala
+ *
+ */
+
+@Named
+@ViewScoped
+public class ApproveManager implements Serializable {
+//    @EJB
+//    private AuthEJB authEJB;
+    @EJB
+    private LifecycleEJB lcEJB;
+            
+    private static final Logger LOGGER = Logger.getLogger(ApproveManager.class.getName());
+//    @Inject
+//    UserSession userSession;
+      
+    private List<PhaseApproval> entities;    
+    private List<PhaseApproval> filteredEntities;    
+    private PhaseApproval inputEntity;
+    private PhaseApproval selectedEntity;
+    private InputAction inputAction;
+    
+    private List<PhaseApproval> selectedApprovals;
+    
+    public ApproveManager() {
+    }
+    
+    @PostConstruct
+    public void init() {      
+        entities = lcEJB.findAllApprovals(); 
+        
+        resetInput();
+    }
+    
+    private void resetInput() {                
+        inputAction = InputAction.READ;
+    }
+    
+    public void onRowSelect(SelectEvent event) {
+        // inputRole = selectedRole;
+        // Utility.showMessage(FacesMessage.SEVERITY_INFO, "Role Selected", "");
+    }
+    
+    public void onAddCommand(ActionEvent event) {
+        inputEntity = new PhaseApproval();
+        inputAction = InputAction.CREATE;       
+    }
+    
+    public void onEditCommand(ActionEvent event) {
+        inputAction = InputAction.UPDATE;
+    }
+    
+    public void onDeleteCommand(ActionEvent event) {
+        inputAction = InputAction.DELETE;
+    }
+    
+    public void saveEntity() {
+        try {                      
+            if (inputAction == InputAction.CREATE) {
+                lcEJB.saveApproval(inputEntity);
+                entities.add(inputEntity);                
+            } else {
+                lcEJB.saveApproval(selectedEntity);
+            }
+            resetInput();
+            RequestContext.getCurrentInstance().addCallbackParam("success", true);
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Saved", "");
+        } catch (Exception e) {
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save", e.getMessage());
+            RequestContext.getCurrentInstance().addCallbackParam("success", false);
+            System.out.println(e);
+        }
+    }
+    
+    public void deleteEntity() {
+        try {
+            lcEJB.deleteApproval(selectedEntity);
+            entities.remove(selectedEntity);  
+            RequestContext.getCurrentInstance().addCallbackParam("success", true);
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Deletion successful", "You may have to refresh the page.");
+            resetInput();
+        } catch (Exception e) {
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not complete deletion", e.getMessage());
+            RequestContext.getCurrentInstance().addCallbackParam("success", false);
+            System.out.println(e);
+        }
+    }
+    
+    public void onApprove() {
+        try {
+            Preconditions.checkNotNull(selectedApprovals);
+            User user = new User("admin");
+            for (PhaseApproval selectedApproval : selectedApprovals) {
+                selectedApproval.setApproved_at(new Date());
+                selectedApproval.setApproved_by(user);
+                selectedApproval.setApproved(true);
+                lcEJB.saveApproval(selectedApproval);
+            }
+            RequestContext.getCurrentInstance().addCallbackParam("success", true);
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
+                    "Approval successful.");
+        } catch (Exception e) {
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not complete approval", e.getMessage());
+            RequestContext.getCurrentInstance().addCallbackParam("success", false);
+            System.out.println(e);
+
+        } finally {
+//            selectedApproval = null;           
+        }
+    }
+    
+    public void onDisapprove() {
+        try {
+            Preconditions.checkNotNull(selectedApprovals);
+            User user = new User("admin"); 
+            for (PhaseApproval selectedApproval: selectedApprovals) {
+                selectedApproval.setApproved_at(new Date());
+                selectedApproval.setApproved_by(user);
+                selectedApproval.setApproved(false);
+               lcEJB.saveApproval(selectedApproval);
+            }         
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
+                                                                "Disappproval successful.");
+        } finally {
+//            selectedApproval = null;           
+        }
+    }
+    //-- Getters/Setters 
+    
+    public InputAction getInputAction() {
+        return inputAction;
+    }
+
+    public List<PhaseApproval> getEntities() {
+        return entities;
+    }
+
+    public List<PhaseApproval> getFilteredEntities() {
+        return filteredEntities;
+    }
+
+    public void setFilteredEntities(List<PhaseApproval> filteredEntities) {
+        this.filteredEntities = filteredEntities;
+    }
+
+    public PhaseApproval getInputEntity() {
+        return inputEntity;
+    }
+
+    public void setInputEntity(PhaseApproval inputEntity) {
+        this.inputEntity = inputEntity;
+    }
+
+    public PhaseApproval getSelectedEntity() {
+        return selectedEntity;
+    }
+
+    public void setSelectedEntity(PhaseApproval selectedEntity) {
+        this.selectedEntity = selectedEntity;
+    }  
+
+    public List<PhaseApproval> getSelectedApprovals() {
+        return selectedApprovals;
+    }
+
+    public void setSelectedApprovals(List<PhaseApproval> selectedApprovals) {
+        this.selectedApprovals = selectedApprovals;
+    }
+    
+}

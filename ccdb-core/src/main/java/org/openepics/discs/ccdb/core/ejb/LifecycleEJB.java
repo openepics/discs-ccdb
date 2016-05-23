@@ -167,6 +167,30 @@ public class LifecycleEJB {
         return em.find(PhaseApproval.class, id);
     }
     
+    /**
+     * save a phase approval
+     *
+     * @param approval
+     */
+    public void saveApproval(PhaseApproval approval) {
+        if (approval.getId() == null) {
+            em.persist(approval);
+        } else {
+            em.merge(approval);
+        }
+        LOGGER.log(Level.FINE, "phase approval  saved - {0}", approval.getId());
+    }
+    
+    /**
+     * delete a given approval
+     *
+     * @param approval
+     */
+    public void deleteApproval(PhaseApproval approval) {
+        PhaseApproval src = em.find(PhaseApproval.class, approval.getId());
+        em.remove(src);
+    }
+    
     // ------------------ Status type
     /**
      * All reviews
