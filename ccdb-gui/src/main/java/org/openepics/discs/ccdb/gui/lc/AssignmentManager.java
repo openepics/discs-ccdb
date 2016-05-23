@@ -25,9 +25,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import org.openepics.discs.ccdb.core.ejb.AuthEJB;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.core.ejb.SlotEJB;
+import org.openepics.discs.ccdb.core.security.SecurityPolicy;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
 import org.openepics.discs.ccdb.model.Slot;
 import org.openepics.discs.ccdb.model.User;
@@ -73,6 +75,8 @@ public class AssignmentManager implements Serializable {
     private SlotEJB slotEJB;
     @EJB 
     private AuthEJB authEJB;
+    @Inject
+    private SecurityPolicy securityPolicy;
     
     private static final Logger LOGGER = Logger.getLogger(AssignmentManager.class.getName());
 //    @Inject
@@ -113,7 +117,15 @@ public class AssignmentManager implements Serializable {
     
     public void onAddCommand(ActionEvent event) {
         inputEntity = new PhaseAssignment();
-        inputAction = InputAction.CREATE;       
+        inputAction = InputAction.CREATE;
+        String userId = securityPolicy.getUserId();
+        if (userId == null) {
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
+                    "Not authorized. User Id is null.");
+            return;
+        }
+        User user = new User(userId);
+        inputEntity.setRequestor(user);
     }
     
     public void onEditCommand(ActionEvent event) {
@@ -125,7 +137,7 @@ public class AssignmentManager implements Serializable {
     }
     
     public void saveEntity() {
-        try {
+        try {            
             if (inputAction == InputAction.CREATE) {
                 reviewEJB.saveAssignment(inputEntity, inputApprovers);
                 entities.add(inputEntity);                

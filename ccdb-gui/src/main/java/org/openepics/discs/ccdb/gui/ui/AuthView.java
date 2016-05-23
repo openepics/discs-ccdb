@@ -82,9 +82,9 @@ public class AuthView implements Serializable {
         for (Privilege priv: privileges) {
             permissions.add(Permission.toPermission(priv));
         }
-        permissions.add(new Permission("FE_AreaManager", "MANAGE", "FrontEnd"));
-        permissions.add(new Permission("PS_Manager", "UPDATE", "PowerSupplies"));
-        logger.log(Level.FINE, "Found number of slots: {0}", users.size());       
+//        permissions.add(new Permission("FE_AreaManager", "MANAGE", "FrontEnd"));
+//        permissions.add(new Permission("PS_Manager", "UPDATE", "PowerSupplies"));
+        logger.log(Level.FINE, "Found number of users: {0}", users.size());       
     }
     
     // --- getters/setters

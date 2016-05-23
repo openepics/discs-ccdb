@@ -12,7 +12,6 @@
  *       East Lansing, MI 48824-1321
  *        http://frib.msu.edu
  */
-
 package org.openepics.discs.ccdb.gui.lc;
 
 import com.google.common.base.Preconditions;
@@ -26,7 +25,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
+import org.openepics.discs.ccdb.core.security.SecurityPolicy;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
 import org.openepics.discs.ccdb.model.User;
 import org.openepics.discs.ccdb.model.cm.PhaseApproval;
@@ -58,64 +59,66 @@ import org.primefaces.event.SelectEvent;
  * @author vuppala
  *
  */
-
 @Named
 @ViewScoped
 public class ApproveManager implements Serializable {
 //    @EJB
 //    private AuthEJB authEJB;
+
     @EJB
     private LifecycleEJB lcEJB;
-            
+    @Inject
+    private SecurityPolicy securityPolicy;
+
     private static final Logger LOGGER = Logger.getLogger(ApproveManager.class.getName());
 //    @Inject
 //    UserSession userSession;
-      
-    private List<PhaseApproval> entities;    
-    private List<PhaseApproval> filteredEntities;    
+
+    private List<PhaseApproval> entities;
+    private List<PhaseApproval> filteredEntities;
     private PhaseApproval inputEntity;
     private PhaseApproval selectedEntity;
     private InputAction inputAction;
-    
+
     private List<PhaseApproval> selectedApprovals;
-    
+
     public ApproveManager() {
     }
-    
+
     @PostConstruct
-    public void init() {      
-        entities = lcEJB.findAllApprovals(); 
-        
+    public void init() {
+        entities = lcEJB.findAllApprovals();
+
         resetInput();
     }
-    
-    private void resetInput() {                
+
+    private void resetInput() {
         inputAction = InputAction.READ;
     }
-    
+
     public void onRowSelect(SelectEvent event) {
         // inputRole = selectedRole;
         // Utility.showMessage(FacesMessage.SEVERITY_INFO, "Role Selected", "");
     }
-    
+
     public void onAddCommand(ActionEvent event) {
         inputEntity = new PhaseApproval();
-        inputAction = InputAction.CREATE;       
+        inputAction = InputAction.CREATE;
     }
-    
+
     public void onEditCommand(ActionEvent event) {
         inputAction = InputAction.UPDATE;
     }
-    
+
     public void onDeleteCommand(ActionEvent event) {
         inputAction = InputAction.DELETE;
     }
-    
+
     public void saveEntity() {
-        try {                      
+        try {
             if (inputAction == InputAction.CREATE) {
                 lcEJB.saveApproval(inputEntity);
-                entities.add(inputEntity);                
+                entities.add(inputEntity);
             } else {
                 lcEJB.saveApproval(selectedEntity);
             }
@@ -128,11 +131,11 @@ public class ApproveManager implements Serializable {
             System.out.println(e);
         }
     }
-    
+
     public void deleteEntity() {
         try {
             lcEJB.deleteApproval(selectedEntity);
-            entities.remove(selectedEntity);  
+            entities.remove(selectedEntity);
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Deletion successful", "You may have to refresh the page.");
             resetInput();
@@ -142,11 +145,28 @@ public class ApproveManager implements Serializable {
             System.out.println(e);
         }
     }
-    
+
     public void onApprove() {
         try {
             Preconditions.checkNotNull(selectedApprovals);
-            User user = new User("admin");
+            String userId = securityPolicy.getUserId();
+            if (userId == null) {
+                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Approval Failed",
+                    "You are not authorized. User Id is null.");
+                RequestContext.getCurrentInstance().addCallbackParam("success", false);
+                return;
+            }           
+            User user = new User(userId);
+            
+            for (PhaseApproval selectedApproval : selectedApprovals) {
+                if (! user.equals(selectedApproval.getAssignedApprover())) {
+                     UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Approval Failed",
+                    "You are not assigned as approver on one or more of the selected assignments.");
+                     RequestContext.getCurrentInstance().addCallbackParam("success", false);
+                     return;
+                }
+            }
+            
             for (PhaseApproval selectedApproval : selectedApprovals) {
                 selectedApproval.setApproved_at(new Date());
                 selectedApproval.setApproved_by(user);
@@ -165,25 +185,36 @@ public class ApproveManager implements Serializable {
 //            selectedApproval = null;           
         }
     }
-    
+
     public void onDisapprove() {
         try {
             Preconditions.checkNotNull(selectedApprovals);
-            User user = new User("admin"); 
-            for (PhaseApproval selectedApproval: selectedApprovals) {
+            String userId = securityPolicy.getUserId();
+            if (userId == null) {
+                UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
+                    "Not authorized. User Id is null.");
+                RequestContext.getCurrentInstance().addCallbackParam("success", false);
+                return;
+            }           
+            User user = new User(userId);
+            for (PhaseApproval selectedApproval : selectedApprovals) {
                 selectedApproval.setApproved_at(new Date());
                 selectedApproval.setApproved_by(user);
                 selectedApproval.setApproved(false);
-               lcEJB.saveApproval(selectedApproval);
-            }         
+                lcEJB.saveApproval(selectedApproval);
+            }
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
-                                                                "Disappproval successful.");
+                    "Disappproval successful.");
+        } catch (Exception e) {
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not complete disapproval", e.getMessage());
+            RequestContext.getCurrentInstance().addCallbackParam("success", false);
+            System.out.println(e);
         } finally {
 //            selectedApproval = null;           
         }
     }
     //-- Getters/Setters 
-    
+
     public InputAction getInputAction() {
         return inputAction;
     }
@@ -214,7 +245,7 @@ public class ApproveManager implements Serializable {
 
     public void setSelectedEntity(PhaseApproval selectedEntity) {
         this.selectedEntity = selectedEntity;
-    }  
+    }
 
     public List<PhaseApproval> getSelectedApprovals() {
         return selectedApprovals;
@@ -223,5 +254,5 @@ public class ApproveManager implements Serializable {
     public void setSelectedApprovals(List<PhaseApproval> selectedApprovals) {
         this.selectedApprovals = selectedApprovals;
     }
-    
+
 }

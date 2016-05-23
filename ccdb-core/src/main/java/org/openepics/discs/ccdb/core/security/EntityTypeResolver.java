@@ -32,7 +32,7 @@ import org.openepics.discs.ccdb.model.EntityType;
  *
  */
 public class EntityTypeResolver {
-    private static Map<String, EntityType> entityTypes = new HashMap<> ();
+    private static final Map<String, EntityType>  entityTypes = new HashMap<> ();
 
     static {
         entityTypes.put(org.openepics.discs.ccdb.model.Device.class.getCanonicalName(), EntityType.DEVICE);
