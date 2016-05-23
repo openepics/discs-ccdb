@@ -9,10 +9,10 @@
         <h:form id="approvalForm">
             <p:panel>
                 <h:outputText value="Device Phase Status Report" styleClass="heading"/>
-                <p:dataTable var="stat" id="approvalTable" value="#{lifecycleApprovalManager.approvalList}" 
+                <p:dataTable var="stat" id="approvalTable" value="#{approvalManager.approvalList}" 
                              emptyMessage="No records found." 
                              rowKey="#{stat.id}"                        
-                             resizableColumns="true" filteredValue="#{lifecycleApprovalManager.filteredList}" 
+                             resizableColumns="true" filteredValue="#{approvalManager.filteredList}" 
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
                              rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">

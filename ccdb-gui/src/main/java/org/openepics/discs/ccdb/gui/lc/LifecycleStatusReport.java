@@ -30,7 +30,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.openepics.discs.ccdb.core.ejb.LcStatusEJB;
-import org.openepics.discs.ccdb.model.cm.PhaseStatusRecord;
+import org.openepics.discs.ccdb.model.cm.PhaseStatus;
 import org.openepics.discs.ccdb.model.Slot;
 
 /**
@@ -62,12 +62,12 @@ public class LifecycleStatusReport implements Serializable {
         }
     }
     
-    private static final Logger logger = Logger.getLogger(LifecycleStatusReport.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(LifecycleStatusReport.class.getName());
     @EJB
     private LcStatusEJB lifecycleEJB;
     
-    private List<PhaseStatusRecord> statusList;
-    private List<PhaseStatusRecord> filteredStatus;
+    private List<PhaseStatus> statusList;
+    private List<PhaseStatus> filteredStatus;
     private Set<String> slotNames = new HashSet<>();
   
     private final static List<String> VALID_COLUMN_KEYS = Arrays.asList("ARR", "DHR");
@@ -86,10 +86,10 @@ public class LifecycleStatusReport implements Serializable {
     @PostConstruct
     public void init() {
         statusList = lifecycleEJB.findAll();
-        logger.log(Level.INFO, "Size of LC sttaus list: {0}", statusList.size());
-        for(PhaseStatusRecord lcstat: statusList) {
-              if (lcstat.getRequirement().getSlot() != null) {
-                  slotNames.add(lcstat.getRequirement().getSlot().getName());
+        LOGGER.log(Level.INFO, "Size of LC sttaus list: {0}", statusList.size());
+        for(PhaseStatus lcstat: statusList) {
+              if (lcstat.getAssignment().getSlot() != null) {
+                  slotNames.add(lcstat.getAssignment().getSlot().getName());
               }
           }
         createDynamicColumns();
@@ -123,9 +123,9 @@ public class LifecycleStatusReport implements Serializable {
               return "";
           }
           
-          for(PhaseStatusRecord lcstat: statusList) {
+          for(PhaseStatus lcstat: statusList) {
 //              if (slot.equals(lcstat.getRequirement().getSlot().getName()) && phase.equals(lcstat.getRequirement().getPhase().getName())) {
-                  return lcstat.getStatus().name();
+                  return lcstat.getStatus().getName();
 //              }
           }
           
@@ -134,15 +134,15 @@ public class LifecycleStatusReport implements Serializable {
     
     // getters and setters
 
-    public List<PhaseStatusRecord> getFilteredStatus() {
+    public List<PhaseStatus> getFilteredStatus() {
         return filteredStatus;
     }
 
-    public void setFilteredStatus(List<PhaseStatusRecord> filteredStatus) {
+    public void setFilteredStatus(List<PhaseStatus> filteredStatus) {
         this.filteredStatus = filteredStatus;
     }
 
-    public List<PhaseStatusRecord> getStatusList() {
+    public List<PhaseStatus> getStatusList() {
         return statusList;
     }
 

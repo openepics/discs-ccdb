@@ -16,39 +16,44 @@
 
 package org.openepics.discs.ccdb.model.cm;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
 
 /**
- * Status of a phase assignment 
- * 
+ *
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "cm_phase_status")
+@Table(name = "cm_status_type" )
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PhaseStatus.findAll", query = "SELECT d FROM PhaseStatus d"),
-    @NamedQuery(name = "PhaseStatus.findByRequirement", query = "SELECT d FROM PhaseStatus d WHERE d.assignment = :assignment")
+    @NamedQuery(name = "StatusType.findAll", query = "SELECT d FROM StatusType d"),
+    @NamedQuery(name = "StatusType.findByName", query = "SELECT d FROM StatusType d WHERE  d.name = :name")
 })
-public class PhaseStatus extends ConfigurationEntity {
+public class StatusType extends ConfigurationEntity {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; 
+
+    @Basic(optional = false)
+    @NotNull
+    @Size(min=1, max=64)
+    @Column(name = "name")
+    private String name;
     
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "assignment")
-    private PhaseAssignment assignment;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min=1, max=255)
+    @Column(name = "description")
+    private String description;
     
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "status")
-    private StatusTypeOption status;
-       
     @Override
     public int hashCode() {
         int hash = 0;
@@ -59,10 +64,10 @@ public class PhaseStatus extends ConfigurationEntity {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PhaseStatus)) {
+        if (!(object instanceof StatusType)) {
             return false;
         }
-        PhaseStatus other = (PhaseStatus) object;
+        StatusType other = (StatusType) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -71,26 +76,25 @@ public class PhaseStatus extends ConfigurationEntity {
 
     @Override
     public String toString() {
-        return "org.openepics.discs.ccdb.model.CMStatus[ id=" + id + " ]";
+        return "org.openepics.discs.ccdb.model.CMProcess[ id=" + id + " ]";
     }
     
-    // --
+    // getters and setters
 
-    public StatusTypeOption getStatus() {
-        return status;
+    public String getName() {
+        return name;
     }
 
-    public void setStatus(StatusTypeOption status) {
-        this.status = status;
-    }  
-
-    public PhaseAssignment getAssignment() {
-        return assignment;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setAssignment(PhaseAssignment assignment) {
-        this.assignment = assignment;
+    public String getDescription() {
+        return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
     
 }

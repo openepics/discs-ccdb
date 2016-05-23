@@ -8,31 +8,30 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content"> 
-
         <h:form id="crudForm" > 
             <p:panel>
-                <h:outputText value="Process Requirements" styleClass="heading"/>
-                <p:dataTable id="entityTable" var="entity" value="#{requirementManager.entities}" 
+                <h:outputText value="Phase Assignments" styleClass="heading"/>
+                <p:dataTable id="entityTable" var="entity" value="#{assignmentManager.entities}" 
                              emptyMessage="No records found." 
-                             rowKey="#{entity.id}" selectionMode="single" selection="#{requirementManager.selectedEntity}"
-                             resizableColumns="true" filteredValue="#{requirementManager.filteredEntities}" 
+                             rowKey="#{entity.id}" selectionMode="single" selection="#{assignmentManager.selectedEntity}"
+                             resizableColumns="true" filteredValue="#{assignmentManager.filteredEntities}" 
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
                              rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">
                     
-                    <p:ajax event="rowSelect" listener="#{requirementManager.onRowSelect}" update="commandButtons" />
+                    <p:ajax event="rowSelect" listener="#{assignmentManager.onRowSelect}" update="commandButtons" />
                     <p:column headerText="Slot" sortBy="#{entity.slot.name}" filterBy="#{entity.slot.name}"
                               filterMatchMode="contains" >
                         <h:outputText value="#{entity.slot.name}" />
                     </p:column>
 
-                    <p:column headerText="Process" sortBy="#{entity.review.name}"  filterBy="#{entity.review.name}" filterMatchMode="contains" >
-                        <h:outputText value="#{entity.review.name}" />
+                    <p:column headerText="Process" sortBy="#{entity.phase.name}"  filterBy="#{entity.phase.name}" filterMatchMode="contains" >
+                        <h:outputText value="#{entity.phase.name}" />
                     </p:column>
 
                     <p:column headerText="Approvers"  >
                         <h:outputText value="#{entity.approvals}" />
-                        <c:forEach items="#{entity.approvals}"  var="arec" > <h:outputText value="#{arec.assignedApprover.name}" /> </c:forEach>
+                        <!--<c:forEach items="#{entity.approvals}"  var="arec" > <h:outputText value="#{arec.assignedApprover.name}" /> </c:forEach>-->
                     </p:column>
                     
                     <p:column headerText="Requestor" sortBy="#{entity.requestor.name}" filterBy="#{entity.requestor.name}"
@@ -48,13 +47,13 @@
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">
                                 <p:commandButton title="Add" icon="ui-icon-document" update=":crudInputDlg" process="@this" 
-                                                 actionListener="#{requirementManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"/>   
+                                                 actionListener="#{assignmentManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"/>   
                                 <p:commandButton title="Edit" icon="ui-icon-disk" update=":crudInputDlg"  process="@this"                                          
-                                                 actionListener="#{requirementManager.onEditCommand}"
-                                                 oncomplete="PF('crudInputWid').show()" disabled="#{empty requirementManager.selectedEntity}"/>
+                                                 actionListener="#{assignmentManager.onEditCommand}"
+                                                 oncomplete="PF('crudInputWid').show()" disabled="#{empty assignmentManager.selectedEntity}"/>
                                 <p:commandButton title="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
-                                                 actionListener="#{requirementManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
-                                                 disabled="#{empty requirementManager.selectedEntity}"/>
+                                                 actionListener="#{assignmentManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
+                                                 disabled="#{empty assignmentManager.selectedEntity}"/>
                             </f:facet>
                         </p:toolbar>
                     </f:facet>
@@ -63,14 +62,14 @@
         </h:form>
 
         <p:dialog id="crudInputDlg" widgetVar="crudInputWid">
-            <h:form id="objectInputForm">              
+            <h:form id="objectInputForm" rendered="#{assignmentManager.inputAction != 'READ'}">              
                 <p:panelGrid>
                     <f:facet name="header">
                         <p:row>
                             <p:column colspan="2">
-                                <h:outputText value="New Assignment" rendered="#{requirementManager.inputAction == 'CREATE'}"/>
-                                <h:outputText value="Update Existing Assignment" rendered="#{requirementManager.inputAction == 'UPDATE'}"/>
-                                <h:outputText value="Delete Assignment" rendered="#{requirementManager.inputAction == 'DELETE'}"/>
+                                <h:outputText value="New Assignment" rendered="#{assignmentManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update Existing Assignment" rendered="#{assignmentManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete Assignment" rendered="#{assignmentManager.inputAction == 'DELETE'}"/>
                             </p:column>                
                         </p:row>
                     </f:facet>
@@ -81,9 +80,9 @@
                         <p:column>
                             <p:selectOneMenu id="slotList" var="slot" converter="#{slotConverter}"
                                              filter="true"
-                                             value="#{requirementManager.inputAction == 'CREATE'? requirementManager.inputEntity.slot : requirementManager.selectedEntity.slot}"                                            
-                                             disabled="#{requirementManager.inputAction == 'DELETE'}">
-                                <f:selectItems value="#{requirementManager.slots}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                             value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputEntity.slot : assignmentManager.selectedEntity.slot}"                                            
+                                             disabled="#{assignmentManager.inputAction == 'DELETE'}">
+                                <f:selectItems value="#{assignmentManager.slots}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
                                 <p:column>
                                     <h:outputText value="#{slot.name}" />
                                 </p:column>
@@ -101,9 +100,9 @@
                         <p:column>
                             <p:selectOneMenu id="procList" var="proc" converter="#{processConverter}"
                                              filter="true"
-                                             value="#{requirementManager.inputAction == 'CREATE'? requirementManager.inputEntity.review : requirementManager.selectedEntity.review}"                                            
-                                             disabled="#{requirementManager.inputAction == 'DELETE'}">
-                                <f:selectItems value="#{requirementManager.processes}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                             value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputEntity.phase : assignmentManager.selectedEntity.phase}"                                            
+                                             disabled="#{assignmentManager.inputAction == 'DELETE'}">
+                                <f:selectItems value="#{assignmentManager.phases}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
                                 <p:column>
                                     <h:outputText value="#{proc.name}" />
                                 </p:column>
@@ -119,29 +118,19 @@
                         </p:column>
                         <p:column>
                             <p:selectManyMenu id="apprList" var="appr" converter="#{userConverter}"
-                                              filter="true" showCheckbox="true"
-                                              value="#{requirementManager.inputAction == 'CREATE'? requirementManager.inputApprovers : requirementManager.inputApprovers}"                                            
-                                             disabled="#{requirementManager.inputAction == 'DELETE'}">
-                                <f:selectItems value="#{requirementManager.users}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                              filter="true" showCheckbox="true" scrollHeight="100"
+                                              value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputApprovers : assignmentManager.inputApprovers}"                                            
+                                             disabled="#{assignmentManager.inputAction == 'DELETE'}">
+                                <f:selectItems value="#{assignmentManager.users}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
                                 <p:column>
                                     <h:outputText value="#{appr.userId}" />
                                 </p:column>
-                                <p:column>
+                                <p:column rendered="false">
                                     <h:outputText value="#{appr.name}" />
                                 </p:column>
                             </p:selectManyMenu>                                                     
                         </p:column>
                     </p:row>
-<!--                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="procDesc"  value="Description" />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="procDesc" value="#{requirementManager.inputAction == 'CREATE'? requirementManager.inputEntity.description : requirementManager.selectedEntity.description}" 
-                                         required="true" 
-                                         validatorMessage="Description required" disabled="#{requirementManager.inputAction == 'DELETE'}"/>                            
-                        </p:column>
-                    </p:row>-->
 
                     <f:facet name="footer">
                         <p:row>
@@ -149,13 +138,13 @@
                                 <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
                                                  onclick="PF('crudInputWid').hide()"/>
                                 <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
-                                                 action="#{requirementManager.saveEntity()}"  
+                                                 action="#{assignmentManager.saveEntity()}"  
                                                  oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
-                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{requirementManager.inputAction != 'DELETE'}"/>
+                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{assignmentManager.inputAction != 'DELETE'}"/>
                                 <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"
-                                                 action="#{requirementManager.deleteEntity()}" 
+                                                 action="#{assignmentManager.deleteEntity()}" 
                                                  oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
-                                                 process="@form" update=":crudForm:entityTable" rendered="#{requirementManager.inputAction == 'DELETE'}"/>                                
+                                                 process="@form" update=":crudForm:entityTable" rendered="#{assignmentManager.inputAction == 'DELETE'}"/>                                
                             </p:column>                
                         </p:row>
                     </f:facet>

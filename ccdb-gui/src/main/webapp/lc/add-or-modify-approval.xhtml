@@ -19,7 +19,7 @@
             
             <p:panel style="text-align: right; padding: 0; border: 0;" styleClass="dialogButtonPanel">
                 <p:commandButton value="Save" id="save" styleClass="dialogButton defaultCommand" tabindex="4" 
-                                 action="#{lifecycleApprovalManager.onApprove()}" 
+                                 action="#{approvalManager.onApprove()}" 
                         oncomplete="if (args &amp;&amp; !args.validationFailed) { closeDialogActions('modifyApprovalWid');}" 
                         update=":approvalForm:approvalTable modifyApproval" />
                 <p:commandButton value="Cancel" styleClass="dialogButton" onclick="PF('modifyApprovalWid').hide();" 

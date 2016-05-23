@@ -33,23 +33,25 @@ import org.openepics.discs.ccdb.model.ConfigurationEntity;
 import org.openepics.discs.ccdb.model.User;
 
 /**
- *
+ * Approval for the completion of a phase
+ * 
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "cm_review_approval")
+@Table(name = "cm_phase_approval")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ReviewApproval.findAll", query = "SELECT d FROM ReviewApproval d"),
-    @NamedQuery(name = "ReviewApproval.findByName", query = "SELECT d FROM ReviewApproval d WHERE d.requirement = :requirement")
+    @NamedQuery(name = "PhaseApproval.findAll", query = "SELECT d FROM PhaseApproval d"),
+    @NamedQuery(name = "PhaseApproval.findByReq", query = "SELECT d FROM PhaseApproval d WHERE d.assignment = :assignment"),
+    @NamedQuery(name = "PhaseApproval.findByName", query = "SELECT d FROM PhaseApproval d WHERE d.assignment = :assignment")
 })
-public class ReviewApproval extends ConfigurationEntity {
+public class PhaseApproval extends ConfigurationEntity {
 
     private static final long serialVersionUID = 1L;
    
     @ManyToOne(optional = false)
-    @JoinColumn(name = "requirement")
-    private ReviewRequirement requirement;
+    @JoinColumn(name = "assignment")
+    private PhaseAssignment assignment;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "assigned_approver")
@@ -83,10 +85,10 @@ public class ReviewApproval extends ConfigurationEntity {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ReviewApproval)) {
+        if (!(object instanceof PhaseApproval)) {
             return false;
         }
-        ReviewApproval other = (ReviewApproval) object;
+        PhaseApproval other = (PhaseApproval) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -99,13 +101,15 @@ public class ReviewApproval extends ConfigurationEntity {
     }
     // --
 
-    public ReviewRequirement getRequirement() {
-        return requirement;
+    public PhaseAssignment getAssignment() {
+        return assignment;
     }
 
-    public void setRequirement(ReviewRequirement requirement) {
-        this.requirement = requirement;
+    public void setAssignment(PhaseAssignment assignment) {
+        this.assignment = assignment;
     }
+
+    
 
     public User getAssignedApprover() {
         return assignedApprover;

@@ -19,6 +19,10 @@ package org.openepics.discs.ccdb.model.cm;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -28,17 +32,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
 
 /**
- *
+ * Life cycle phase
+ * 
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "cm_review" )
+@Table(name = "cm_phase" )
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Review.findAll", query = "SELECT d FROM Review d"),
-    @NamedQuery(name = "Review.findByName", query = "SELECT d FROM Review d WHERE d.name = :name")
+    @NamedQuery(name = "Phase.findAll", query = "SELECT d FROM Phase d"),
+    @NamedQuery(name = "Phase.findByName", query = "SELECT d FROM Phase d WHERE d.name = :name")
 })
-public class Review extends ConfigurationEntity {
+public class Phase extends ConfigurationEntity {
 
     private static final long serialVersionUID = 1L; 
 
@@ -54,6 +59,15 @@ public class Review extends ConfigurationEntity {
     @Column(name = "description")
     private String description;
     
+    @Basic(optional = false)
+    @Column(name = "loc")
+    @Enumerated(EnumType.STRING)
+    private LevelOfCare levelOfControl = LevelOfCare.NONE;
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "status_type")
+    private StatusType statusType;
+            
     @Override
     public int hashCode() {
         int hash = 0;
@@ -64,10 +78,10 @@ public class Review extends ConfigurationEntity {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Review)) {
+        if (!(object instanceof Phase)) {
             return false;
         }
-        Review other = (Review) object;
+        Phase other = (Phase) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -95,6 +109,22 @@ public class Review extends ConfigurationEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LevelOfCare getLevelOfControl() {
+        return levelOfControl;
+    }
+
+    public void setLevelOfControl(LevelOfCare levelOfControl) {
+        this.levelOfControl = levelOfControl;
+    }
+
+    public StatusType getStatusType() {
+        return statusType;
+    }
+
+    public void setStatusType(StatusType statusType) {
+        this.statusType = statusType;
     }
     
 }

@@ -19,13 +19,13 @@ package org.openepics.discs.ccdb.model.cm;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
 
@@ -34,25 +34,34 @@ import org.openepics.discs.ccdb.model.ConfigurationEntity;
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "lc_status")
+@Table(name = "cm_status_option" )
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PhaseStatusRecord.findAll", query = "SELECT d FROM PhaseStatusRecord d"),
-    @NamedQuery(name = "PhaseStatusRecord.findByRequirement", query = "SELECT d FROM PhaseStatusRecord d WHERE d.requirement = :requirement")
+    @NamedQuery(name = "StatusTypeOption.findAll", query = "SELECT d FROM StatusTypeOption d"),
+    @NamedQuery(name = "StatusTypeOption.findByType", query = "SELECT d FROM StatusTypeOption d WHERE d.statusType = :type"),
+    @NamedQuery(name = "StatusTypeOption.findByName", query = "SELECT d FROM StatusTypeOption d WHERE  d.name = :name")
 })
-public class PhaseStatusRecord extends ConfigurationEntity {
+public class StatusTypeOption extends ConfigurationEntity {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; 
     
+    @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "requirement")
-    private ReviewRequirement requirement;
+    @JoinColumn(name = "status_type")
+    private StatusType statusType;
     
     @Basic(optional = false)
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private PhaseStatus status = PhaseStatus.NOT_STARTED;
-
+    @NotNull
+    @Size(min=1, max=64)
+    @Column(name = "name")
+    private String name;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min=1, max=255)
+    @Column(name = "description")
+    private String description;
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -63,10 +72,10 @@ public class PhaseStatusRecord extends ConfigurationEntity {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PhaseStatusRecord)) {
+        if (!(object instanceof StatusTypeOption)) {
             return false;
         }
-        PhaseStatusRecord other = (PhaseStatusRecord) object;
+        StatusTypeOption other = (StatusTypeOption) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -75,25 +84,33 @@ public class PhaseStatusRecord extends ConfigurationEntity {
 
     @Override
     public String toString() {
-        return "org.openepics.discs.ccdb.model.CMStatus[ id=" + id + " ]";
+        return "org.openepics.discs.ccdb.model.CMProcess[ id=" + id + " ]";
     }
     
-    // --
+    // getters and setters
 
-    public PhaseStatus getStatus() {
-        return status;
+    public String getName() {
+        return name;
     }
 
-    public void setStatus(PhaseStatus status) {
-        this.status = status;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public ReviewRequirement getRequirement() {
-        return requirement;
+    public String getDescription() {
+        return description;
     }
 
-    public void setRequirement(ReviewRequirement requirement) {
-        this.requirement = requirement;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public StatusType getStatusType() {
+        return statusType;
+    }
+
+    public void setStatusType(StatusType statusType) {
+        this.statusType = statusType;
     }
     
 }

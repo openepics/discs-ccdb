@@ -12,8 +12,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.inject.Named;
-import org.openepics.discs.ccdb.core.ejb.ReviewEJB;
-import org.openepics.discs.ccdb.model.cm.Phase;
+import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
+import org.openepics.discs.ccdb.model.cm.StatusType;
 
 /**
  *
@@ -21,14 +21,14 @@ import org.openepics.discs.ccdb.model.cm.Phase;
  */
 @Named
 @RequestScoped // Can be ApplicationScoped but have to be careful with state
-public class ProcessConverter implements Converter {
+public class StatusTypeConverter implements Converter {
 
-    @EJB private ReviewEJB reviewEJB;
+    @EJB private LifecycleEJB reviewEJB;
 
     /**
      * Creates a new instance of DeviceConverter
      */
-    public ProcessConverter() {
+    public StatusTypeConverter() {
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ProcessConverter implements Converter {
         } 
         
         try {
-            return reviewEJB.findProcess(Long.valueOf(stringValue));
+            return reviewEJB.findStatusType(Long.valueOf(stringValue));
         } catch (Exception e){
             throw new ConverterException("Not a valid ID");
         }
@@ -50,8 +50,8 @@ public class ProcessConverter implements Converter {
             return "";
         }
         
-        if (modelObject instanceof Phase) {
-            return ((Phase) modelObject).getId().toString();
+        if (modelObject instanceof StatusType) {
+            return ((StatusType) modelObject).getId().toString();
         } else {
             throw new ConverterException("Not a valid entity");
         }

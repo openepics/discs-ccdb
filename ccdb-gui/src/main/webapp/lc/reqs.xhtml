@@ -1,0 +1,109 @@
+review<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/WEB-INF/template/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"              
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content"> 
+        <h:form id="crudForm" > 
+            <p:panel>
+                <h:outputText value="Phase Assignments" styleClass="heading"/>
+                
+            </p:panel>
+        </h:form>
+
+        <p:dialog id="crudInputDlg" widgetVar="crudInputWid">
+            <h:form id="objectInputForm" rendered="#{assignmentManager.inputAction != 'READ'}">              
+                <p:panelGrid>
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column colspan="2">
+                                <h:outputText value="New Assignment" rendered="#{assignmentManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update Existing Assignment" rendered="#{assignmentManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete Assignment" rendered="#{assignmentManager.inputAction == 'DELETE'}"/>
+                            </p:column>                
+                        </p:row>
+                    </f:facet>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="slotList" value="Slot"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="slotList" var="slot" converter="#{slotConverter}"
+                                             filter="true"
+                                             value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputEntity.slot : assignmentManager.selectedEntity.slot}"                                            
+                                             disabled="#{assignmentManager.inputAction == 'DELETE'}">
+                                <f:selectItems value="#{assignmentManager.slots}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{slot.name}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{slot.description}" />
+                                </p:column>
+                            </p:selectOneMenu>                                                    
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="procList" value="Process"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="procList" var="proc" converter="#{processConverter}"
+                                             filter="true"
+                                             value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputEntity.phase : assignmentManager.selectedEntity.phase}"                                            
+                                             disabled="#{assignmentManager.inputAction == 'DELETE'}">
+                                <f:selectItems value="#{assignmentManager.phases}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{proc.name}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{proc.description}" />
+                                </p:column>
+                            </p:selectOneMenu>                                                     
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="apprList" value="Approvers"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectManyMenu id="apprList" var="appr" converter="#{userConverter}"
+                                              filter="true" showCheckbox="true" scrollHeight="100"
+                                              value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputApprovers : assignmentManager.inputApprovers}"                                            
+                                             disabled="#{assignmentManager.inputAction == 'DELETE'}">
+                                <f:selectItems value="#{assignmentManager.users}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{appr.userId}" />
+                                </p:column>
+                                <p:column rendered="false">
+                                    <h:outputText value="#{appr.name}" />
+                                </p:column>
+                            </p:selectManyMenu>                                                     
+                        </p:column>
+                    </p:row>
+
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
+                                                 onclick="PF('crudInputWid').hide()"/>
+                                <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
+                                                 action="#{assignmentManager.saveEntity()}"  
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{assignmentManager.inputAction != 'DELETE'}"/>
+                                <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"
+                                                 action="#{assignmentManager.deleteEntity()}" 
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form" update=":crudForm:entityTable" rendered="#{assignmentManager.inputAction == 'DELETE'}"/>                                
+                            </p:column>                
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define> 
+</ui:composition>

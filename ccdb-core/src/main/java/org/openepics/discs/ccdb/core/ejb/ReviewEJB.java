@@ -23,9 +23,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.openepics.discs.ccdb.model.User;
-import org.openepics.discs.ccdb.model.cm.Review;
-import org.openepics.discs.ccdb.model.cm.ReviewApproval;
-import org.openepics.discs.ccdb.model.cm.ReviewRequirement;
+import org.openepics.discs.ccdb.model.cm.Phase;
+import org.openepics.discs.ccdb.model.cm.PhaseApproval;
+import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
 
 /**
  *
@@ -42,28 +42,28 @@ public class ReviewEJB {
     /**
      * All approvals
      * 
-     * @return a list of all {@link ReviewApproval}s ordered by name.
+     * @return a list of all {@link PhaseApproval}s ordered by name.
      */
-    public List<ReviewApproval> findAllApprovals() {
-        return em.createNamedQuery("ReviewApproval.findAll", ReviewApproval.class).getResultList();
+    public List<PhaseApproval> findAllApprovals() {
+        return em.createNamedQuery("ReviewApproval.findAll", PhaseApproval.class).getResultList();
     }    
     
     /**
      * All reviews
      * 
-     * @return a list of all {@link Review}s ordered by name.
+     * @return a list of all {@link Phase}s ordered by name.
      */
-    public List<Review> findAllReviews() {
-        return em.createNamedQuery("Review.findAll", Review.class).getResultList();
+    public List<Phase> findAllReviews() {
+        return em.createNamedQuery("Review.findAll", Phase.class).getResultList();
     } 
     
     /**
      * All reviews
      * 
-     * @return a list of all {@link Review}s ordered by name.
+     * @return a list of all {@link Phase}s ordered by name.
      */
-    public List<ReviewRequirement> findAllRequirements() {
-        return em.createNamedQuery("ReviewRequirement.findAll", ReviewRequirement.class).getResultList();
+    public List<PhaseAssignment> findAllRequirements() {
+        return em.createNamedQuery("ReviewRequirement.findAll", PhaseAssignment.class).getResultList();
     }
     
     /**
@@ -71,7 +71,7 @@ public class ReviewEJB {
      *
      * @param process
      */
-    public void saveProcess(Review process) {
+    public void saveProcess(Phase process) {
         if (process.getId() == null) {
             em.persist(process);
         } else {
@@ -85,8 +85,8 @@ public class ReviewEJB {
      *
      * @param process
      */
-    public void deleteProcess(Review process) {
-        Review src = em.find(Review.class, process.getId());
+    public void deleteProcess(Phase process) {
+        Phase src = em.find(Phase.class, process.getId());
         em.remove(src);
     }
 
@@ -96,8 +96,8 @@ public class ReviewEJB {
      * @param id
      * @return the process
      */
-    public Review findProcess(Long id) {
-        return em.find(Review.class, id);
+    public Phase findProcess(Long id) {
+        return em.find(Phase.class, id);
     }
     
     // ----------------- Requirements
@@ -107,7 +107,7 @@ public class ReviewEJB {
      *
      * @param process
      */
-    public void saveRequirement(ReviewRequirement process) {
+    public void saveRequirement(PhaseAssignment process) {
         if (process.getId() == null) {
             em.persist(process);
         } else {
@@ -116,19 +116,19 @@ public class ReviewEJB {
         logger.log(Level.FINE, "process requirement saved - {0}", process.getId());
     }
 
-    public void saveRequirement(ReviewRequirement process, List<User> approvers) {
-        if (process.getId() == null) {
+    public void saveRequirement(PhaseAssignment assignment, List<User> approvers) {
+        if (assignment.getId() == null) {
             for (User user: approvers) {
-                ReviewApproval approval = new ReviewApproval();
+                PhaseApproval approval = new PhaseApproval();
                 approval.setAssignedApprover(user);
-                approval.setRequirement(process);
+                approval.setAssignment(assignment);
                 em.persist(approval);
             }
-            em.persist(process);
+            em.persist(assignment);
         } else {
-            em.merge(process);
+            em.merge(assignment);
         }
-        logger.log(Level.FINE, "process requirement saved - {0}", process.getId());
+        logger.log(Level.FINE, "process requirement saved - {0}", assignment.getId());
     }
     
     /**
@@ -136,8 +136,8 @@ public class ReviewEJB {
      *
      * @param process
      */
-    public void deleteRequirement(ReviewRequirement process) {
-        ReviewRequirement src = em.find(ReviewRequirement.class, process.getId());
+    public void deleteRequirement(PhaseAssignment process) {
+        PhaseAssignment src = em.find(PhaseAssignment.class, process.getId());
         em.remove(src);
     }
 
@@ -147,8 +147,8 @@ public class ReviewEJB {
      * @param id
      * @return the process
      */
-    public ReviewRequirement findRequirement(Long id) {
-        return em.find(ReviewRequirement.class, id);
+    public PhaseAssignment findRequirement(Long id) {
+        return em.find(PhaseAssignment.class, id);
     }
     
     // --------------------
@@ -159,7 +159,7 @@ public class ReviewEJB {
      * @param id
      * @return the process
      */
-    public ReviewApproval findReviewApproval(Long id) {
-        return em.find(ReviewApproval.class, id);
+    public PhaseApproval findReviewApproval(Long id) {
+        return em.find(PhaseApproval.class, id);
     }
 }

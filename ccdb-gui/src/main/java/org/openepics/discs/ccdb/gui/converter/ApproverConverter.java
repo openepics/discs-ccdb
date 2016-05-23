@@ -13,7 +13,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.inject.Named;
 import org.openepics.discs.ccdb.core.ejb.ReviewEJB;
-import org.openepics.discs.ccdb.model.cm.ReviewApproval;
+import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 
 /**
  *
@@ -50,8 +50,8 @@ public class ApproverConverter implements Converter {
             return "";
         }
         
-        if (modelObject instanceof ReviewApproval) {
-            return ((ReviewApproval) modelObject).getId().toString();
+        if (modelObject instanceof PhaseApproval) {
+            return ((PhaseApproval) modelObject).getId().toString();
         } else {
             throw new ConverterException("Not a valid entity");
         }

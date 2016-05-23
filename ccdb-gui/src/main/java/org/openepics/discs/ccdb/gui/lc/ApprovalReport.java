@@ -29,11 +29,12 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.core.ejb.ReviewEJB;
-import org.openepics.discs.ccdb.model.cm.ReviewApproval;
+import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 
 /**
- * Bean to support lifecycle approval report
+ * Bean to support life cycle approval report
  *
  * @author vuppala
  *
@@ -61,12 +62,12 @@ public class ApprovalReport implements Serializable {
         }
     }
     
-    private static final Logger logger = Logger.getLogger(ApprovalReport.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ApprovalReport.class.getName());
     @EJB
-    private ReviewEJB reviewEJB;
+    private LifecycleEJB reviewEJB;
     
-    private List<ReviewApproval> statusList;
-    private List<ReviewApproval> filteredStatus;
+    private List<PhaseApproval> statusList;
+    private List<PhaseApproval> filteredStatus;
     private Set<String> slotNames;
   
     private final static List<String> VALID_COLUMN_KEYS = Arrays.asList("ARR", "DHR");
@@ -85,15 +86,15 @@ public class ApprovalReport implements Serializable {
     @PostConstruct
     public void init() {
         statusList = reviewEJB.findAllApprovals();
-        logger.log(Level.INFO, "Size of LC sttaus list: {0}", statusList.size());
+        LOGGER.log(Level.INFO, "Size of LC sttaus list: {0}", statusList.size());
 //        for( ReviewApproval lcstat: statusList ) {
 //              if (lcstat.getRequirement().getSlot() != null) {
 //                  slotNames.add(lcstat.getRequirement().getSlot().getName());
 //              }
 //          }
         slotNames = statusList.stream()
-                  .filter(t -> t.getRequirement().getSlot() != null)
-                  .map(t -> t.getRequirement().getSlot().getName())
+                  .filter(t -> t.getAssignment().getSlot() != null)
+                  .map(t -> t.getAssignment().getSlot().getName())
                   .collect(toSet());
         
         createDynamicColumns();
@@ -127,7 +128,7 @@ public class ApprovalReport implements Serializable {
               return "";
           }
           
-          for(ReviewApproval lcstat: statusList) {
+          for(PhaseApproval lcstat: statusList) {
               
                   if (lcstat.isApproved()) {
                       return "Approved by " + (lcstat.getApproved_by() == null? " " : lcstat.getApproved_by().getUserId()) + ", " + lcstat.getApproved_at();
@@ -140,15 +141,15 @@ public class ApprovalReport implements Serializable {
     
     // getters and setters
 
-    public List<ReviewApproval> getFilteredStatus() {
+    public List<PhaseApproval> getFilteredStatus() {
         return filteredStatus;
     }
 
-    public void setFilteredStatus(List<ReviewApproval> filteredStatus) {
+    public void setFilteredStatus(List<PhaseApproval> filteredStatus) {
         this.filteredStatus = filteredStatus;
     }
 
-    public List<ReviewApproval> getStatusList() {
+    public List<PhaseApproval> getStatusList() {
         return statusList;
     }
 

@@ -27,9 +27,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.openepics.discs.ccdb.core.ejb.LcApprovalEJB;
+import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
 import org.openepics.discs.ccdb.model.User;
-import org.openepics.discs.ccdb.model.cm.ReviewApproval;
+import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 
 /**
  * Bean to support rack layout view
@@ -39,17 +40,17 @@ import org.openepics.discs.ccdb.model.cm.ReviewApproval;
  */
 @Named
 @ViewScoped
-public class LifecycleApprovalManager implements Serializable {
+public class ApprovalManager implements Serializable {
 
-    private static final Logger logger = Logger.getLogger(LifecycleApprovalManager.class.getName());
+    private static final Logger logger = Logger.getLogger(ApprovalManager.class.getName());
     @EJB
-    private LcApprovalEJB lifecycleEJB;
+    private LifecycleEJB lifecycleEJB;
     
-    private List<ReviewApproval> approvalList;
-    private List<ReviewApproval> filteredList;
-    private List<ReviewApproval> selectedApprovals;
+    private List<PhaseApproval> approvalList;
+    private List<PhaseApproval> filteredList;
+    private List<PhaseApproval> selectedApprovals;
     
-    public LifecycleApprovalManager() {
+    public ApprovalManager() {
         
     }
 
@@ -58,7 +59,7 @@ public class LifecycleApprovalManager implements Serializable {
      */
     @PostConstruct
     public void init() {
-        approvalList = lifecycleEJB.findAll();
+        approvalList = lifecycleEJB.findAllApprovals();
         logger.log(Level.INFO, "Size of LC approval list: {0}", approvalList.size());
     }
 
@@ -67,7 +68,7 @@ public class LifecycleApprovalManager implements Serializable {
         try {
             Preconditions.checkNotNull(selectedApprovals);
             User user = new User("admin"); 
-            for (ReviewApproval selectedApproval: selectedApprovals) {
+            for (PhaseApproval selectedApproval: selectedApprovals) {
                 selectedApproval.setApproved_at(new Date());
                 selectedApproval.setApproved_by(user);
                 selectedApproval.setApproved(true);
@@ -90,7 +91,7 @@ public class LifecycleApprovalManager implements Serializable {
         try {
             Preconditions.checkNotNull(selectedApprovals);
             User user = new User("admin"); 
-            for (ReviewApproval selectedApproval: selectedApprovals) {
+            for (PhaseApproval selectedApproval: selectedApprovals) {
                 selectedApproval.setApproved_at(new Date());
                 selectedApproval.setApproved_by(user);
                 selectedApproval.setApproved(false);
@@ -110,23 +111,23 @@ public class LifecycleApprovalManager implements Serializable {
     }
     // getters and setters
 
-    public List<ReviewApproval> getApprovalList() {
+    public List<PhaseApproval> getApprovalList() {
         return approvalList;
     }
 
-    public List<ReviewApproval> getFilteredList() {
+    public List<PhaseApproval> getFilteredList() {
         return filteredList;
     }
 
-    public void setFilteredList(List<ReviewApproval> filteredList) {
+    public void setFilteredList(List<PhaseApproval> filteredList) {
         this.filteredList = filteredList;
     }
 
-    public List<ReviewApproval> getSelectedApprovals() {
+    public List<PhaseApproval> getSelectedApprovals() {
         return selectedApprovals;
     }
 
-    public void setSelectedApprovals(List<ReviewApproval> selectedApprovals) {
+    public void setSelectedApprovals(List<PhaseApproval> selectedApprovals) {
         this.selectedApprovals = selectedApprovals;
     }
    

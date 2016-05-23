@@ -16,7 +16,6 @@
 package org.openepics.discs.ccdb.gui.lc;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -25,15 +24,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import org.openepics.discs.ccdb.core.ejb.AuthEJB;
-import org.openepics.discs.ccdb.core.ejb.ReviewEJB;
-import org.openepics.discs.ccdb.core.ejb.SlotEJB;
+import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
-import org.openepics.discs.ccdb.model.Slot;
-import org.openepics.discs.ccdb.model.User;
-import org.openepics.discs.ccdb.model.cm.Review;
-import org.openepics.discs.ccdb.model.cm.ReviewRequirement;
+import org.openepics.discs.ccdb.model.cm.StatusType;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -65,40 +58,29 @@ import org.primefaces.event.SelectEvent;
 
 @Named
 @ViewScoped
-public class RequirementManager implements Serializable {
+public class StatusTypeManager implements Serializable {
 //    @EJB
 //    private AuthEJB authEJB;
     @EJB
-    private ReviewEJB reviewEJB;
-    @EJB 
-    private SlotEJB slotEJB;
-    @EJB 
-    private AuthEJB authEJB;
-    
-    private static final Logger LOGGER = Logger.getLogger(RequirementManager.class.getName());
+    private LifecycleEJB lcEJB;
+            
+    private static final Logger LOGGER = Logger.getLogger(StatusTypeManager.class.getName());
 //    @Inject
 //    UserSession userSession;
       
-    private List<ReviewRequirement> entities;    
-    private List<ReviewRequirement> filteredEntities;    
-    private ReviewRequirement inputEntity;
-    private ReviewRequirement selectedEntity;
+    private List<StatusType> entities;    
+    private List<StatusType> filteredEntities;    
+    private StatusType inputEntity;
+    private StatusType selectedEntity;
     private InputAction inputAction;
-    private List<User> inputApprovers = new ArrayList<>();
     
-    private List<Slot> slots;
-    private List<Review> processes;
-    private List<User> users;
     
-    public RequirementManager() {
+    public StatusTypeManager() {
     }
     
     @PostConstruct
     public void init() {      
-        entities = reviewEJB.findAllRequirements();
-        processes = reviewEJB.findAllReviews();
-        slots = slotEJB.findAll();
-        users = authEJB.findAllUsers();
+        entities = lcEJB.findAllStatusTypes();     
         resetInput();
     }
     
@@ -107,13 +89,12 @@ public class RequirementManager implements Serializable {
     }
     
     public void onRowSelect(SelectEvent event) {
-        
         // inputRole = selectedRole;
         // Utility.showMessage(FacesMessage.SEVERITY_INFO, "Role Selected", "");
     }
     
     public void onAddCommand(ActionEvent event) {
-        inputEntity = new ReviewRequirement();
+        inputEntity = new StatusType();
         inputAction = InputAction.CREATE;       
     }
     
@@ -126,18 +107,18 @@ public class RequirementManager implements Serializable {
     }
     
     public void saveEntity() {
-        try {
+        try {                      
             if (inputAction == InputAction.CREATE) {
-                reviewEJB.saveRequirement(inputEntity, inputApprovers);
+                lcEJB.saveStatusType(inputEntity);
                 entities.add(inputEntity);                
             } else {
-                reviewEJB.saveRequirement(selectedEntity, inputApprovers);
+                lcEJB.saveStatusType(selectedEntity);
             }
             resetInput();
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
-            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Process saved", "");
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Saved", "");
         } catch (Exception e) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save process", e.getMessage());
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save ", e.getMessage());
             RequestContext.getCurrentInstance().addCallbackParam("success", false);
             System.out.println(e);
         }
@@ -145,7 +126,7 @@ public class RequirementManager implements Serializable {
     
     public void deleteEntity() {
         try {
-            reviewEJB.deleteRequirement(selectedEntity);
+            lcEJB.deleteStatusType(selectedEntity);
             entities.remove(selectedEntity);  
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Deletion successful", "You may have to refresh the page.");
@@ -163,52 +144,32 @@ public class RequirementManager implements Serializable {
         return inputAction;
     }
 
-    public List<ReviewRequirement> getEntities() {
+    public List<StatusType> getEntities() {
         return entities;
     }
 
-    public List<ReviewRequirement> getFilteredEntities() {
+    public List<StatusType> getFilteredEntities() {
         return filteredEntities;
     }
 
-    public void setFilteredEntities(List<ReviewRequirement> filteredEntities) {
+    public void setFilteredEntities(List<StatusType> filteredEntities) {
         this.filteredEntities = filteredEntities;
     }
 
-    public ReviewRequirement getInputEntity() {
+    public StatusType getInputEntity() {
         return inputEntity;
     }
 
-    public void setInputEntity(ReviewRequirement inputEntity) {
+    public void setInputEntity(StatusType inputEntity) {
         this.inputEntity = inputEntity;
     }
 
-    public ReviewRequirement getSelectedEntity() {
+    public StatusType getSelectedEntity() {
         return selectedEntity;
     }
 
-    public void setSelectedEntity(ReviewRequirement selectedEntity) {
+    public void setSelectedEntity(StatusType selectedEntity) {
         this.selectedEntity = selectedEntity;
-    }
-
-    public List<Slot> getSlots() {
-        return slots;
-    }
-
-    public List<Review> getProcesses() {
-        return processes;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public List<User> getInputApprovers() {
-        return inputApprovers;
-    }
-
-    public void setInputApprovers(List<User> inputApprovers) {
-        this.inputApprovers = inputApprovers;
     }
 
     

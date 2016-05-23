@@ -24,16 +24,16 @@ import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import org.openepics.discs.ccdb.core.ejb.ReviewEJB;
+import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
-import org.openepics.discs.ccdb.model.cm.Review;
+import org.openepics.discs.ccdb.model.cm.Phase;
+import org.openepics.discs.ccdb.model.cm.StatusType;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 /**
- * Description: State for Manage Process View
+ * Description: State for Manage Phase View
  *
  * Methods:
  * <p>
@@ -59,29 +59,31 @@ import org.primefaces.event.SelectEvent;
 
 @Named
 @ViewScoped
-public class ProcessManager implements Serializable {
+public class PhaseManager implements Serializable {
 //    @EJB
 //    private AuthEJB authEJB;
     @EJB
-    private ReviewEJB reviewEJB;
+    private LifecycleEJB lcEJB;
             
-    private static final Logger LOGGER = Logger.getLogger(ProcessManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(PhaseManager.class.getName());
 //    @Inject
 //    UserSession userSession;
       
-    private List<Review> entities;    
-    private List<Review> filteredEntities;    
-    private Review inputEntity;
-    private Review selectedEntity;
+    private List<Phase> entities;    
+    private List<Phase> filteredEntities;    
+    private Phase inputEntity;
+    private Phase selectedEntity;
     private InputAction inputAction;
     
+    private List<StatusType> statusTypes;
     
-    public ProcessManager() {
+    public PhaseManager() {
     }
     
     @PostConstruct
     public void init() {      
-        entities = reviewEJB.findAllReviews();     
+        entities = lcEJB.findAllPhases(); 
+        statusTypes = lcEJB.findAllStatusTypes();
         resetInput();
     }
     
@@ -95,7 +97,7 @@ public class ProcessManager implements Serializable {
     }
     
     public void onAddCommand(ActionEvent event) {
-        inputEntity = new Review();
+        inputEntity = new Phase();
         inputAction = InputAction.CREATE;       
     }
     
@@ -110,16 +112,16 @@ public class ProcessManager implements Serializable {
     public void saveEntity() {
         try {                      
             if (inputAction == InputAction.CREATE) {
-                reviewEJB.saveProcess(inputEntity);
+                lcEJB.savePhase(inputEntity);
                 entities.add(inputEntity);                
             } else {
-                reviewEJB.saveProcess(selectedEntity);
+                lcEJB.savePhase(selectedEntity);
             }
             resetInput();
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
-            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Process saved", "");
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Saved", "");
         } catch (Exception e) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save process", e.getMessage());
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save", e.getMessage());
             RequestContext.getCurrentInstance().addCallbackParam("success", false);
             System.out.println(e);
         }
@@ -127,7 +129,7 @@ public class ProcessManager implements Serializable {
     
     public void deleteEntity() {
         try {
-            reviewEJB.deleteProcess(selectedEntity);
+            lcEJB.deletePhase(selectedEntity);
             entities.remove(selectedEntity);  
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Deletion successful", "You may have to refresh the page.");
@@ -145,31 +147,35 @@ public class ProcessManager implements Serializable {
         return inputAction;
     }
 
-    public List<Review> getEntities() {
+    public List<Phase> getEntities() {
         return entities;
     }
 
-    public List<Review> getFilteredEntities() {
+    public List<Phase> getFilteredEntities() {
         return filteredEntities;
     }
 
-    public void setFilteredEntities(List<Review> filteredEntities) {
+    public void setFilteredEntities(List<Phase> filteredEntities) {
         this.filteredEntities = filteredEntities;
     }
 
-    public Review getInputEntity() {
+    public Phase getInputEntity() {
         return inputEntity;
     }
 
-    public void setInputEntity(Review inputEntity) {
+    public void setInputEntity(Phase inputEntity) {
         this.inputEntity = inputEntity;
     }
 
-    public Review getSelectedEntity() {
+    public Phase getSelectedEntity() {
         return selectedEntity;
     }
 
-    public void setSelectedEntity(Review selectedEntity) {
+    public void setSelectedEntity(Phase selectedEntity) {
         this.selectedEntity = selectedEntity;
     }
+
+    public List<StatusType> getStatusTypes() {
+        return statusTypes;
+    }   
 }

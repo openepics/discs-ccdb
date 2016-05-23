@@ -30,18 +30,19 @@ import org.openepics.discs.ccdb.model.Slot;
 import org.openepics.discs.ccdb.model.User;
 
 /**
- * Configuration Management requirements for slot or device
+ * Configuration Management: Phases a slot must go through
  * 
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "cm_review_requirement")
+@Table(name = "cm_slot_phase")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ReviewRequirement.findAll", query = "SELECT d FROM ReviewRequirement d"),
-    @NamedQuery(name = "ReviewRequirement.findBySlot", query = "SELECT d FROM ReviewRequirement d WHERE d.slot = :slot")
+    @NamedQuery(name = "PhaseAssignment.findAll", query = "SELECT d FROM PhaseAssignment d"),
+    @NamedQuery(name = "PhaseAssignment.findByName", query = "SELECT d FROM PhaseAssignment d WHERE d.phase = :phase"),
+    @NamedQuery(name = "PhaseAssignment.findBySlot", query = "SELECT d FROM PhaseAssignment d WHERE d.slot = :slot")
 })
-public class ReviewRequirement extends ConfigurationEntity {
+public class PhaseAssignment extends ConfigurationEntity {
 
     private static final long serialVersionUID = 1L;
     
@@ -50,15 +51,15 @@ public class ReviewRequirement extends ConfigurationEntity {
     private Slot slot;
     
     @ManyToOne(optional = false)
-    @JoinColumn(name = "review")
-    private Review review;
+    @JoinColumn(name = "phase")
+    private Phase phase;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "requestor")
     private User requestor;    
     
-    @OneToMany(mappedBy = "requirement")
-    private List<ReviewApproval> approvals;
+    @OneToMany(mappedBy = "assignment")
+    private List<PhaseApproval> approvals;
     
     @Override
     public int hashCode() {
@@ -70,10 +71,10 @@ public class ReviewRequirement extends ConfigurationEntity {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ReviewRequirement)) {
+        if (!(object instanceof PhaseAssignment)) {
             return false;
         }
-        ReviewRequirement other = (ReviewRequirement) object;
+        PhaseAssignment other = (PhaseAssignment) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -103,15 +104,16 @@ public class ReviewRequirement extends ConfigurationEntity {
         this.slot = slot;
     }
 
-    public Review getReview() {
-        return review;
+    public Phase getPhase() {
+        return phase;
     }
 
-    public void setReview(Review review) {
-        this.review = review;
+    public void setPhase(Phase phase) {
+        this.phase = phase;
     }
 
-    public List<ReviewApproval> getApprovals() {
+
+    public List<PhaseApproval> getApprovals() {
         return approvals;
     }
     
