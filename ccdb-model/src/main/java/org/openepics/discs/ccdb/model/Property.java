@@ -79,7 +79,7 @@ public class Property extends ConfigurationEntity implements NamedEntity {
     @Basic(optional = false)
     @Column(name = "loc")
     @Enumerated(EnumType.STRING)
-    private LevelOfCare levelOfControl = LevelOfCare.NONE;
+    private LevelOfCare levelOfCare = LevelOfCare.NONE;
     
     @Basic(optional = false)
     @Column(name = "value_unique")
@@ -150,13 +150,15 @@ public class Property extends ConfigurationEntity implements NamedEntity {
         this.unit = unit;
     }
 
-    public LevelOfCare getLevelOfControl() {
-        return levelOfControl;
+    public LevelOfCare getLevelOfCare() {
+        return levelOfCare;
     }
 
-    public void setLevelOfControl(LevelOfCare levelOfControl) {
-        this.levelOfControl = levelOfControl;
+    public void setLevelOfCare(LevelOfCare levelOfCare) {
+        this.levelOfCare = levelOfCare;
     }
+
+   
    
     /** @return the type of the property value uniqueness as defined in {@link PropertyValueUniqueness} enumeration */
     public PropertyValueUniqueness getValueUniqueness() {

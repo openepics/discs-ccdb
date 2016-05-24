@@ -86,6 +86,11 @@ public class PropertyView implements Serializable {
     public Unit getUnit() {
         return prop.getUnit();
     }
+    
+    /** @return The level of care of the property the user is working on. Used by UI */
+    public LevelOfCare getLevelOfCare() {
+        return prop.getLevelOfCare();
+    }
 
     /** @return The {@link DataType} of the property the user is working on. Used by UI */
     public DataType getDataType() {
@@ -146,11 +151,11 @@ public class PropertyView implements Serializable {
     }
 
     public LevelOfCare getLoc() {
-        return prop.getLevelOfControl();
+        return prop.getLevelOfCare();
     }
 
     public void setLoc(LevelOfCare loc) {
-        prop.setLevelOfControl(loc);
+        prop.setLevelOfCare(loc);
     }
 
 

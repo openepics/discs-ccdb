@@ -29,6 +29,12 @@
                         <h:outputText value="#{obj.description}" styleClass="colCenter"/>
                     </p:column>
 
+                     <p:column headerText="Options" >
+                         <ui:repeat value="#{obj.options}" var="opt">
+                             <h:outputText value="#{opt.name} " />
+                             <br/>
+                         </ui:repeat>
+                    </p:column>
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">

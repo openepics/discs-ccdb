@@ -46,6 +46,7 @@ import org.openepics.discs.ccdb.core.util.PropertyValueUIElement;
 import org.openepics.discs.ccdb.core.util.UnhandledCaseException;
 
 import com.google.common.base.Preconditions;
+import org.openepics.discs.ccdb.model.cm.LevelOfCare;
 
 /**
  * @author <a href="mailto:miha.vitorovic@cosylab.com">Miha Vitorovič</a>
@@ -105,6 +106,10 @@ public class EntityAttrPropertyValueView<E extends ConfigurationEntity & NamedEn
         return propertyValue.getProperty().getName();
     }
 
+    @Override
+    public LevelOfCare getLevelOfCare() {
+        return propertyValue.getProperty().getLevelOfCare();
+    }
     /** @return A String representation of the associated entity */
     @Override
     public String getValue() {

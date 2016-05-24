@@ -33,6 +33,11 @@
                                                     :devicesForm:attributesDataTable:attributesDataTable 
                                                     :devicesForm:duplicateButton" />
     
+                                    <p:column headerText="Inventory ID" sortBy="#{device.inventoryId}" 
+                                            filterBy="#{device.inventoryId}" filterMatchMode="contains">
+                                        <h:outputText value="#{device.inventoryId}" />
+                                    </p:column>
+                                    
                                     <p:column headerText="Type" sortBy="#{device.device.componentType.name}" 
                                             filterBy="#{device.device.componentType.name}" filterMatchMode="contains">
                                         <h:link outcome="deviceTypesManager" value="#{device.device.componentType.name}" class="link">
@@ -40,11 +45,22 @@
                                         </h:link>                                    
                                     </p:column>
     
-                                    <p:column headerText="Inventory ID" sortBy="#{device.inventoryId}" 
-                                            filterBy="#{device.inventoryId}" filterMatchMode="contains">
-                                        <h:outputText value="#{device.inventoryId}" />
+                                    <p:column headerText="Name" sortBy="#{device.name}" 
+                                            filterBy="#{device.name}" filterMatchMode="contains">
+                                        <h:outputText value="#{device.name}" />
                                     </p:column>
-    
+                                    <p:column headerText="Description" sortBy="#{device.description}" 
+                                            filterBy="#{device.name}" filterMatchMode="contains">
+                                        <h:outputText value="#{device.name}" />
+                                    </p:column>
+                                    <p:column headerText="LoC" sortBy="#{device.levelOfCare}" 
+                                            filterBy="#{device.name}" filterMatchMode="contains">
+                                        <h:outputText value="#{device.levelOfCare}" />
+                                    </p:column>
+                                    <p:column headerText="AfO" sortBy="#{device.approvedForOp}">
+                                        <h:outputText value="#{device.approvedForOp ? 'Yes' : 'No'}" />
+                                    </p:column>
+                                    
                                     <p:column headerText="Installation Slot" sortBy="#{device.installedIn}" 
                                             filterBy="#{device.installedIn}" filterMatchMode="contains">
                                         <h:outputLink rendered="#{!empty device.installedSlotId}" 

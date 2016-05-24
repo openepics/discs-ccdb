@@ -56,24 +56,24 @@
                         </p:panelGrid >  
                     </p:column>
                     <p:column>
-<!--                        <p:panelGrid >  
+                        <p:panelGrid>  
                             <p:row>  
-                                <p:column>Area Manager</p:column>  
-                                <p:column><h:outputText value="#{fn:substringBefore(cc.attrs.selectedSlot.name,'_')}_AreaManager" /></p:column>                               
+                                <p:column>Level Of Care</p:column>  
+                                <p:column><h:outputText value="#{cc.attrs.selectedSlot.levelOfCare}" /></p:column>                               
                             </p:row>
                             <p:row>  
-                                <p:column>Owner</p:column>  
-                                <p:column><h:outputText value="#{cc.attrs.selectedSlot.componentType.name}_Manager"  rendered="#{fn:startsWith(cc.attrs.selectedSlot.componentType.name, 'PS')}"/></p:column>                               
+                                <p:column>Approved [for Ops]</p:column>  
+                                <p:column><h:outputText value="#{comp.approvedForOp ? 'Yes': 'No'}" /></p:column>                               
                             </p:row>
-                            <p:row>  
-                                <p:column>% Complete</p:column>  
-                                <p:column>0.0</p:column>                               
+<!--                            <p:row>  
+                                <p:column> <h:outputText value=" " /> </p:column>  
+                                <p:column> <h:outputText value=" " /> </p:column>                               
                             </p:row>           
                             <p:row>  
-                                <p:column><h:outputText value="CM Level" title="Configuration Management: Level of Care"/></p:column>  
-                                <p:column>Low</p:column>                               
-                            </p:row>
-                        </p:panelGrid> -->
+                                <p:column></p:column>  
+                                <p:column></p:column>                               
+                            </p:row>-->
+                        </p:panelGrid> 
                     </p:column>
                 </p:row>
             </p:panelGrid>

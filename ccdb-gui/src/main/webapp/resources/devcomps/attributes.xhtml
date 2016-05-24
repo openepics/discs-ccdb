@@ -34,6 +34,10 @@
                 <!--<h:outputText value=" [H]" title="CM Level: None, Low, Medium, High" />-->
             </p:column>
 
+            <p:column headerText="LoC" sortBy="#{attribute.levelOfCare}" >
+                <h:outputText value="#{attribute.levelOfCare}" />
+            </p:column>
+            
             <p:column headerText="Value"  style="text-align: right;" >
                 <h:outputLink rendered="#{attribute.hasURL}" target="_blank" value="#{attribute.value}" title="Go to URL">
                     <h:outputText value="#{attribute.value}" style="color: black; text-decoration: underline;" />

@@ -201,6 +201,18 @@ a {
     vertical-align: top;
 }
 
+.horizontal { 
+    display: inline;
+    float : left;
+    width: 70px;
+    padding: 0px 0px;
+}
+
+.ui-datalist-data {
+   height:20px;
+   overflow:auto;
+}
+
 /* -------------------------------------------------- */
 
 #top {

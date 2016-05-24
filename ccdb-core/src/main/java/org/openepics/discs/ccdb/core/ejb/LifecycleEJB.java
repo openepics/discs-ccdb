@@ -120,7 +120,7 @@ public class LifecycleEJB {
                 approval.setAssignment(assignment);
                 em.persist(approval);
             }
-            em.persist(assignment);
+            em.persist(assignment);        
         } else {
             em.merge(assignment);
         }

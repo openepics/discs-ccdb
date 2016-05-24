@@ -27,6 +27,7 @@ import org.openepics.discs.ccdb.model.Device;
 import org.openepics.discs.ccdb.core.util.Conversion;
 
 import com.google.common.base.Preconditions;
+import org.openepics.discs.ccdb.model.cm.LevelOfCare;
 
 /**
  * An UI view object for showing {@link Device} entity in a table.
@@ -88,9 +89,21 @@ public class DeviceView implements Serializable {
 
     /** @return the inventoryId for display in multi-delete confirmation dialog */
     public String getName() {
-        return inventoryId;
+        return device.getName();
     }
 
+    public LevelOfCare getLevelOfCare() {
+        return device.getLevelOfCare();
+    }
+    
+    public boolean getApprovedForOp() {
+        return device.isApprovedForOp();
+    }
+    
+    public String getDescription() {
+        return device.getDescription();
+    }
+    
     /** @return the installedIn */
     public String getInstalledIn() {
         return installedIn;

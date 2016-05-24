@@ -17,6 +17,7 @@
 package org.openepics.discs.ccdb.model.cm;
 
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -58,7 +59,7 @@ public class PhaseAssignment extends ConfigurationEntity {
     @JoinColumn(name = "requestor")
     private User requestor;    
     
-    @OneToMany(mappedBy = "assignment")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "assignment")
     private List<PhaseApproval> approvals;
     
     @Override

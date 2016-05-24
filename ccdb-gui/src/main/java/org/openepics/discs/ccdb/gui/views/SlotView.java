@@ -28,6 +28,7 @@ import org.openepics.discs.ccdb.model.Slot;
 import org.openepics.discs.ccdb.model.SlotPair;
 import org.openepics.discs.ccdb.model.SlotRelationName;
 import org.openepics.discs.ccdb.core.util.CCDBRuntimeException;
+import org.openepics.discs.ccdb.model.cm.LevelOfCare;
 
 /**
  * View of container used to compose and manipulate with container presentation in tree view
@@ -41,6 +42,8 @@ public class SlotView implements Serializable {
     private final Long id;
     private String name;
     private String description;
+    private LevelOfCare loc;
+    private boolean afo;
     private final SlotView parentNode;
     private final boolean isHostingSlot;
     private String deviceTypeName;
@@ -60,6 +63,8 @@ public class SlotView implements Serializable {
     public SlotView(Slot slot, SlotView parentNode, int order, SlotEJB slotEJB) {
         this.name = slot.getName();
         this.description = slot.getDescription();
+        this.loc = slot.getLevelOfCare();
+        this.afo = slot.isApprovedForOp();
         this.id = slot.getId();
         this.parentNode = parentNode;
         this.isHostingSlot = slot.isHostingSlot();

@@ -16,11 +16,15 @@
 
 package org.openepics.discs.ccdb.model.cm;
 
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -53,6 +57,9 @@ public class StatusType extends ConfigurationEntity {
     @Size(min=1, max=255)
     @Column(name = "description")
     private String description;
+    
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "statusType")
+    private List<StatusTypeOption> options;
     
     @Override
     public int hashCode() {
@@ -95,6 +102,14 @@ public class StatusType extends ConfigurationEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<StatusTypeOption> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<StatusTypeOption> options) {
+        this.options = options;
     }
     
 }

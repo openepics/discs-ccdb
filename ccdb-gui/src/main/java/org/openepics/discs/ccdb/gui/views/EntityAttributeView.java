@@ -27,6 +27,7 @@ import org.openepics.discs.ccdb.model.ConfigurationEntity;
 import org.openepics.discs.ccdb.model.DataType;
 import org.openepics.discs.ccdb.model.NamedEntity;
 import org.openepics.discs.ccdb.model.Unit;
+import org.openepics.discs.ccdb.model.cm.LevelOfCare;
 
 /**
  * The UI view class. This is a helper class containing all the information that is used in the UI and is displayed
@@ -101,6 +102,11 @@ public abstract class EntityAttributeView<E extends ConfigurationEntity & NamedE
         return null;
     }
 
+    /** @return the Level of Care */
+    public LevelOfCare getLevelOfCare() {
+        return LevelOfCare.NONE;
+    }
+    
     /** @return <code>true</code> if attribute has an URL (is an artifact), <code>false</code> otherwise */
     public boolean getHasURL() {
         return false;

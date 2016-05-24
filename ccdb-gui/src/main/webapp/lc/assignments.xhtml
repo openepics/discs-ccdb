@@ -30,8 +30,13 @@
                     </p:column>
 
                     <p:column headerText="Approvers"  >
-                        <h:outputText value="#{entity.approvals}" />
-                        <!--<c:forEach items="#{entity.approvals}"  var="arec" > <h:outputText value="#{arec.assignedApprover.name}" /> </c:forEach>-->
+                        <ui:repeat var="appr" value="#{entity.approvals}">
+                            <h:outputText value="#{appr.assignedApprover.name} " />
+                        </ui:repeat>
+<!--                        <p:dataList value="#{entity.approvals}" var="appr"  itemType="none">
+                            <h:outputText value="#{appr.assignedApprover.name}" styleClass="horizontal"/>
+                        </p:dataList>
+                        <c:forEach items="#{entity.approvals}"  var="arec" > <h:outputText value="#{arec.assignedApprover.name}" /> </c:forEach>-->
                     </p:column>
                     
                     <p:column headerText="Requestor" sortBy="#{entity.requestor.name}" filterBy="#{entity.requestor.name}"

@@ -62,6 +62,10 @@
                     filterMatchMode="contains">
                 <h:outputText value="#{!empty attribute.type ? attribute.type.name : '-'}" />
             </p:column>
+            
+            <p:column headerText="LoC" >
+                <h:outputText value="#{attribute.levelOfCare}" />
+            </p:column>
         </p:dataTable>
     </cc:implementation>
 </html>

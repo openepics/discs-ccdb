@@ -1,0 +1,59 @@
+<ui:composition template="/WEB-INF/template/template.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <h:form id="approvalForm">
+            <p:panel>
+                <h:outputText value="Slot/Device Status Report" styleClass="heading"/>
+                <p:dataTable var="stat" id="reportTable" value="#{deviceStatusReport.entries}" 
+                             emptyMessage="No records found." 
+                             rowKey="#{stat.slot.id}"                        
+                             resizableColumns="true" filteredValue="#{deviceStatusReport.filteredEntries}" 
+                             currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
+                             rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">
+              
+                    <p:column headerText="Slot" sortBy="#{stat.slot.name}" filterBy="#{stat.slot.name}"
+                              filterMatchMode="contains" >
+                        <h:outputText value="#{stat.slot.name}" />
+                    </p:column>
+
+                    <p:column headerText="Area" sortBy="#{stat.area}"  filterBy="#{stat.area}" >
+                        <h:outputText value="#{stat.area}" />
+                    </p:column>
+
+                    <p:column headerText="Installed Device" sortBy="#{stat.installedDevice.serialNumber}" filterBy="#{stat.installedDevice.serialNumber}"
+                              filterMatchMode="contains" >
+                        <h:outputText value="#{stat.installedDevice.serialNumber}" />
+                    </p:column>
+                    
+                    <p:column headerText="LoC" sortBy="#{stat.slot.levelOfCare}"  filterBy="#{stat.slot.levelOfCare}" >
+                        <h:outputText value="#{stat.slot.levelOfCare}" />
+                    </p:column>
+                    
+                    <p:column headerText="Device Owner Approved" sortBy="#{stat.devOwnerApproval}" >
+                        <h:outputText value="#{stat.devOwnerApproval ? 'Yes': 'No'}" />
+                    </p:column>
+                   
+                </p:dataTable> 
+                
+                <h:commandLink title="Export to Excel">  
+                    <p:graphicImage value="#{resource['images/excel.png']}" />                      
+                    <p:dataExporter type="xls"  target="reportTable" fileName="slot-status-report"  />  
+                </h:commandLink>  
+                <h:commandLink title="Export to CSV">  
+                    <p:graphicImage value="#{resource['images/csv.png']}" />  
+                    <p:dataExporter type="csv" target="reportTable" fileName="slot-status-report"  /> 
+                </h:commandLink>  
+                <h:commandLink title="Export to XML">  
+                    <p:graphicImage value="#{resource['images/xml.png']}" />  
+                    <p:dataExporter type="xml" target="reportTable" fileName="slot-status-report" />  
+                </h:commandLink>
+            </p:panel>
+        </h:form>              
+    </ui:define>
+</ui:composition>

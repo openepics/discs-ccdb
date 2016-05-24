@@ -140,6 +140,11 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
+            <from-outcome>slotreport</from-outcome>
+            <to-view-id>/report/slot-report.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>auth</from-outcome>
             <to-view-id>/admin/auth/index.xhtml</to-view-id>
             <redirect/>

@@ -20,13 +20,12 @@
                          currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
                          rows="25" paginator="true" rowsPerPageTemplate="25,50,100"                                     
-                          rowKey="#{comp.id}"  styleClass="ccdbDatatable">                    
+                         rowKey="#{comp.id}"  styleClass="ccdbDatatable">                    
 
                 <f:facet name="header">
                     <h:outputText value="Slot List"/>
                 </f:facet>
                 <p:column id="name" headerText="Name"  sortBy="#{comp.name}" filterBy="#{comp.name}" filterMatchMode="contains">
-                    
                     <p:link  value="#{comp.name}"  outcome="devices" target="_blank">
                         <f:param name="name" value="#{comp.name}" />
                     </p:link>
@@ -36,7 +35,16 @@
                 </p:column>  
                 <p:column id="desc" headerText="Description"  filterBy="#{comp.description}">
                     <h:outputText value="#{comp.description}"/>
-                </p:column>           
+                </p:column>
+                <p:column id="loc" headerText="LoC"  filterBy="#{comp.levelOfCare}">
+                    <h:outputText value="#{comp.levelOfCare}"/>
+                </p:column>
+                <p:column id="afo" headerText="Approved"  sortBy="#{comp.approvedForOp}">
+                     <h:outputText value="#{comp.approvedForOp ? 'Yes': 'No'}" />
+                </p:column>
+                <p:column id="asmp" headerText="Asm Parent" >
+                    <h:outputText value="#{comp.asmParent.name}"/>
+                </p:column>
             </p:dataTable>          
         </h:form>
     </ui:define>

@@ -43,6 +43,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import org.openepics.discs.ccdb.model.cm.LevelOfCare;
 
 /**
  * An installation slot for devices
@@ -102,6 +105,15 @@ public class Slot extends ConfigurationEntity implements EntityWithProperties, E
     @ManyToOne(optional = false)
     private ComponentType componentType;
 
+    @Basic(optional = false)
+    @Column(name = "loc")
+    @Enumerated(EnumType.STRING)
+    private LevelOfCare levelOfCare = LevelOfCare.NONE;
+    
+    @Basic(optional = false)
+    @Column(name = "afo")
+    private boolean approvedForOp = false;
+    
     // -- assembly
     
 //    @OneToMany(mappedBy = "asmSlot")
@@ -301,4 +313,22 @@ public class Slot extends ConfigurationEntity implements EntityWithProperties, E
     public String toString() {
         return "Slot[ slotId=" + id + " ]";
     }
+
+    public LevelOfCare getLevelOfCare() {
+        return levelOfCare;
+    }
+
+    public void setLevelOfCare(LevelOfCare levelOfCare) {
+        this.levelOfCare = levelOfCare;
+    }
+
+    public boolean isApprovedForOp() {
+        return approvedForOp;
+    }
+
+    public void setApprovedForOp(boolean approvedForOp) {
+        this.approvedForOp = approvedForOp;
+    }
+    
+    
 }

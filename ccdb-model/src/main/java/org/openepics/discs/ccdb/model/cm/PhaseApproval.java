@@ -97,7 +97,7 @@ public class PhaseApproval extends ConfigurationEntity {
 
     @Override
     public String toString() {
-        return "org.openepics.discs.ccdb.model.LifecycleApprovalRecord[ id=" + id + " ]";
+        return "org.openepics.discs.ccdb.model.PhaseApproval[ id=" + id + " ]";
     }
     // --
 

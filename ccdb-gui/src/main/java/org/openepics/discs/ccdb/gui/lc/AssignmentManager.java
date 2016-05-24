@@ -34,6 +34,7 @@ import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
 import org.openepics.discs.ccdb.model.Slot;
 import org.openepics.discs.ccdb.model.User;
 import org.openepics.discs.ccdb.model.cm.Phase;
+import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
 
 import org.primefaces.context.RequestContext;
@@ -110,7 +111,10 @@ public class AssignmentManager implements Serializable {
     }
     
     public void onRowSelect(SelectEvent event) {
-        
+        inputApprovers.clear();
+        for (PhaseApproval approval: selectedEntity.getApprovals()) {
+            if (approval.getAssignedApprover() != null) inputApprovers.add(approval.getAssignedApprover());
+        }
         // inputRole = selectedRole;
         // Utility.showMessage(FacesMessage.SEVERITY_INFO, "Role Selected", "");
     }
@@ -146,9 +150,9 @@ public class AssignmentManager implements Serializable {
             }
             resetInput();
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
-            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Process saved", "");
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Success", "Saved");
         } catch (Exception e) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save process", e.getMessage());
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Failure", e.getMessage());
             RequestContext.getCurrentInstance().addCallbackParam("success", false);
             System.out.println(e);
         }
@@ -159,10 +163,10 @@ public class AssignmentManager implements Serializable {
             reviewEJB.deleteAssignment(selectedEntity);
             entities.remove(selectedEntity);  
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
-            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Deletion successful", "You may have to refresh the page.");
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Success", "Deletion was successful. However, you may have to refresh the page.");
             resetInput();
         } catch (Exception e) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not complete deletion", e.getMessage());
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Failure", e.getMessage());
             RequestContext.getCurrentInstance().addCallbackParam("success", false);
             System.out.println(e);
         }
