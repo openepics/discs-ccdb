@@ -23,7 +23,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import org.openepics.discs.ccdb.core.ejb.LcStatusEJB;
+import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.model.cm.PhaseStatus;
 
 /**
@@ -34,16 +34,16 @@ import org.openepics.discs.ccdb.model.cm.PhaseStatus;
  */
 @Named
 @ViewScoped
-public class LifecycleStatusManager implements Serializable {
+public class StatusManager implements Serializable {
 
-    private static final Logger logger = Logger.getLogger(LifecycleStatusManager.class.getName());
+    private static final Logger logger = Logger.getLogger(StatusManager.class.getName());
     @EJB
-    private LcStatusEJB lifecycleEJB;
+    private LifecycleEJB lifecycleEJB;
     
     private List<PhaseStatus> statusList;
     private List<PhaseStatus> filteredStatus;
   
-    public LifecycleStatusManager() {
+    public StatusManager() {
         
     }
 
@@ -52,7 +52,7 @@ public class LifecycleStatusManager implements Serializable {
      */
     @PostConstruct
     public void init() {
-        statusList = lifecycleEJB.findAll();
+        statusList = lifecycleEJB.findAllStatuses();
         logger.log(Level.INFO, "Size of LC sttaus list: {0}", statusList.size());
     }
 

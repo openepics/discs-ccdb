@@ -12,19 +12,19 @@
 
                 <h:panelGrid columns="3" style="margin:10px 0">
                     <p:outputLabel for="template" value="Template:" style="font-weight:bold"/>
-                    <p:inputText id="template" value="#{lifecycleStatusReport.columnTemplate}" size="100"/>
-                    <p:commandButton update="statusTable" actionListener="#{lifecycleStatusReport.updateColumns()}" value="Update" process="@parent" icon="ui-icon-refresh" oncomplete="PF('statusTableWid').clearFilters()"/>
+                    <p:inputText id="template" value="#{statusReport.columnTemplate}" size="100"/>
+                    <p:commandButton update="statusTable" actionListener="#{statusReport.updateColumns()}" value="Update" process="@parent" icon="ui-icon-refresh" oncomplete="PF('statusTableWid').clearFilters()"/>
                 </h:panelGrid>
 
-                <p:dataTable id="statusTable" var="car" value="#{lifecycleStatusReport.slotNames}" widgetVar="statusTableWid"> 
+                <p:dataTable id="statusTable" var="car" value="#{statusReport.slotNames}" widgetVar="statusTableWid"> 
                     <p:column headerText="Slot" sortBy="#{car}}" filterBy="#{car}">
                         <h:outputText value="#{car}" />
                     </p:column>
-                    <p:columns value="#{lifecycleStatusReport.columns}" var="column" columnIndexVar="colIndex" >
+                    <p:columns value="#{statusReport.columns}" var="column" columnIndexVar="colIndex" >
                         <f:facet name="header">
                             <h:outputText value="#{column.property}" />
                         </f:facet>
-                        <h:outputText value="#{lifecycleStatusReport.getStatus(car, column.property)}" />
+                        <h:outputText value="#{statusReport.getStatus(car, column.property)}" />
                     </p:columns>
                 </p:dataTable>
                 <h:commandLink title="Export to Excel">  

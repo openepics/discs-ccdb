@@ -35,7 +35,7 @@ import org.openepics.discs.ccdb.model.ConfigurationEntity;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PhaseStatus.findAll", query = "SELECT d FROM PhaseStatus d"),
-    @NamedQuery(name = "PhaseStatus.findByRequirement", query = "SELECT d FROM PhaseStatus d WHERE d.assignment = :assignment")
+    @NamedQuery(name = "PhaseStatus.findByAssignment", query = "SELECT d FROM PhaseStatus d WHERE d.assignment = :assignment")
 })
 public class PhaseStatus extends ConfigurationEntity {
 

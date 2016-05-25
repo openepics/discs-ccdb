@@ -13,7 +13,7 @@
  *   http://frib.msu.edu
  *
  */
-package org.openepics.discs.ccdb.gui.lc;
+package org.openepics.discs.ccdb.gui.report;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,9 +29,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import org.openepics.discs.ccdb.core.ejb.LcStatusEJB;
+import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.model.cm.PhaseStatus;
-import org.openepics.discs.ccdb.model.Slot;
 
 /**
  * Bean to support lifecycle phase report
@@ -41,7 +40,7 @@ import org.openepics.discs.ccdb.model.Slot;
  */
 @Named
 @ViewScoped
-public class LifecycleStatusReport implements Serializable {
+public class StatusReport implements Serializable {
 
     static public class ColumnModel implements Serializable {
  
@@ -62,9 +61,9 @@ public class LifecycleStatusReport implements Serializable {
         }
     }
     
-    private static final Logger LOGGER = Logger.getLogger(LifecycleStatusReport.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(StatusReport.class.getName());
     @EJB
-    private LcStatusEJB lifecycleEJB;
+    private LifecycleEJB lifecycleEJB;
     
     private List<PhaseStatus> statusList;
     private List<PhaseStatus> filteredStatus;
@@ -76,7 +75,7 @@ public class LifecycleStatusReport implements Serializable {
      
     private List<ColumnModel> columns;
     
-    public LifecycleStatusReport() {
+    public StatusReport() {
         
     }
 
@@ -85,7 +84,7 @@ public class LifecycleStatusReport implements Serializable {
      */
     @PostConstruct
     public void init() {
-        statusList = lifecycleEJB.findAll();
+        statusList = lifecycleEJB.findAllStatuses();
         LOGGER.log(Level.INFO, "Size of LC sttaus list: {0}", statusList.size());
         for(PhaseStatus lcstat: statusList) {
               if (lcstat.getAssignment().getSlot() != null) {

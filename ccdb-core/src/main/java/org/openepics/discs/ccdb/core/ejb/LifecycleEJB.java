@@ -26,6 +26,7 @@ import org.openepics.discs.ccdb.model.User;
 import org.openepics.discs.ccdb.model.cm.Phase;
 import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
+import org.openepics.discs.ccdb.model.cm.PhaseStatus;
 import org.openepics.discs.ccdb.model.cm.StatusType;
 import org.openepics.discs.ccdb.model.cm.StatusTypeOption;
 
@@ -254,4 +255,24 @@ public class LifecycleEJB {
                 .setParameter("type", type)
                 .getResultList();
     } 
+    
+    //----------------- phase status
+    /**
+     * 
+     * @return 
+     */
+    public List<PhaseStatus> findAllStatuses() {
+        return em.createNamedQuery("PhaseStatus.findAll", PhaseStatus.class).getResultList();
+    }  
+    
+    /**
+     * 
+     * @param assignment
+     * @return 
+     */
+    public List<PhaseStatus> findAllStatuses(PhaseAssignment assignment) {
+        return em.createNamedQuery("PhaseStatus.findByAssignment", PhaseStatus.class)
+                .setParameter("assignment", assignment)
+                .getResultList();
+    }
 }

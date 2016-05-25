@@ -9,27 +9,27 @@
         <h:form id="racklistForm">
             <p:panel>
                 <h:outputText value="Phase Status" styleClass="heading"/>
-                <p:dataTable var="stat" id="statusTable" value="#{lifecycleStatusManager.statusList}" 
+                <p:dataTable var="stat" id="statusTable" value="#{statusManager.statusList}" 
                              emptyMessage="No records found." 
                              rowKey="#{stat.id}" 
-                             resizableColumns="true" filteredValue="#{lifecycleStatusManager.filteredStatus}" 
+                             resizableColumns="true" filteredValue="#{statusManager.filteredStatus}" 
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
                              rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">   
 
                     
-                    <p:column headerText="Slot" sortBy="#{stat.requirement.slot.name}" filterBy="#{stat.requirement.slot.name}"
+                    <p:column headerText="Slot" sortBy="#{stat.assignment.slot.name}" filterBy="#{stat.assignment.slot.name}"
                               filterMatchMode="contains" >
-                        <h:outputText value="#{stat.requirement.slot.name}" />
+                        <h:outputText value="#{stat.assignment.slot.name}" />
                     </p:column>
 
-                    <p:column headerText="Phase" sortBy="#{stat.requirement.phase}"  >
-                        <h:outputText value="#{stat.requirement.phase.name}" />
+                    <p:column headerText="Phase" sortBy="#{stat.assignment.phase}"  >
+                        <h:outputText value="#{stat.assignment.phase.name}" />
                     </p:column>
 
-                    <p:column headerText="Requestor" sortBy="#{stat.requirement.requestor.name}" filterBy="#{stat.requirement.requestor.name}"
+                    <p:column headerText="Requestor" sortBy="#{stat.assignment.requestor.name}" filterBy="#{stat.assignment.requestor.name}"
                               filterMatchMode="contains" >
-                        <h:outputText value="#{stat.requirement.requestor.name}" />
+                        <h:outputText value="#{stat.assignment.requestor.name}" />
                     </p:column>
 
                     <p:column headerText="Status" sortBy="#{stat.status}"  >
