@@ -28,6 +28,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.openepics.discs.ccdb.jaxb.InstallationSlot;
+import org.openepics.discs.ccdb.jaxb.PropertyValue;
 
 /**
  * This resource provides bulk and specific installation slot data.
@@ -36,6 +37,12 @@ import org.openepics.discs.ccdb.jaxb.InstallationSlot;
  */
 @Path("slot")
 public interface InstallationSlotResource {
+    /**
+     * Retrieves a list of slots of a given device type
+     * 
+     * @param deviceType the name of the device type to retrieve slots for
+     * @return list of slots of given device 
+     */ 
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML}) 
     public List<InstallationSlot> getInstallationSlots(@DefaultValue("undefined") 
@@ -53,9 +60,15 @@ public interface InstallationSlotResource {
     public InstallationSlot getInstallationSlot(@PathParam("name") String name);
     
     /**
-     * Retrieves a list of slots of a given device type
-     * 
-     * @param deviceType the name of the device type to retrieve slots for
-     * @return list of slots of given device 
-     */    
+     * Returns value of a property of a installation slot
+     *
+     * @param name the name of the installation slot to retrieve
+     * @param property name of the property
+     * @return the installation slot instance data
+     */
+    @GET
+    @Path("{name}/{prop}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public PropertyValue getSlotPropertyValue(@PathParam("name") String name, @PathParam("prop") String property);
+       
 }

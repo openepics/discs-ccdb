@@ -83,6 +83,18 @@ public class InstallationSlotResourceImpl implements InstallationSlotResource {
         }
         return createInstallationSlot(installationSlot);
     }
+    
+    @Override
+    public PropertyValue getSlotPropertyValue(String name, String property) {
+        final Slot slot = slotEJB.findByName(name);
+        if (slot == null || property == null) {
+            return null;
+        }
+        List<org.openepics.discs.ccdb.model.SlotPropertyValue> slotProps = new ArrayList<>(slot.getSlotPropertyList());
+        return  slotProps.stream().filter(prop -> property.equals(prop.getProperty().getName()))
+                .map(propValue -> createPropertyValue(propValue))
+                       .collect(Collectors.toList()).get(0); // TODO: improve use findFirst()
+    }
 
     private List<InstallationSlot> getInstallationSlotsForType(String deviceType) {
         if (StringUtils.isEmpty(deviceType)) {
@@ -151,6 +163,8 @@ public class InstallationSlotResourceImpl implements InstallationSlotResource {
                 collect(Collectors.toList());
     }
 
+    /*
+    
     private List<PropertyValue> getPropertyValues(final Slot slot) {
         final InstallationRecord record = installationEJB.getActiveInstallationRecordForSlot(slot);
 
@@ -166,7 +180,31 @@ public class InstallationSlotResourceImpl implements InstallationSlotResource {
                                 externalProps).
                         collect(Collectors.toList());
     }
+    */
 
+    private List<PropertyValue> getPropertyValues(final Slot slot) {
+        final InstallationRecord record = installationEJB.getActiveInstallationRecordForSlot(slot);
+       
+//        return slotProps.stream().map(propValue -> createPropertyValue(propValue)).collect(Collectors.toList());
+        
+//         ToDo: Temporary workaround for bug in EcplseliNk 2.5: lazy fetch and streams do not work well together 
+        List<org.openepics.discs.ccdb.model.ComptypePropertyValue> typeProps = new ArrayList<>(slot.getComponentType().getComptypePropertyList());
+        // ToDo: Temporary workaround for bug in EcplseliNk 2.5: lazy fetch and streams do not work well together
+        List<org.openepics.discs.ccdb.model.DevicePropertyValue> deviceProps = (record == null ? new ArrayList<>() : new ArrayList<>(record.getDevice().getDevicePropertyList()));
+        final Stream<? extends PropertyValue> externalProps = Stream.concat(
+                            typeProps.stream().
+                                filter(propValue -> !propValue.isPropertyDefinition()).
+                                map(propValue -> createPropertyValue(propValue)),
+                            record == null ? Stream.empty() : deviceProps.stream().
+                                    map(propValue -> createPropertyValue(propValue)));
+
+        // ToDo: Temporary workaround for bug in EcplseliNk 2.5: lazy fetch and streams do not work well together 
+        
+        List<org.openepics.discs.ccdb.model.SlotPropertyValue> slotProps = new ArrayList<>(slot.getSlotPropertyList());
+        return Stream.concat(slotProps.stream().map(propValue -> createPropertyValue(propValue)), externalProps)
+                        .collect(Collectors.toList());
+    }
+    
     private PropertyValue createPropertyValue(final org.openepics.discs.ccdb.model.PropertyValue slotPropertyValue) {
         final PropertyValue propertyValue = new PropertyValue();
         final Property parentProperty = slotPropertyValue.getProperty();
