@@ -19,7 +19,6 @@
  */
 package org.openepics.discs.client;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -31,7 +30,7 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import org.openepics.discs.client.impl.ClosableResponse;
 import org.openepics.discs.client.impl.ResponseException;
 import org.openepics.discs.ccdb.jaxb.InstallationSlot;
-import org.openepics.discs.ccdb.jaxb.InstallationSlotNames;
+import org.openepics.discs.ccdb.jaxb.PropertyValue;
 import org.openepics.discs.ccdb.jaxrs.InstallationSlotResource;
 
 /**
@@ -85,5 +84,17 @@ class InstallationSlotClient implements
         } catch (Exception e) {
             throw new ResponseException("Couldn't retrieve data from service at " + url + ".", e);
         }
+    }
+    
+    /**
+     * ToDo: dummy method. Complete it.
+     * 
+     * @param name
+     * @param property
+     * @return 
+     */
+    @Override
+    public PropertyValue getSlotPropertyValue(String name, String property) {
+        return null;
     }
 }

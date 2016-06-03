@@ -27,15 +27,18 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import org.openepics.discs.ccdb.core.ejb.AuthEJB;
+import org.openepics.discs.ccdb.core.ejb.DeviceEJB;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.core.ejb.SlotEJB;
 import org.openepics.discs.ccdb.core.security.SecurityPolicy;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
+import org.openepics.discs.ccdb.model.Device;
 import org.openepics.discs.ccdb.model.Slot;
 import org.openepics.discs.ccdb.model.User;
 import org.openepics.discs.ccdb.model.cm.Phase;
 import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
+import org.openepics.discs.ccdb.model.cm.PhaseTag;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -71,9 +74,11 @@ public class AssignmentManager implements Serializable {
 //    @EJB
 //    private AuthEJB authEJB;
     @EJB
-    private LifecycleEJB reviewEJB;
+    private LifecycleEJB lcEJB;
     @EJB 
     private SlotEJB slotEJB;
+    @EJB 
+    private DeviceEJB deviceEJB;
     @EJB 
     private AuthEJB authEJB;
     @Inject
@@ -83,6 +88,7 @@ public class AssignmentManager implements Serializable {
 //    @Inject
 //    UserSession userSession;
       
+    private PhaseTag selectedTag = PhaseTag.NONE;
     private List<PhaseAssignment> entities;    
     private List<PhaseAssignment> filteredEntities;    
     private PhaseAssignment inputEntity;
@@ -92,6 +98,7 @@ public class AssignmentManager implements Serializable {
     
     private List<Slot> slots;
     private List<Phase> phases;
+    private List<Device> devices;
     private List<User> users;
     
     public AssignmentManager() {
@@ -99,11 +106,29 @@ public class AssignmentManager implements Serializable {
     
     @PostConstruct
     public void init() {      
-        entities = reviewEJB.findAllAssignments();
-        phases = reviewEJB.findAllPhases();
-        slots = slotEJB.findAll();
+//        entities = lcEJB.findAllAssignments();
+//        phases = lcEJB.findAllPhases();
+        devices = deviceEJB.findAll();
+        slots = slotEJB.findByIsHostingSlot(true);
         users = authEJB.findAllUsers();
         resetInput();
+    }
+    
+    /**
+     * Initialize data in view
+     * 
+     * @return 
+     */
+    public String initialize() {
+        String nextView = null;
+        if (selectedTag == null || selectedTag == PhaseTag.NONE) {
+            phases = lcEJB.findAllPhases();
+            entities = lcEJB.findAllAssignments();
+        } else {
+            phases = lcEJB.findPhases(selectedTag);
+            entities = lcEJB.findAssignments(selectedTag);
+        }
+        return nextView;
     }
     
     private void resetInput() {                
@@ -143,10 +168,10 @@ public class AssignmentManager implements Serializable {
     public void saveEntity() {
         try {            
             if (inputAction == InputAction.CREATE) {
-                reviewEJB.saveAssignment(inputEntity, inputApprovers);
+                lcEJB.saveAssignment(inputEntity, inputApprovers);
                 entities.add(inputEntity);                
             } else {
-                reviewEJB.saveAssignment(selectedEntity, inputApprovers);
+                lcEJB.saveAssignment(selectedEntity, inputApprovers);
             }
             resetInput();
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
@@ -160,7 +185,7 @@ public class AssignmentManager implements Serializable {
     
     public void deleteEntity() {
         try {
-            reviewEJB.deleteAssignment(selectedEntity);
+            lcEJB.deleteAssignment(selectedEntity);
             entities.remove(selectedEntity);  
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Success", "Deletion was successful. However, you may have to refresh the page.");
@@ -226,5 +251,19 @@ public class AssignmentManager implements Serializable {
         this.inputApprovers = inputApprovers;
     }
 
-    
+    public PhaseTag getSelectedTag() {
+        return selectedTag;
+    }
+
+    public void setSelectedTag(PhaseTag selectedTag) {
+        this.selectedTag = selectedTag;
+    }
+
+    public List<Device> getDevices() {
+        return devices;
+    }
+
+    public void setDevices(List<Device> devices) {
+        this.devices = devices;
+    }
 }

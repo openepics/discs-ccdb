@@ -27,6 +27,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
+import org.openepics.discs.ccdb.model.Device;
 import org.openepics.discs.ccdb.model.Slot;
 import org.openepics.discs.ccdb.model.User;
 
@@ -36,20 +37,25 @@ import org.openepics.discs.ccdb.model.User;
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "cm_slot_phase")
+@Table(name = "cm_assignment")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PhaseAssignment.findAll", query = "SELECT d FROM PhaseAssignment d"),
     @NamedQuery(name = "PhaseAssignment.findByName", query = "SELECT d FROM PhaseAssignment d WHERE d.phase = :phase"),
+    @NamedQuery(name = "PhaseAssignment.findByTag", query = "SELECT d FROM PhaseAssignment d WHERE d.phase.tag = :tag"),
     @NamedQuery(name = "PhaseAssignment.findBySlot", query = "SELECT d FROM PhaseAssignment d WHERE d.slot = :slot")
 })
 public class PhaseAssignment extends ConfigurationEntity {
 
     private static final long serialVersionUID = 1L;
     
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "slot")
     private Slot slot;
+    
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "device")
+    private Device device;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "phase")
@@ -113,9 +119,16 @@ public class PhaseAssignment extends ConfigurationEntity {
         this.phase = phase;
     }
 
-
     public List<PhaseApproval> getApprovals() {
         return approvals;
+    }
+
+    public Device getDevice() {
+        return device;
+    }
+
+    public void setDevice(Device device) {
+        this.device = device;
     }
     
 }

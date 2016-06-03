@@ -41,6 +41,7 @@ import org.openepics.discs.ccdb.model.ConfigurationEntity;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Phase.findAll", query = "SELECT d FROM Phase d"),
+    @NamedQuery(name = "Phase.findByTag", query = "SELECT d FROM Phase d WHERE d.tag = :tag"),
     @NamedQuery(name = "Phase.findByName", query = "SELECT d FROM Phase d WHERE d.name = :name")
 })
 public class Phase extends ConfigurationEntity {
@@ -63,6 +64,11 @@ public class Phase extends ConfigurationEntity {
     @Column(name = "loc")
     @Enumerated(EnumType.STRING)
     private LevelOfCare levelOfControl = LevelOfCare.NONE;
+    
+    @Basic(optional = false)
+    @Column(name = "tag")
+    @Enumerated(EnumType.STRING)
+    private PhaseTag tag = PhaseTag.NONE;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "status_type")
@@ -125,6 +131,14 @@ public class Phase extends ConfigurationEntity {
 
     public void setStatusType(StatusType statusType) {
         this.statusType = statusType;
+    }
+
+    public PhaseTag getTag() {
+        return tag;
+    }
+
+    public void setTag(PhaseTag tag) {
+        this.tag = tag;
     }
     
 }

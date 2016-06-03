@@ -68,13 +68,15 @@
                 <p:menuitem value="Units" icon="fa fa-database" outcome="units" />
             </p:submenu>
             
-            <p:submenu label="Approvals" icon="fa fa-crosshairs">
-                
+            <p:submenu label="Approvals" icon="fa fa-crosshairs">              
                 <p:menuitem value="Approvals" icon="fa fa-crosshairs" outcome="phaseapprovals" />
-                <p:menuitem value="Assignments" icon="fa fa-crosshairs" outcome="phasereqs"/>
-                <p:menuitem value="Phases" icon="fa fa-crosshairs" outcome="phases"/>
-                <p:menuitem value="Status Types" icon="fa fa-crosshairs" outcome="statustypes" />                              
-                
+                <p:menuitem value="Assignments" icon="fa fa-crosshairs" outcome="phasereqs"/>                                                                
+            </p:submenu>
+            
+            <p:submenu label="Checklists" icon="fa fa-list-alt">                              
+                <p:menuitem value="Assignments" icon="fa fa-list-alt" outcome="cl-assign" />   
+                <p:menuitem value="Status Update" icon="fa fa-list-alt" outcome="cl-status" />
+                <p:menuitem value="Report" icon="fa fa-list-alt" outcome="cl-report"  disabled="true" />
             </p:submenu>
             
             <p:submenu label="Import" icon="fa fa-upload" rendered="false">               
@@ -86,7 +88,9 @@
             </p:submenu>
             
             <p:submenu label="Admin" icon="fa fa-cubes">               
-                <p:menuitem value="Authorizations" icon="fa fa-cubes" outcome="auth"/>               
+                <p:menuitem value="Authorizations" icon="fa fa-cubes" outcome="auth"/>        
+                <p:menuitem value="Manage Phases" icon="fa fa-list-alt" outcome="phases" />
+                 <p:menuitem value="Status Types" icon="fa fa-crosshairs" outcome="statustypes" />       
             </p:submenu>
             
             <p:submenu label="Links" icon="fa fa-external-link" >

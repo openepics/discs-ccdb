@@ -27,6 +27,7 @@ import org.openepics.discs.ccdb.model.cm.Phase;
 import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
 import org.openepics.discs.ccdb.model.cm.PhaseStatus;
+import org.openepics.discs.ccdb.model.cm.PhaseTag;
 import org.openepics.discs.ccdb.model.cm.StatusType;
 import org.openepics.discs.ccdb.model.cm.StatusTypeOption;
 
@@ -53,6 +54,15 @@ public class LifecycleEJB {
         return em.createNamedQuery("Phase.findAll", Phase.class).getResultList();
     } 
     
+     /**
+     * Reviews with a given tag
+     * 
+     * @param tag
+     * @return a list of all {@link Phase}s ordered by name.
+     */
+    public List<Phase> findPhases(PhaseTag tag) {
+        return em.createNamedQuery("Phase.findByTag", Phase.class).setParameter("tag", tag).getResultList();
+    }
     
     
     /**
@@ -97,6 +107,16 @@ public class LifecycleEJB {
      */
     public List<PhaseAssignment> findAllAssignments() {
         return em.createNamedQuery("PhaseAssignment.findAll", PhaseAssignment.class).getResultList();
+    }
+    
+    /**
+     * All assignments
+     * 
+     * @param tag
+     * @return a list of all {@link Phase}s ordered by name.
+     */
+    public List<PhaseAssignment> findAssignments(PhaseTag tag) {
+        return em.createNamedQuery("PhaseAssignment.findByTag", PhaseAssignment.class).setParameter("tag", tag).getResultList();
     }
     
     /**

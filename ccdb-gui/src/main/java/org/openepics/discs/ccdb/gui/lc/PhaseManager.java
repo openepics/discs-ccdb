@@ -27,6 +27,7 @@ import javax.faces.view.ViewScoped;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
 import org.openepics.discs.ccdb.model.cm.Phase;
+import org.openepics.discs.ccdb.model.cm.PhaseTag;
 import org.openepics.discs.ccdb.model.cm.StatusType;
 
 import org.primefaces.context.RequestContext;
@@ -74,6 +75,7 @@ public class PhaseManager implements Serializable {
     private Phase inputEntity;
     private Phase selectedEntity;
     private InputAction inputAction;
+    private PhaseTag selectedTag;
     
     private List<StatusType> statusTypes;
     
@@ -81,10 +83,25 @@ public class PhaseManager implements Serializable {
     }
     
     @PostConstruct
-    public void init() {      
-        entities = lcEJB.findAllPhases(); 
+    public void init() { 
+        initialize();
         statusTypes = lcEJB.findAllStatusTypes();
         resetInput();
+    }
+    
+    /**
+     * Initialize data in view
+     * 
+     * @return 
+     */
+    public String initialize() {
+        String nextView = null;
+        if (selectedTag == null || selectedTag == PhaseTag.NONE) {
+            entities = lcEJB.findAllPhases();
+        } else {
+            entities = lcEJB.findPhases(selectedTag);
+        }
+        return nextView;
     }
     
     private void resetInput() {                
@@ -178,4 +195,20 @@ public class PhaseManager implements Serializable {
     public List<StatusType> getStatusTypes() {
         return statusTypes;
     }   
+
+    public LifecycleEJB getLcEJB() {
+        return lcEJB;
+    }
+
+    public void setLcEJB(LifecycleEJB lcEJB) {
+        this.lcEJB = lcEJB;
+    }
+
+    public PhaseTag getSelectedTag() {
+        return selectedTag;
+    }
+
+    public void setSelectedTag(PhaseTag selectedTag) {
+        this.selectedTag = selectedTag;
+    }
 }

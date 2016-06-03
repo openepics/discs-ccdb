@@ -61,6 +61,10 @@ public class PhaseApproval extends ConfigurationEntity {
     @Basic(optional = false)
     private boolean approved = false;
     
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "status")
+    private StatusTypeOption status;
+    
     @ManyToOne
     @JoinColumn(name = "approved_by")
     private User approved_by;
@@ -149,6 +153,14 @@ public class PhaseApproval extends ConfigurationEntity {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public StatusTypeOption getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusTypeOption status) {
+        this.status = status;
     }
     
 }

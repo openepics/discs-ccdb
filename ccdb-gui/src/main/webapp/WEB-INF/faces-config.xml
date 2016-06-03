@@ -69,11 +69,19 @@
             <to-view-id>/type/device-types.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        <!-- Admin -->
         <navigation-case>
             <from-outcome>phases</from-outcome>
-            <to-view-id>/lc/phases.xhtml</to-view-id>
+            <to-view-id>/cm/phases.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>statustypes</from-outcome>
+            <to-view-id>/cm/status-type.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <!-- approvals -->
         <navigation-case>
             <from-outcome>phasereqs</from-outcome>
             <to-view-id>/lc/assignments.xhtml</to-view-id>
@@ -89,11 +97,31 @@
             <to-view-id>/lc/approvals.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        
+        
+        <!-- Checklists -->
         <navigation-case>
-            <from-outcome>statustypes</from-outcome>
-            <to-view-id>/lc/status-type.xhtml</to-view-id>
+            <from-outcome>checklists</from-outcome>
+            <to-view-id>/cm/checklists.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>cl-assign</from-outcome>
+            <to-view-id>/cm/cl-assignments.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cl-status</from-outcome>
+            <to-view-id>/cm/cl-status.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cl-report</from-outcome>
+            <to-view-id>/cm/checklists.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+         <!-- Checklists -->
+         
         <navigation-case>
             <from-outcome>properties</from-outcome>
             <to-view-id>/property/properties.xhtml</to-view-id>
