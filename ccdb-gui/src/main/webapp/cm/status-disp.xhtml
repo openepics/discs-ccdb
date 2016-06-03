@@ -1,0 +1,25 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui" 
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:fragment  rendered="#{not empty statusRec}">
+        <ui:fragment  rendered="#{not empty statusRec.status}">
+            <h:outputText value="#{statusRec.status.name} " title="#{statusRec.status.description}" />
+            <h:outputText value=" [#{statusRec.approved_by.userId}"/>
+            <p:spacer width="5"/>
+            <h:outputText value="#{statusRec.approved_at}" >
+                <f:convertDateTime type="both"  pattern="#{msgs.timestampFormat}"/>
+            </h:outputText>  
+            <h:outputText value="]" />
+            <p:spacer width="5"/>
+            <h:outputText id="comment" styleClass="fa fa-comment-o" rendered="#{not empty statusRec.comment}" />
+            <p:overlayPanel for="comment" showEvent="mouseover" hideEvent="mouseout">
+                <h:outputText value="Comments: " /> 
+                <h:outputText value="#{statusRec.comment}" />                                
+            </p:overlayPanel>          
+        </ui:fragment>
+    </ui:fragment>
+
+    <h:outputText value="N/R" rendered="#{empty statusRec}"/>
+</ui:composition>

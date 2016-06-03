@@ -1,0 +1,94 @@
+<ui:composition template="/WEB-INF/template/template.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:viewParam name="type" value="#{statusReport.selectedType}"  /> 
+            <f:viewAction action="#{statusReport.initialize()}" />
+        </f:metadata>
+
+        <h:form id="form">  
+            <p:panel>
+                <h:outputText value="Status Report" styleClass="heading"/>
+
+                <h:outputText value="Slots:" />
+                <p:dataTable id="statusTable" var="slot" value="#{statusReport.slots}" widgetVar="statusTableWid"
+                             rowKey="#{slot.id}" > 
+                    <p:column headerText="Slot" sortBy="#{slot.name}" filterBy="#{slot.name}">
+                        <h:outputText value="#{slot.name}" />
+                    </p:column>
+                    <p:columns value="#{statusReport.phases}" var="phase" columnIndexVar="colIndex" >
+                        <f:facet name="header">
+                            <h:outputText value="#{phase.name}" />
+                        </f:facet>
+                        <div style="text-align: center;">
+                            <ui:include src="status-disp.xhtml">
+                                <ui:param name="statusRec" value="#{statusReport.getStatusRec(slot, phase)}" />
+                            </ui:include>
+                        </div>
+                    </p:columns>
+                    <div style="text-align: center;">
+                        <p:column headerText="Sum OK"  width="5%">
+                            <h:outputText value="#{statusReport.getSlotSumOk(slot)}" />
+                        </p:column>
+                    </div>
+                </p:dataTable>
+
+                <h:commandLink title="Export to Excel">  
+                    <p:graphicImage value="#{resource['images/excel.png']}" />                      
+                    <p:dataExporter type="xls"  target="statusTable" fileName="status-report"  />  
+                </h:commandLink>  
+                <h:commandLink title="Export to CSV">  
+                    <p:graphicImage value="#{resource['images/csv.png']}" />  
+                    <p:dataExporter type="csv" target="statusTable" fileName="status-report"  /> 
+                </h:commandLink>  
+                <h:commandLink title="Export to XML">  
+                    <p:graphicImage value="#{resource['images/xml.png']}" />  
+                    <p:dataExporter type="xml" target="statusTable" fileName="status-report" />  
+                </h:commandLink>
+                <br/>
+
+                <p:spacer height="20"  width="0"/>
+                <h:outputText value="Devices:" />
+                <p:dataTable id="statusDevTable" var="device" value="#{statusReport.devices}" 
+                             rowKey="#{device.id}" > 
+                    <p:column headerText="Device" sortBy="#{device.serialNumber}" filterBy="#{device.serialNumber}">
+                        <h:outputText value="#{device.serialNumber}" />
+                    </p:column>
+                    <p:columns value="#{statusReport.phases}" var="phase" columnIndexVar="colIndex" >
+                        <f:facet name="header">
+                            <h:outputText value="#{phase.name}" />
+                        </f:facet>
+                        <div style="text-align: center;">
+                            <ui:include src="status-disp.xhtml">
+                                <ui:param name="statusRec" value="#{statusReport.getDeviceStatusRec(device, phase)}" />
+                            </ui:include>
+                        </div>
+                    </p:columns>
+                    <p:column headerText="Sum OK" width="5%">
+                        <div style="text-align: center;">
+                            <h:outputText value="#{statusReport.getDeviceSumOk(device)}" />
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <h:commandLink title="Export to Excel">  
+                    <p:graphicImage value="#{resource['images/excel.png']}" />                      
+                    <p:dataExporter type="xls"  target="statusDevTable" fileName="tatus-report-dev"  />  
+                </h:commandLink>  
+                <h:commandLink title="Export to CSV">  
+                    <p:graphicImage value="#{resource['images/csv.png']}" />  
+                    <p:dataExporter type="csv" target="statusDevTable" fileName="status-report-dev"  /> 
+                </h:commandLink>  
+                <h:commandLink title="Export to XML">  
+                    <p:graphicImage value="#{resource['images/xml.png']}" />  
+                    <p:dataExporter type="xml" target="statusDevTable" fileName="status-report-dev" />  
+                </h:commandLink>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -9,7 +9,7 @@
 
     <ui:define name="content"> 
         <f:metadata>
-            <f:viewParam name="tag" value="#{assignmentManager.selectedTag}"  /> 
+            <f:viewParam name="type" value="#{assignmentManager.selectedType}"  /> 
             <f:viewAction action="#{assignmentManager.initialize()}" />
         </f:metadata>
         <h:form id="crudForm" > 
@@ -136,7 +136,7 @@
                     
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="procList" value="#{param[tag] == 'INSPECTION'? 'Checklist' : 'Process'}"/>
+                            <p:outputLabel for="procList" value="#{assignmentManager.selectedType}"/>
                         </p:column>
                         <p:column>
                             <p:selectOneMenu id="procList" var="proc" converter="#{processConverter}"

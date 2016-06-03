@@ -8,7 +8,10 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content"> 
-
+        <f:metadata>
+            <f:viewParam name="type" value="#{approveManager.selectedType}"  /> 
+            <f:viewAction action="#{approveManager.initialize()}" />
+        </f:metadata>
         <h:form id="crudForm" > 
             <p:panel>
                 <h:outputText value="Status" styleClass="heading"/>
@@ -27,9 +30,9 @@
                               filterMatchMode="contains" >
                         <h:outputText value="#{stat.assignment.slot.name}" />
                     </p:column>
-                    <p:column headerText="Device" sortBy="#{stat.assignment.device.name}" filterBy="#{stat.assignment.device.name}"
+                    <p:column headerText="Device" sortBy="#{stat.assignment.device.serialNumber}" filterBy="#{stat.assignment.device.serialNumber}"
                               filterMatchMode="contains" >
-                        <h:outputText value="#{stat.assignment.device.name}" />
+                        <h:outputText value="#{stat.assignment.device.serialNumber}" />
                     </p:column>
                     <p:column headerText="Phase" sortBy="#{stat.assignment.phase.name}"  filterBy="#{stat.assignment.phase.name}" >
                         <h:outputText value="#{stat.assignment.phase.name}" />
@@ -61,13 +64,11 @@
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">
-                                <p:commandButton title="Approve"  value="Approve" icon="ui-icon-document" update=":crudInputDlg" process="@this" 
+                                <p:commandButton title="Modify"  value="Modify" icon="ui-icon-document" update=":crudInputDlg" process="@this" 
                                                  actionListener="#{approveManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"
                                                  disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty approveManager.selectedApprovals}" />   
-                                <p:commandButton title="Disapprove" value="Dispprove" icon="ui-icon-disk" update=":crudInputDlg"  process="@this"                                          
-                                                 actionListener="#{approveManager.onEditCommand}"
-                                                 oncomplete="PF('crudInputWid').show()" disabled="#{true or empty approveManager.selectedApprovals}"/>
-                                <p:commandButton title="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
+         
+                                <p:commandButton title="Delete" value="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
                                                  actionListener="#{approveManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
                                                  disabled="#{true or empty approveManager.selectedApprovals}"/>
                             </f:facet>
@@ -79,28 +80,54 @@
 
         <p:dialog id="crudInputDlg" widgetVar="crudInputWid">
             <h:form id="objectInputForm" >              
-                <p:panelGrid columns="1">
+                <p:panelGrid >
                     <f:facet name="header">
                         <p:row>
-                            <p:column>
-                                <h:outputText value="Approve" rendered="#{approveManager.inputAction == 'CREATE'}"/>
-                                <h:outputText value="Disapprove" rendered="#{approveManager.inputAction == 'UPDATE'}"/>
-                                <h:outputText value="Delete Approval" rendered="#{approveManager.inputAction == 'DELETE'}"/>
+                            <p:column colspan="2">
+                                <h:outputText value="Update" rendered="#{approveManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update" rendered="#{approveManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete" rendered="#{approveManager.inputAction == 'DELETE'}"/>
                             </p:column>                
                         </p:row>
                         
                     </f:facet>
                     <p:row>
-                            <p:column >
-                                <h:outputText value="Are you sure?" />
-                            </p:column>                           
+                        <p:column>
+                            <p:outputLabel for="status" value="Status"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="status" var="opt" converter="#{statusOptionConverter}"
+                                             filter="true"
+                                             value="#{approveManager.inputStatus}" >
+                                <f:selectItems value="#{approveManager.statusOptions}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{opt.name}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{opt.description}" />
+                                </p:column>
+                            </p:selectOneMenu>                                                    
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="comment" value="Comment"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea id="comment" value="#{approveManager.inputComment}" 
+                                             rows="5" cols="40" counter="display" maxlength="250" 
+                                             counterTemplate="{0} characters remaining." 
+                                             autoResize="false" /> 
+                            <br/>
+                            <h:outputText id="display" />
+                        </p:column>
                     </p:row>
                     <f:facet name="footer">
                         <p:row>
-                            <p:column>
+                            <p:column colspan="2">
                                 <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
                                                  onclick="PF('crudInputWid').hide()"/>
-                                <p:commandButton icon="ui-icon-disk" value="Yes" style="float: right;"
+                                <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
                                                  action="#{approveManager.onApprove()}"  
                                                  oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
                                                  process="@form"  update="@form :crudForm:entityTable" rendered="#{approveManager.inputAction != 'DELETE'}"/>

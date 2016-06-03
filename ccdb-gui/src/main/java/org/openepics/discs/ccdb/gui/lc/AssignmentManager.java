@@ -39,6 +39,7 @@ import org.openepics.discs.ccdb.model.cm.Phase;
 import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
 import org.openepics.discs.ccdb.model.cm.PhaseTag;
+import org.openepics.discs.ccdb.model.cm.StatusType;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -88,7 +89,7 @@ public class AssignmentManager implements Serializable {
 //    @Inject
 //    UserSession userSession;
       
-    private PhaseTag selectedTag = PhaseTag.NONE;
+    private String selectedType;
     private List<PhaseAssignment> entities;    
     private List<PhaseAssignment> filteredEntities;    
     private PhaseAssignment inputEntity;
@@ -121,12 +122,18 @@ public class AssignmentManager implements Serializable {
      */
     public String initialize() {
         String nextView = null;
-        if (selectedTag == null || selectedTag == PhaseTag.NONE) {
+        StatusType stype = null;
+        
+        if (selectedType != null) {
+            stype = lcEJB.findStatusType(selectedType);
+        }
+        
+        if (stype == null) {
             phases = lcEJB.findAllPhases();
             entities = lcEJB.findAllAssignments();
-        } else {
-            phases = lcEJB.findPhases(selectedTag);
-            entities = lcEJB.findAssignments(selectedTag);
+        } else {         
+            phases = lcEJB.findPhases(stype);
+            entities = lcEJB.findAssignments(stype);
         }
         return nextView;
     }
@@ -251,12 +258,12 @@ public class AssignmentManager implements Serializable {
         this.inputApprovers = inputApprovers;
     }
 
-    public PhaseTag getSelectedTag() {
-        return selectedTag;
+    public String getSelectedType() {
+        return selectedType;
     }
 
-    public void setSelectedTag(PhaseTag selectedTag) {
-        this.selectedTag = selectedTag;
+    public void setSelectedType(String selectedType) {
+        this.selectedType = selectedType;
     }
 
     public List<Device> getDevices() {

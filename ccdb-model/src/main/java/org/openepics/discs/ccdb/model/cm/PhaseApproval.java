@@ -42,7 +42,7 @@ import org.openepics.discs.ccdb.model.User;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PhaseApproval.findAll", query = "SELECT d FROM PhaseApproval d"),
-    @NamedQuery(name = "PhaseApproval.findByReq", query = "SELECT d FROM PhaseApproval d WHERE d.assignment = :assignment"),
+    @NamedQuery(name = "PhaseApproval.findByType", query = "SELECT d FROM PhaseApproval d WHERE d.assignment.phase.statusType = :type"),
     @NamedQuery(name = "PhaseApproval.findByName", query = "SELECT d FROM PhaseApproval d WHERE d.assignment = :assignment")
 })
 public class PhaseApproval extends ConfigurationEntity {

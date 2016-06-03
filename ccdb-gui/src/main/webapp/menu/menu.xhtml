@@ -74,9 +74,9 @@
             </p:submenu>
             
             <p:submenu label="Checklists" icon="fa fa-list-alt">                              
-                <p:menuitem value="Assignments" icon="fa fa-list-alt" outcome="cl-assign" />   
-                <p:menuitem value="Status Update" icon="fa fa-list-alt" outcome="cl-status" />
-                <p:menuitem value="Report" icon="fa fa-list-alt" outcome="cl-report"  disabled="true" />
+                <p:menuitem value="Assignments" icon="fa fa-list-alt" url="/cm/assignments.xhtml?type=checklist" />   
+                <p:menuitem value="Status Update" icon="fa fa-list-alt" url="/cm/status.xhtml?type=checklist" />
+                <p:menuitem value="Status Report" icon="fa fa-list-alt" outcome="/cm/status-report.xhtml?type=checklist" />
             </p:submenu>
             
             <p:submenu label="Import" icon="fa fa-upload" rendered="false">               

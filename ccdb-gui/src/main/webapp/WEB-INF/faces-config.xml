@@ -107,12 +107,16 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>cl-assign</from-outcome>
-            <to-view-id>/cm/cl-assignments.xhtml</to-view-id>
+            <to-view-id>/cm/assignments.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>cl-status</from-outcome>
-            <to-view-id>/cm/cl-status.xhtml</to-view-id>
+            <to-view-id>/cm/status.xhtml</to-view-id>
+            <view-param>
+                <name>type</name>
+                <value>checklist</value>
+            </view-param>
             <redirect/>
         </navigation-case>
         <navigation-case>

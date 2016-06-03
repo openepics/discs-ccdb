@@ -57,11 +57,12 @@ public class LifecycleEJB {
      /**
      * Reviews with a given tag
      * 
-     * @param tag
+     * @param type
+     * 
      * @return a list of all {@link Phase}s ordered by name.
      */
-    public List<Phase> findPhases(PhaseTag tag) {
-        return em.createNamedQuery("Phase.findByTag", Phase.class).setParameter("tag", tag).getResultList();
+    public List<Phase> findPhases(StatusType type) {
+        return em.createNamedQuery("Phase.findByType", Phase.class).setParameter("type", type).getResultList();
     }
     
     
@@ -112,11 +113,11 @@ public class LifecycleEJB {
     /**
      * All assignments
      * 
-     * @param tag
+     * @param type
      * @return a list of all {@link Phase}s ordered by name.
      */
-    public List<PhaseAssignment> findAssignments(PhaseTag tag) {
-        return em.createNamedQuery("PhaseAssignment.findByTag", PhaseAssignment.class).setParameter("tag", tag).getResultList();
+    public List<PhaseAssignment> findAssignments(StatusType type) {
+        return em.createNamedQuery("PhaseAssignment.findByType", PhaseAssignment.class).setParameter("type", type).getResultList();
     }
     
     /**
@@ -179,6 +180,15 @@ public class LifecycleEJB {
     }   
     
     /**
+     * All approvals
+     * 
+     * @return a list of all {@link PhaseApproval}s ordered by name.
+     */
+    public List<PhaseApproval> findApprovals(StatusType type) {
+        return em.createNamedQuery("PhaseApproval.findByType", PhaseApproval.class).setParameter("type", type).getResultList();
+    } 
+    
+    /**
      * find a approval given its id
      *
      * @param id
@@ -214,13 +224,24 @@ public class LifecycleEJB {
     
     // ------------------ Status type
     /**
-     * All reviews
+     * All types
      * 
      * @return a list of all {@link Phase}s ordered by name.
      */
     public List<StatusType> findAllStatusTypes() {
         return em.createNamedQuery("StatusType.findAll", StatusType.class).getResultList();
     } 
+    
+    /**
+     * PHase type 
+     * 
+     * @param name
+     * @return a list of all {@link Phase}s ordered by name.
+     */
+    public StatusType findStatusType(String name) {
+        return em.createNamedQuery("StatusType.findByName", StatusType.class).setParameter("name", name).getSingleResult();
+    } 
+    
     /**
      * save a status type
      *
@@ -295,4 +316,24 @@ public class LifecycleEJB {
                 .setParameter("assignment", assignment)
                 .getResultList();
     }
+    
+    /**
+     * Find status options of a given type
+     * 
+     * @param type
+     * @return 
+     */
+    public List<StatusTypeOption> findStatusOptions(StatusType type) {
+        return em.createNamedQuery("StatusTypeOption.findByType", StatusTypeOption.class).setParameter("type",type).getResultList();
+    }  
+    
+    /**
+     * Find status option for a given id
+     * 
+     * @param id
+     * @return 
+     */
+    public StatusTypeOption findStatusOption(Long id) {
+        return em.find(StatusTypeOption.class,id);
+    } 
 }

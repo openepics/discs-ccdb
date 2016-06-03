@@ -31,6 +31,8 @@ import org.openepics.discs.ccdb.core.security.SecurityPolicy;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
 import org.openepics.discs.ccdb.model.User;
 import org.openepics.discs.ccdb.model.cm.PhaseApproval;
+import org.openepics.discs.ccdb.model.cm.StatusType;
+import org.openepics.discs.ccdb.model.cm.StatusTypeOption;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -76,9 +78,13 @@ public class ApproveManager implements Serializable {
 
     private List<PhaseApproval> entities;
     private List<PhaseApproval> filteredEntities;
+    private List<StatusTypeOption> statusOptions;
     private PhaseApproval inputEntity;
     private PhaseApproval selectedEntity;
     private InputAction inputAction;
+    private StatusTypeOption inputStatus;
+    private String selectedType;
+    private String inputComment;
 
     private List<PhaseApproval> selectedApprovals;
 
@@ -86,12 +92,32 @@ public class ApproveManager implements Serializable {
     }
 
     @PostConstruct
-    public void init() {
-        entities = lcEJB.findAllApprovals();
-
+    public void init() {      
         resetInput();
     }
 
+    /**
+     * Initialize data in view
+     * 
+     * @return 
+     */
+    public String initialize() {
+        String nextView = null;
+        StatusType stype = null;
+        
+        if (selectedType != null) {
+            stype = lcEJB.findStatusType(selectedType);
+        }
+        
+        if (stype == null) {
+            entities = lcEJB.findAllApprovals();
+        } else {                 
+            entities = lcEJB.findApprovals(stype);
+            statusOptions = lcEJB.findStatusOptions(stype);
+        }
+        return nextView;
+    }
+    
     private void resetInput() {
         inputAction = InputAction.READ;
     }
@@ -159,7 +185,7 @@ public class ApproveManager implements Serializable {
             User user = new User(userId);
             
             for (PhaseApproval selectedApproval : selectedApprovals) {
-                if (! user.equals(selectedApproval.getAssignedApprover())) {
+                if (selectedApproval.getAssignedApprover() != null && ! selectedApproval.getAssignedApprover().equals(user)) {
                      UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Approval Failed",
                     "You are not assigned as approver on one or more of the selected assignments.");
                      RequestContext.getCurrentInstance().addCallbackParam("success", false);
@@ -171,6 +197,8 @@ public class ApproveManager implements Serializable {
                 selectedApproval.setApproved_at(new Date());
                 selectedApproval.setApproved_by(user);
                 selectedApproval.setApproved(true);
+                selectedApproval.setStatus(inputStatus);
+                selectedApproval.setComment(inputComment);
                 lcEJB.saveApproval(selectedApproval);
             }
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
@@ -253,6 +281,34 @@ public class ApproveManager implements Serializable {
 
     public void setSelectedApprovals(List<PhaseApproval> selectedApprovals) {
         this.selectedApprovals = selectedApprovals;
+    }
+
+    public StatusTypeOption getInputStatus() {
+        return inputStatus;
+    }
+
+    public void setInputStatus(StatusTypeOption inputStatus) {
+        this.inputStatus = inputStatus;
+    }
+
+    public String getInputComment() {
+        return inputComment;
+    }
+
+    public void setInputComment(String inputComment) {
+        this.inputComment = inputComment;
+    }
+
+    public List<StatusTypeOption> getStatusOptions() {
+        return statusOptions;
+    }
+
+    public String getSelectedType() {
+        return selectedType;
+    }
+
+    public void setSelectedType(String selectedType) {
+        this.selectedType = selectedType;
     }
 
 }

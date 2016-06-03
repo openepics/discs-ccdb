@@ -41,7 +41,7 @@ import org.openepics.discs.ccdb.model.ConfigurationEntity;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Phase.findAll", query = "SELECT d FROM Phase d"),
-    @NamedQuery(name = "Phase.findByTag", query = "SELECT d FROM Phase d WHERE d.tag = :tag"),
+    @NamedQuery(name = "Phase.findByType", query = "SELECT d FROM Phase d WHERE d.statusType = :type"),
     @NamedQuery(name = "Phase.findByName", query = "SELECT d FROM Phase d WHERE d.name = :name")
 })
 public class Phase extends ConfigurationEntity {

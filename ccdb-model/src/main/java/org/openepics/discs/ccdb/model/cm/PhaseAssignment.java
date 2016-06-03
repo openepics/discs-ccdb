@@ -42,7 +42,7 @@ import org.openepics.discs.ccdb.model.User;
 @NamedQueries({
     @NamedQuery(name = "PhaseAssignment.findAll", query = "SELECT d FROM PhaseAssignment d"),
     @NamedQuery(name = "PhaseAssignment.findByName", query = "SELECT d FROM PhaseAssignment d WHERE d.phase = :phase"),
-    @NamedQuery(name = "PhaseAssignment.findByTag", query = "SELECT d FROM PhaseAssignment d WHERE d.phase.tag = :tag"),
+    @NamedQuery(name = "PhaseAssignment.findByType", query = "SELECT d FROM PhaseAssignment d WHERE d.phase.statusType = :type"),
     @NamedQuery(name = "PhaseAssignment.findBySlot", query = "SELECT d FROM PhaseAssignment d WHERE d.slot = :slot")
 })
 public class PhaseAssignment extends ConfigurationEntity {
