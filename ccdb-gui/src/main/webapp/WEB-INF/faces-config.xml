@@ -80,51 +80,6 @@
             <to-view-id>/cm/status-type.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-        
-        <!-- approvals -->
-        <navigation-case>
-            <from-outcome>phasereqs</from-outcome>
-            <to-view-id>/lc/assignments.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>phasestatus</from-outcome>
-            <to-view-id>/lc/status.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>phaseapprovals</from-outcome>
-            <to-view-id>/lc/approvals.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        
-        
-        <!-- Checklists -->
-        <navigation-case>
-            <from-outcome>checklists</from-outcome>
-            <to-view-id>/cm/checklists.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>cl-assign</from-outcome>
-            <to-view-id>/cm/assignments.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>cl-status</from-outcome>
-            <to-view-id>/cm/status.xhtml</to-view-id>
-            <view-param>
-                <name>type</name>
-                <value>checklist</value>
-            </view-param>
-            <redirect/>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>cl-report</from-outcome>
-            <to-view-id>/cm/checklists.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-         <!-- Checklists -->
          
         <navigation-case>
             <from-outcome>properties</from-outcome>

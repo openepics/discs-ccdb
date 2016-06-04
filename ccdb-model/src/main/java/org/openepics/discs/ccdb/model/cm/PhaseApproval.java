@@ -113,8 +113,6 @@ public class PhaseApproval extends ConfigurationEntity {
         this.assignment = assignment;
     }
 
-    
-
     public User getAssignedApprover() {
         return assignedApprover;
     }

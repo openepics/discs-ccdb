@@ -39,13 +39,10 @@
                     </p:column>
 
                     <p:column headerText="Assignees"  >
-                        <ui:repeat var="appr" value="#{entity.approvals}">
-                            <h:outputText value="#{appr.assignedApprover.name} " />
+                        <ui:repeat  value="#{entity.approvals}" var="approval">
+                            <!--<h:outputText value="#{entity.approvals.stream.map(appr -> appr.assignedApprover.userid)}" />-->
+                            <h:outputText value="test " />
                         </ui:repeat>
-<!--                        <p:dataList value="#{entity.approvals}" var="appr"  itemType="none">
-                            <h:outputText value="#{appr.assignedApprover.name}" styleClass="horizontal"/>
-                        </p:dataList>
-                        <c:forEach items="#{entity.approvals}"  var="arec" > <h:outputText value="#{arec.assignedApprover.name}" /> </c:forEach>-->
                     </p:column>
 
                     <p:column headerText="Requestor" sortBy="#{entity.requestor.name}" filterBy="#{entity.requestor.name}"

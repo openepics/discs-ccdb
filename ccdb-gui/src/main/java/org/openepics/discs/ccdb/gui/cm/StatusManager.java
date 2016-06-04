@@ -12,7 +12,7 @@
  *       East Lansing, MI 48824-1321
  *        http://frib.msu.edu
  */
-package org.openepics.discs.ccdb.gui.lc;
+package org.openepics.discs.ccdb.gui.cm;
 
 import com.google.common.base.Preconditions;
 import java.io.Serializable;
@@ -63,7 +63,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class ApproveManager implements Serializable {
+public class StatusManager implements Serializable {
 //    @EJB
 //    private AuthEJB authEJB;
 
@@ -72,7 +72,7 @@ public class ApproveManager implements Serializable {
     @Inject
     private SecurityPolicy securityPolicy;
 
-    private static final Logger LOGGER = Logger.getLogger(ApproveManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(StatusManager.class.getName());
 //    @Inject
 //    UserSession userSession;
 
@@ -88,7 +88,7 @@ public class ApproveManager implements Serializable {
 
     private List<PhaseApproval> selectedApprovals;
 
-    public ApproveManager() {
+    public StatusManager() {
     }
 
     @PostConstruct

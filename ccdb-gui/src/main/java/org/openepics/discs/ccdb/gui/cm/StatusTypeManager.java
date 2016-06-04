@@ -13,7 +13,7 @@
  *        http://frib.msu.edu
  */
 
-package org.openepics.discs.ccdb.gui.lc;
+package org.openepics.discs.ccdb.gui.cm;
 
 import java.io.Serializable;
 import java.util.List;

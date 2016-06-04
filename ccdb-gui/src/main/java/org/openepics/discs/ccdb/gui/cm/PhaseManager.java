@@ -13,10 +13,9 @@
  *        http://frib.msu.edu
  */
 
-package org.openepics.discs.ccdb.gui.lc;
+package org.openepics.discs.ccdb.gui.cm;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -25,27 +24,16 @@ import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import org.openepics.discs.ccdb.core.ejb.AuthEJB;
-import org.openepics.discs.ccdb.core.ejb.DeviceEJB;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
-import org.openepics.discs.ccdb.core.ejb.SlotEJB;
-import org.openepics.discs.ccdb.core.security.SecurityPolicy;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
-import org.openepics.discs.ccdb.model.Device;
-import org.openepics.discs.ccdb.model.Slot;
-import org.openepics.discs.ccdb.model.User;
 import org.openepics.discs.ccdb.model.cm.Phase;
-import org.openepics.discs.ccdb.model.cm.PhaseApproval;
-import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
-import org.openepics.discs.ccdb.model.cm.PhaseTag;
 import org.openepics.discs.ccdb.model.cm.StatusType;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 /**
- * Description: State for Manage Process View
+ * Description: State for Manage Phase View
  *
  * Methods:
  * <p>
@@ -71,47 +59,32 @@ import org.primefaces.event.SelectEvent;
 
 @Named
 @ViewScoped
-public class AssignmentManager implements Serializable {
+public class PhaseManager implements Serializable {
 //    @EJB
 //    private AuthEJB authEJB;
     @EJB
     private LifecycleEJB lcEJB;
-    @EJB 
-    private SlotEJB slotEJB;
-    @EJB 
-    private DeviceEJB deviceEJB;
-    @EJB 
-    private AuthEJB authEJB;
-    @Inject
-    private SecurityPolicy securityPolicy;
-    
-    private static final Logger LOGGER = Logger.getLogger(AssignmentManager.class.getName());
+            
+    private static final Logger LOGGER = Logger.getLogger(PhaseManager.class.getName());
 //    @Inject
 //    UserSession userSession;
       
-    private String selectedType;
-    private List<PhaseAssignment> entities;    
-    private List<PhaseAssignment> filteredEntities;    
-    private PhaseAssignment inputEntity;
-    private PhaseAssignment selectedEntity;
+    private List<Phase> entities;    
+    private List<Phase> filteredEntities;    
+    private Phase inputEntity;
+    private Phase selectedEntity;
     private InputAction inputAction;
-    private List<User> inputApprovers = new ArrayList<>();
+    private String selectedType;
     
-    private List<Slot> slots;
-    private List<Phase> phases;
-    private List<Device> devices;
-    private List<User> users;
+    private List<StatusType> statusTypes;
     
-    public AssignmentManager() {
+    public PhaseManager() {
     }
     
     @PostConstruct
-    public void init() {      
-//        entities = lcEJB.findAllAssignments();
-//        phases = lcEJB.findAllPhases();
-        devices = deviceEJB.findAll();
-        slots = slotEJB.findByIsHostingSlot(true);
-        users = authEJB.findAllUsers();
+    public void init() { 
+        initialize();
+        statusTypes = lcEJB.findAllStatusTypes();
         resetInput();
     }
     
@@ -127,15 +100,14 @@ public class AssignmentManager implements Serializable {
         if (selectedType != null) {
             stype = lcEJB.findStatusType(selectedType);
         }
-        
         if (stype == null) {
-            phases = lcEJB.findAllPhases();
-            entities = lcEJB.findAllAssignments();
-        } else {         
-            phases = lcEJB.findPhases(stype);
-            entities = lcEJB.findAssignments(stype);
+            entities = lcEJB.findAllPhases();
+        } else {
+            entities = lcEJB.findPhases(stype);
         }
+        
         return nextView;
+    
     }
     
     private void resetInput() {                
@@ -143,25 +115,13 @@ public class AssignmentManager implements Serializable {
     }
     
     public void onRowSelect(SelectEvent event) {
-        inputApprovers.clear();
-        for (PhaseApproval approval: selectedEntity.getApprovals()) {
-            if (approval.getAssignedApprover() != null) inputApprovers.add(approval.getAssignedApprover());
-        }
         // inputRole = selectedRole;
         // Utility.showMessage(FacesMessage.SEVERITY_INFO, "Role Selected", "");
     }
     
     public void onAddCommand(ActionEvent event) {
-        inputEntity = new PhaseAssignment();
-        inputAction = InputAction.CREATE;
-        String userId = securityPolicy.getUserId();
-        if (userId == null) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
-                    "Not authorized. User Id is null.");
-            return;
-        }
-        User user = new User(userId);
-        inputEntity.setRequestor(user);
+        inputEntity = new Phase();
+        inputAction = InputAction.CREATE;       
     }
     
     public void onEditCommand(ActionEvent event) {
@@ -173,18 +133,18 @@ public class AssignmentManager implements Serializable {
     }
     
     public void saveEntity() {
-        try {            
+        try {                      
             if (inputAction == InputAction.CREATE) {
-                lcEJB.saveAssignment(inputEntity, inputApprovers);
+                lcEJB.savePhase(inputEntity);
                 entities.add(inputEntity);                
             } else {
-                lcEJB.saveAssignment(selectedEntity, inputApprovers);
+                lcEJB.savePhase(selectedEntity);
             }
             resetInput();
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
-            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Success", "Saved");
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Saved", "");
         } catch (Exception e) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Failure", e.getMessage());
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save", e.getMessage());
             RequestContext.getCurrentInstance().addCallbackParam("success", false);
             System.out.println(e);
         }
@@ -192,13 +152,13 @@ public class AssignmentManager implements Serializable {
     
     public void deleteEntity() {
         try {
-            lcEJB.deleteAssignment(selectedEntity);
+            lcEJB.deletePhase(selectedEntity);
             entities.remove(selectedEntity);  
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
-            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Success", "Deletion was successful. However, you may have to refresh the page.");
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Deletion successful", "You may have to refresh the page.");
             resetInput();
         } catch (Exception e) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Failure", e.getMessage());
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not complete deletion", e.getMessage());
             RequestContext.getCurrentInstance().addCallbackParam("success", false);
             System.out.println(e);
         }
@@ -210,52 +170,44 @@ public class AssignmentManager implements Serializable {
         return inputAction;
     }
 
-    public List<PhaseAssignment> getEntities() {
+    public List<Phase> getEntities() {
         return entities;
     }
 
-    public List<PhaseAssignment> getFilteredEntities() {
+    public List<Phase> getFilteredEntities() {
         return filteredEntities;
     }
 
-    public void setFilteredEntities(List<PhaseAssignment> filteredEntities) {
+    public void setFilteredEntities(List<Phase> filteredEntities) {
         this.filteredEntities = filteredEntities;
     }
 
-    public PhaseAssignment getInputEntity() {
+    public Phase getInputEntity() {
         return inputEntity;
     }
 
-    public void setInputEntity(PhaseAssignment inputEntity) {
+    public void setInputEntity(Phase inputEntity) {
         this.inputEntity = inputEntity;
     }
 
-    public PhaseAssignment getSelectedEntity() {
+    public Phase getSelectedEntity() {
         return selectedEntity;
     }
 
-    public void setSelectedEntity(PhaseAssignment selectedEntity) {
+    public void setSelectedEntity(Phase selectedEntity) {
         this.selectedEntity = selectedEntity;
     }
 
-    public List<Slot> getSlots() {
-        return slots;
+    public List<StatusType> getStatusTypes() {
+        return statusTypes;
+    }   
+
+    public LifecycleEJB getLcEJB() {
+        return lcEJB;
     }
 
-    public List<Phase> getPhases() {
-        return phases;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public List<User> getInputApprovers() {
-        return inputApprovers;
-    }
-
-    public void setInputApprovers(List<User> inputApprovers) {
-        this.inputApprovers = inputApprovers;
+    public void setLcEJB(LifecycleEJB lcEJB) {
+        this.lcEJB = lcEJB;
     }
 
     public String getSelectedType() {
@@ -264,13 +216,5 @@ public class AssignmentManager implements Serializable {
 
     public void setSelectedType(String selectedType) {
         this.selectedType = selectedType;
-    }
-
-    public List<Device> getDevices() {
-        return devices;
-    }
-
-    public void setDevices(List<Device> devices) {
-        this.devices = devices;
     }
 }

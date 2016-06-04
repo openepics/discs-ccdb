@@ -123,6 +123,10 @@ public class PhaseAssignment extends ConfigurationEntity {
         return approvals;
     }
 
+    public void setApprovals(List<PhaseApproval> approvals) {
+        this.approvals = approvals;
+    }
+
     public Device getDevice() {
         return device;
     }
