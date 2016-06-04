@@ -9,22 +9,22 @@
 
     <ui:define name="content"> 
         <f:metadata>
-            <f:viewParam name="type" value="#{approveManager.selectedType}"  /> 
-            <f:viewAction action="#{approveManager.initialize()}" />
+            <f:viewParam name="type" value="#{statusManager.selectedType}"  /> 
+            <f:viewAction action="#{statusManager.initialize()}" />
         </f:metadata>
         <h:form id="crudForm" > 
             <p:panel>
                 <h:outputText value="Status" styleClass="heading"/>
-                <p:dataTable var="stat" id="entityTable" value="#{approveManager.entities}" 
+                <p:dataTable var="stat" id="entityTable" value="#{statusManager.entities}" 
                              emptyMessage="No records found." 
                              rowKey="#{stat.id}" 
-                             selection="#{approveManager.selectedApprovals}"
-                             resizableColumns="true" filteredValue="#{approveManager.filteredEntities}" 
+                             selection="#{statusManager.selectedApprovals}"
+                             resizableColumns="true" filteredValue="#{statusManager.filteredEntities}" 
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
                              rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">   
 
-                    <p:ajax event="rowSelectCheckbox" listener="#{approveManager.onRowSelect}" update="commandButtons" />
+                    <p:ajax event="rowSelectCheckbox" listener="#{statusManager.onRowSelect}" update="commandButtons" />
                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                     <p:column headerText="Slot" sortBy="#{stat.assignment.slot.name}" filterBy="#{stat.assignment.slot.name}"
                               filterMatchMode="contains" >
@@ -65,12 +65,12 @@
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">
                                 <p:commandButton title="Modify"  value="Modify" icon="ui-icon-document" update=":crudInputDlg" process="@this" 
-                                                 actionListener="#{approveManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"
-                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty approveManager.selectedApprovals}" />   
+                                                 actionListener="#{statusManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty statusManager.selectedApprovals}" />   
          
                                 <p:commandButton title="Delete" value="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
-                                                 actionListener="#{approveManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
-                                                 disabled="#{true or empty approveManager.selectedApprovals}"/>
+                                                 actionListener="#{statusManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
+                                                 disabled="#{true or empty statusManager.selectedApprovals}"/>
                             </f:facet>
                         </p:toolbar>
                     </f:facet>
@@ -84,9 +84,9 @@
                     <f:facet name="header">
                         <p:row>
                             <p:column colspan="2">
-                                <h:outputText value="Update" rendered="#{approveManager.inputAction == 'CREATE'}"/>
-                                <h:outputText value="Update" rendered="#{approveManager.inputAction == 'UPDATE'}"/>
-                                <h:outputText value="Delete" rendered="#{approveManager.inputAction == 'DELETE'}"/>
+                                <h:outputText value="Update" rendered="#{statusManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update" rendered="#{statusManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete" rendered="#{statusManager.inputAction == 'DELETE'}"/>
                             </p:column>                
                         </p:row>
                         
@@ -98,8 +98,8 @@
                         <p:column>
                             <p:selectOneMenu id="status" var="opt" converter="#{statusOptionConverter}"
                                              filter="true"
-                                             value="#{approveManager.inputStatus}" >
-                                <f:selectItems value="#{approveManager.statusOptions}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                             value="#{statusManager.inputStatus}" >
+                                <f:selectItems value="#{statusManager.statusOptions}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
                                 <p:column>
                                     <h:outputText value="#{opt.name}" />
                                 </p:column>
@@ -114,7 +114,7 @@
                             <p:outputLabel for="comment" value="Comment"/>
                         </p:column>
                         <p:column>
-                            <p:inputTextarea id="comment" value="#{approveManager.inputComment}" 
+                            <p:inputTextarea id="comment" value="#{statusManager.inputComment}" 
                                              rows="5" cols="40" counter="display" maxlength="250" 
                                              counterTemplate="{0} characters remaining." 
                                              autoResize="false" /> 
@@ -128,13 +128,13 @@
                                 <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
                                                  onclick="PF('crudInputWid').hide()"/>
                                 <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
-                                                 action="#{approveManager.onApprove()}"  
+                                                 action="#{statusManager.onApprove()}"  
                                                  oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
-                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{approveManager.inputAction != 'DELETE'}"/>
+                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{statusManager.inputAction != 'DELETE'}"/>
                                 <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"
-                                                 action="#{approveManager.deleteEntity()}" 
+                                                 action="#{statusManager.deleteEntity()}" 
                                                  oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
-                                                 process="@form" update=":crudForm:entityTable" rendered="#{approveManager.inputAction == 'DELETE'}"/>                                
+                                                 process="@form" update=":crudForm:entityTable" rendered="#{statusManager.inputAction == 'DELETE'}"/>                                
                             </p:column>                
                         </p:row>
                     </f:facet>
