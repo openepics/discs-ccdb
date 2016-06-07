@@ -38,8 +38,11 @@
                         <h:outputText value="#{entity.phase.name}" />
                     </p:column>
 
-                    <p:column headerText="Assignees"  >                      
-                            <h:outputText value="#{entity.approvals.stream().map(appr -> appr.assignedApprover.name).toList()}" />               
+                    <p:column headerText="Assignees"  >
+                        <ui:repeat  value="#{entity.approvals}" var="approval">
+                            <!--<h:outputText value="#{entity.approvals.stream.map(appr -> appr.assignedApprover.userid)}" />-->
+                            <h:outputText value="test " />
+                        </ui:repeat>
                     </p:column>
 
                     <p:column headerText="Requestor" sortBy="#{entity.requestor.name}" filterBy="#{entity.requestor.name}"
@@ -47,7 +50,7 @@
                         <h:outputText value="#{entity.requestor.name}" />
                     </p:column>
 
-                    <p:column headerText="Date" sortBy="#{entity.modifiedAt}"  rendered="false" >
+                    <p:column headerText="Date" sortBy="#{entity.modifiedAt}"  >
                         <h:outputText value="#{entity.modifiedAt}" />
                     </p:column>
 
@@ -188,5 +191,3 @@
         </p:dialog>
     </ui:define> 
 </ui:composition>
-
-

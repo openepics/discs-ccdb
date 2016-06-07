@@ -171,8 +171,32 @@ public class AssignmentManager implements Serializable {
         inputAction = InputAction.DELETE;
     }
     
+    private boolean inputIsValid() {
+        PhaseAssignment assignment = inputAction == InputAction.CREATE? inputEntity : selectedEntity;
+        
+        if (assignment.getDevice() == null && assignment.getSlot() == null) {
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must specify a slot or a device", "");
+            return false;
+        }
+        
+        if (assignment.getDevice() != null && assignment.getSlot() != null) {
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must not specify bot a slot and a device", "");
+            return false;
+        }
+        
+        if (inputApprovers == null || inputApprovers.isEmpty()) {
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must specify a user", "");
+            return false;
+        }
+        return true;
+    }
+    
     public void saveEntity() {
         try {            
+            if (! inputIsValid()) {
+               RequestContext.getCurrentInstance().addCallbackParam("success", false);
+               return; 
+            }
             if (inputAction == InputAction.CREATE) {
                 lcEJB.saveAssignment(inputEntity, inputApprovers);
                 entities.add(inputEntity);                

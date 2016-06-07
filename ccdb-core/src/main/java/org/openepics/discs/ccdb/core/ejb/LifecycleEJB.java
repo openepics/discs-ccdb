@@ -15,6 +15,8 @@
  */
 package org.openepics.discs.ccdb.core.ejb;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -134,21 +136,73 @@ public class LifecycleEJB {
         LOGGER.log(Level.FINE, "phase assignment  saved - {0}", assignment.getId());
     }
 
-    public void saveAssignment(PhaseAssignment assignment, List<User> approvers) {
-        if (assignment.getId() == null) {
-            for (User user: approvers) {
-                PhaseApproval approval = new PhaseApproval();
-                approval.setAssignedApprover(user);
-                approval.setAssignment(assignment);
-                em.persist(approval);
+    /**
+     * 
+     * @param approvals
+     * @param approver
+     * @return 
+     */
+    private boolean isAnApprover(List<PhaseApproval> approvals, User approver) {
+        if (approvals == null || approver == null ) {
+            return false;
+        }
+        for (PhaseApproval approval : approvals) {
+            if (approver.equals(approval.getAssignedApprover())) {
+                return true;
             }
-            em.persist(assignment);        
+        }
+        return false;
+    }
+    
+    /**
+     * ToDo: Improve the code with set operations.
+     * 
+     * @param assignment
+     * @param approvers 
+     */
+    public void saveAssignment(PhaseAssignment assignment, List<User> approvers) {
+
+        if (assignment.getId() == null) {
+            em.persist(assignment);
         } else {
             em.merge(assignment);
         }
-        LOGGER.log(Level.FINE, "phase assignment saved - {0}", assignment.getId());
+
+        if (assignment.getApprovals() != null && approvers != null) {
+            Iterator<PhaseApproval> iterator =  assignment.getApprovals().iterator();
+            while (iterator.hasNext()) {
+                PhaseApproval approval = iterator.next();
+                
+                LOGGER.log(Level.INFO, "checking for removed approvers {0}", approval.getAssignedApprover());
+//                if (! approvers.contains(iterator.next().getApproved_by())) {
+                if (! approvers.contains(approval.getAssignedApprover())) {
+                    iterator.remove();
+                    em.remove(approval);
+                    LOGGER.log(Level.INFO, "removed approval record {0}", approval.getAssignedApprover());
+                }
+            }
+        }
+
+        if (approvers != null) {
+            if (assignment.getApprovals() == null) {
+                assignment.setApprovals(new ArrayList<>());
+            }
+            for(User user : approvers) {
+                LOGGER.log(Level.INFO, "checking for new approver {0}", user.getName());
+                if (!isAnApprover(assignment.getApprovals(), user)) {
+                    PhaseApproval approval = new PhaseApproval();
+                    approval.setAssignedApprover(user);
+                    approval.setAssignment(assignment);
+                    em.persist(approval);
+                    assignment.getApprovals().add(approval);
+                    LOGGER.log(Level.INFO, "added approver {0}", user.getName());
+                }
+            }
+        }
+        
+        em.flush(); // ToDo: should not be needed
     }
-    
+
     /**
      * delete a given process
      *
@@ -209,7 +263,7 @@ public class LifecycleEJB {
         } else {
             em.merge(approval);
         }
-        LOGGER.log(Level.FINE, "phase approval  saved - {0}", approval.getId());
+        LOGGER.log(Level.INFO, "phase approval  saved - {0}", approval.getId());
     }
     
     /**

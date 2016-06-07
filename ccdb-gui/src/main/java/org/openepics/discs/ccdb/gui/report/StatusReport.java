@@ -151,40 +151,40 @@ public class StatusReport implements Serializable {
 //        }
 //    }
     
-    public String getSlotSumOk(Slot slot) {
-       
-          if (slot == null ) {
-              return "";
-          }
-          
-          for(PhaseApproval lcstat: statusList) {
-              if (slot.equals(lcstat.getAssignment().getSlot())) {
-                  if (lcstat.getStatus() == null || "No".equals(lcstat.getStatus().getName())) {
-                      return "No";
-                  }                
-             }
-          }
-          
-        return "Yes";
-    }
-
-    public String getDeviceSumOk(Device device) {
-       
-          if (device == null ) {
-              return "";
-          }
-          
-          for(PhaseApproval lcstat: statusList) {
-              if (device.equals(lcstat.getAssignment().getDevice())) {
-                  if (lcstat.getStatus() == null || "No".equals(lcstat.getStatus().getName())) {
-                      return "No";
-                  }                
-             }
-          }
-          
-        return "Yes";
-    }   
-    
+//    public String getSlotSumOk(Slot slot) {
+//       
+//          if (slot == null ) {
+//              return "";
+//          }
+//          
+//          for(PhaseApproval lcstat: statusList) {
+//              if (slot.equals(lcstat.getAssignment().getSlot())) {
+//                  if (lcstat.getStatus() == null || "No".equals(lcstat.getStatus().getName())) {
+//                      return "No";
+//                  }                
+//             }
+//          }
+//          
+//        return "Yes";
+//    }
+//
+//    public String getDeviceSumOk(Device device) {
+//       
+//          if (device == null ) {
+//              return "";
+//          }
+//          
+//          for(PhaseApproval lcstat: statusList) {
+//              if (device.equals(lcstat.getAssignment().getDevice())) {
+//                  if (lcstat.getStatus() == null || "No".equals(lcstat.getStatus().getName())) {
+//                      return "No";
+//                  }                
+//             }
+//          }
+//          
+//        return "Yes";
+//    }   
+//    
     public PhaseApproval getStatusRec(Slot slot, Phase phase) {
        
           if (slot == null || phase == null ) {

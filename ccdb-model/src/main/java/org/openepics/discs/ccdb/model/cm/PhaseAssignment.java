@@ -65,7 +65,7 @@ public class PhaseAssignment extends ConfigurationEntity {
     @JoinColumn(name = "requestor")
     private User requestor;    
     
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "assignment")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "assignment")
     private List<PhaseApproval> approvals;
     
     @Override

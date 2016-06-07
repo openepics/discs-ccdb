@@ -75,7 +75,7 @@ public class PhaseApproval extends ConfigurationEntity {
     private Date approved_at;
     
     @Column(name = "comment")
-    @Size(min = 1, max = 1024)
+    @Size(max = 1024)
     @Basic
     private String comment;
     

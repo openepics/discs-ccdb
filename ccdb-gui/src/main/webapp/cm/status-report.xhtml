@@ -31,11 +31,13 @@
                             </ui:include>
                         </div>
                     </p:columns>
-                    <div style="text-align: center;">
-                        <p:column headerText="Sum OK"  width="5%">
+                    
+                        <p:column headerText="Sum OK"  width="5%" rendered="false">
+                            <div style="text-align: center;">
                             <h:outputText value="#{statusReport.getSlotSumOk(slot)}" />
+                             </div>
                         </p:column>
-                    </div>
+                   
                 </p:dataTable>
 
                 <h:commandLink title="Export to Excel">  
@@ -69,7 +71,7 @@
                             </ui:include>
                         </div>
                     </p:columns>
-                    <p:column headerText="Sum OK" width="5%">
+                    <p:column headerText="Sum OK" width="5%" rendered="false">
                         <div style="text-align: center;">
                             <h:outputText value="#{statusReport.getDeviceSumOk(device)}" />
                         </div>

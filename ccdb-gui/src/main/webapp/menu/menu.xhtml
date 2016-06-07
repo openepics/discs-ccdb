@@ -68,8 +68,13 @@
                 <p:menuitem value="Units" icon="fa fa-database" outcome="units" />
             </p:submenu>
                       
-            <p:submenu id="cm" label="CM" icon="fa fa-crosshairs" >
-                <p:submenu label="Approvals" icon="fa fa-crosshairs">             
+             <p:submenu label="Checklists" icon="fa fa-list-alt">                              
+                    <p:menuitem value="Assignments" icon="fa fa-list-alt" url="/cm/assignments.xhtml?type=checklist" />   
+                    <p:menuitem value="Status Update" icon="fa fa-list-alt" url="/cm/status.xhtml?type=checklist" />
+                    <p:menuitem value="Status Report" icon="fa fa-list-alt" url="/cm/status-report.xhtml?type=checklist" />
+                </p:submenu>
+            <p:submenu id="cm" label="CM" icon="fa fa-crosshairs"  rendered="false"> 
+                <p:submenu label="Reviews" icon="fa fa-crosshairs">             
                     <p:menuitem value="Assignments" icon="fa fa-crosshairs" url="/cm/assignments.xhtml?type=review" />    
                     <p:menuitem value="Approvals" icon="fa fa-crosshairs" url="/cm/status.xhtml?type=review"  />
                 </p:submenu>

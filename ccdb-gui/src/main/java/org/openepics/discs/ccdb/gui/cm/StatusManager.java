@@ -92,37 +92,44 @@ public class StatusManager implements Serializable {
     }
 
     @PostConstruct
-    public void init() {      
+    public void init() {
         resetInput();
     }
 
     /**
      * Initialize data in view
-     * 
-     * @return 
+     *
+     * @return
      */
     public String initialize() {
         String nextView = null;
         StatusType stype = null;
-        
+
         if (selectedType != null) {
             stype = lcEJB.findStatusType(selectedType);
         }
-        
+
         if (stype == null) {
             entities = lcEJB.findAllApprovals();
-        } else {                 
+        } else {
             entities = lcEJB.findApprovals(stype);
             statusOptions = lcEJB.findStatusOptions(stype);
         }
         return nextView;
     }
-    
+
     private void resetInput() {
         inputAction = InputAction.READ;
+        inputComment = null;
+        if (statusOptions != null) {
+            inputStatus = statusOptions.get(0);
+        }
     }
 
     public void onRowSelect(SelectEvent event) {
+        PhaseApproval approval = (PhaseApproval) event.getObject();
+        inputComment = approval.getComment();
+        inputStatus = approval.getStatus();
         // inputRole = selectedRole;
         // Utility.showMessage(FacesMessage.SEVERITY_INFO, "Role Selected", "");
     }
@@ -177,22 +184,22 @@ public class StatusManager implements Serializable {
             Preconditions.checkNotNull(selectedApprovals);
             String userId = securityPolicy.getUserId();
             if (userId == null) {
-                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Approval Failed",
-                    "You are not authorized. User Id is null.");
+                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Update Failed",
+                        "You are not authorized. User Id is null.");
                 RequestContext.getCurrentInstance().addCallbackParam("success", false);
                 return;
-            }           
+            }
             User user = new User(userId);
-            
+
             for (PhaseApproval selectedApproval : selectedApprovals) {
-                if (selectedApproval.getAssignedApprover() != null && ! selectedApproval.getAssignedApprover().equals(user)) {
-                     UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Approval Failed",
-                    "You are not assigned as approver on one or more of the selected assignments.");
-                     RequestContext.getCurrentInstance().addCallbackParam("success", false);
-                     return;
+                if (selectedApproval.getAssignedApprover() != null && !selectedApproval.getAssignedApprover().equals(user)) {
+                    UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Update Failed",
+                            "You are not assigned to one or more of the selected assignments.");
+                    RequestContext.getCurrentInstance().addCallbackParam("success", false);
+                    return;
                 }
             }
-            
+
             for (PhaseApproval selectedApproval : selectedApprovals) {
                 selectedApproval.setApproved_at(new Date());
                 selectedApproval.setApproved_by(user);
@@ -203,7 +210,7 @@ public class StatusManager implements Serializable {
             }
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
-                    "Approval successful.");
+                    "Update successful.");
         } catch (Exception e) {
             UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not complete approval", e.getMessage());
             RequestContext.getCurrentInstance().addCallbackParam("success", false);
@@ -220,10 +227,10 @@ public class StatusManager implements Serializable {
             String userId = securityPolicy.getUserId();
             if (userId == null) {
                 UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
-                    "Not authorized. User Id is null.");
+                        "Not authorized. User Id is null.");
                 RequestContext.getCurrentInstance().addCallbackParam("success", false);
                 return;
-            }           
+            }
             User user = new User(userId);
             for (PhaseApproval selectedApproval : selectedApprovals) {
                 selectedApproval.setApproved_at(new Date());
