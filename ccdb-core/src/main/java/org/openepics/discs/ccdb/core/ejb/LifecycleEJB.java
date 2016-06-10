@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.openepics.discs.ccdb.model.User;
+import org.openepics.discs.ccdb.model.auth.User;
 import org.openepics.discs.ccdb.model.cm.Phase;
 import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.PhaseAssignment;

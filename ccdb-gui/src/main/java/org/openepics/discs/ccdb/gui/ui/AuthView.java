@@ -15,10 +15,10 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.openepics.discs.ccdb.core.ejb.AuthEJB;
-import org.openepics.discs.ccdb.model.Privilege;
-import org.openepics.discs.ccdb.model.Role;
-import org.openepics.discs.ccdb.model.User;
-import org.openepics.discs.ccdb.model.UserRole;
+import org.openepics.discs.ccdb.model.auth.Privilege;
+import org.openepics.discs.ccdb.model.auth.Role;
+import org.openepics.discs.ccdb.model.auth.User;
+import org.openepics.discs.ccdb.model.auth.UserRole;
 
 /**
  *

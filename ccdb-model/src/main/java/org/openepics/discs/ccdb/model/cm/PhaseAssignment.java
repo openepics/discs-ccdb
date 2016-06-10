@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
 import org.openepics.discs.ccdb.model.Device;
 import org.openepics.discs.ccdb.model.Slot;
-import org.openepics.discs.ccdb.model.User;
+import org.openepics.discs.ccdb.model.auth.User;
 
 /**
  * Configuration Management: Phases a slot must go through

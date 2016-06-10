@@ -30,7 +30,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
-import org.openepics.discs.ccdb.model.User;
+import org.openepics.discs.ccdb.model.auth.User;
 
 /**
  * Approval for the completion of a phase

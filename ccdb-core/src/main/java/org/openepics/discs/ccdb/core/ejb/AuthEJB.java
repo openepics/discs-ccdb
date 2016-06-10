@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
-import org.openepics.discs.ccdb.model.Privilege;
+import org.openepics.discs.ccdb.model.auth.Privilege;
 import org.openepics.discs.ccdb.model.Rack;
-import org.openepics.discs.ccdb.model.Role;
-import org.openepics.discs.ccdb.model.User;
-import org.openepics.discs.ccdb.model.UserRole;
+import org.openepics.discs.ccdb.model.auth.Role;
+import org.openepics.discs.ccdb.model.auth.User;
+import org.openepics.discs.ccdb.model.auth.UserRole;
 
 /**
  *

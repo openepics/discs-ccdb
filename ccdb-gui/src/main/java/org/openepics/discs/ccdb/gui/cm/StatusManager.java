@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.core.security.SecurityPolicy;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
-import org.openepics.discs.ccdb.model.User;
+import org.openepics.discs.ccdb.model.auth.User;
 import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.StatusType;
 import org.openepics.discs.ccdb.model.cm.StatusTypeOption;

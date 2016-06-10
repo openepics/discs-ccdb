@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.openepics.discs.ccdb.model.EntityType;
 import org.openepics.discs.ccdb.model.EntityTypeOperation;
-import org.openepics.discs.ccdb.model.Privilege;
+import org.openepics.discs.ccdb.model.auth.Privilege;
 
 /**
  * Implementation of simple security policy (checking for entity-type access only) using the DB {@link Privilege} table

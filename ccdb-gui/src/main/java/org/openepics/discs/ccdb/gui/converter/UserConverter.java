@@ -13,7 +13,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.inject.Named;
 import org.openepics.discs.ccdb.core.ejb.AuthEJB;
-import org.openepics.discs.ccdb.model.User;
+import org.openepics.discs.ccdb.model.auth.User;
 
 /**
  *

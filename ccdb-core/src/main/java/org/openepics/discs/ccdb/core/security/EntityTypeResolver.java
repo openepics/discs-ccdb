@@ -66,7 +66,7 @@ public class EntityTypeResolver {
 
         entityTypes.put(org.openepics.discs.ccdb.model.Unit.class.getCanonicalName(), EntityType.UNIT);
 
-        entityTypes.put(org.openepics.discs.ccdb.model.User.class.getCanonicalName(), EntityType.USER);
+        entityTypes.put(org.openepics.discs.ccdb.model.auth.User.class.getCanonicalName(), EntityType.USER);
         entityTypes.put(org.openepics.discs.ccdb.model.Property.class.getCanonicalName(), EntityType.PROPERTY);
 
         entityTypes.put(org.openepics.discs.ccdb.model.DataType.class.getCanonicalName(), EntityType.DATA_TYPE);

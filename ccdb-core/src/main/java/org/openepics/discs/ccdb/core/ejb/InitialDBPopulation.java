@@ -29,13 +29,13 @@ import org.openepics.discs.ccdb.model.ComponentType;
 import org.openepics.discs.ccdb.model.DataType;
 import org.openepics.discs.ccdb.model.EntityType;
 import org.openepics.discs.ccdb.model.EntityTypeOperation;
-import org.openepics.discs.ccdb.model.Privilege;
-import org.openepics.discs.ccdb.model.Role;
+import org.openepics.discs.ccdb.model.auth.Privilege;
+import org.openepics.discs.ccdb.model.auth.Role;
 import org.openepics.discs.ccdb.model.Slot;
 import org.openepics.discs.ccdb.model.SlotRelation;
 import org.openepics.discs.ccdb.model.SlotRelationName;
-import org.openepics.discs.ccdb.model.User;
-import org.openepics.discs.ccdb.model.UserRole;
+import org.openepics.discs.ccdb.model.auth.User;
+import org.openepics.discs.ccdb.model.auth.UserRole;
 import org.openepics.discs.ccdb.core.util.BuiltInDataType;
 
 /**

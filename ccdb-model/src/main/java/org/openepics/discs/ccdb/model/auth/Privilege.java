@@ -17,8 +17,9 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see https://www.gnu.org/licenses/gpl-2.0.txt
  */
-package org.openepics.discs.ccdb.model;
+package org.openepics.discs.ccdb.model.auth;
 
+import org.openepics.discs.ccdb.model.auth.Role;
 import java.io.Serializable;
 
 import javax.persistence.Basic;
@@ -36,6 +37,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.openepics.discs.ccdb.model.EntityType;
+import org.openepics.discs.ccdb.model.EntityTypeOperation;
 
 /**
  *
