@@ -85,6 +85,7 @@ public class CmSlotManager implements Serializable {
     public void init() {
         entities = slotEJB.findByIsHostingSlot(true);
         slotGroups = lcEJB.findAllSlotGroups();
+        selectedEntity = entities.get(0);
         resetInput();
     }
 
@@ -111,15 +112,25 @@ public class CmSlotManager implements Serializable {
 
     public void saveEntity() {
         try {
+            Slot slot; 
             if (inputAction == InputAction.CREATE) {
                 slotEJB.save(inputEntity);
                 entities.add(inputEntity);
+                slot = inputEntity;
             } else {
                 slotEJB.save(selectedEntity);
+                slot = selectedEntity;
             }
+//            if (slot.getCmGroup() == null) {
+//                UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Make sure that corresponding checklist is updated", "");
+//            } else {
+//                if (lcEJB.findAssignment(slot.getCmGroup()) != null) {
+//                    
+//                }
+//            }
             resetInput();
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
-            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Saved", "");
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Make sure that corresponding checklist is updated", "");
         } catch (Exception e) {
             UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save ", e.getMessage());
             RequestContext.getCurrentInstance().addCallbackParam("success", false);

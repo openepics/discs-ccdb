@@ -123,6 +123,15 @@ public class LifecycleEJB {
         return em.createNamedQuery("PhaseAssignment.findByGroup", PhaseAssignment.class).setParameter("group", type).getResultList();
     }
     
+    public PhaseAssignment findAssignment(SlotGroup group) {
+        List<PhaseAssignment> result = em.createNamedQuery("PhaseAssignment.findBySlotGroup", PhaseAssignment.class).setParameter("group", group).getResultList();
+        if (result == null || result.isEmpty()) {
+            return null;
+        } else {
+            return result.get(0);
+        }
+    }
+    
     /**
      * save a process
      *
@@ -501,6 +510,9 @@ public class LifecycleEJB {
         return em.createNamedQuery("PhaseStatus.findAll", PhaseStatus.class).getResultList();
     }  
     
+    public List<PhaseStatus> findAllValidStatuses() {
+        return em.createNamedQuery("PhaseStatus.findValid", PhaseStatus.class).getResultList();
+    } 
     /**
      * 
      * @param assignment

@@ -25,7 +25,7 @@
                              rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">   
 
                     <p:ajax event="rowSelectCheckbox" listener="#{statusManager.onRowSelect}" update="commandButtons" />
-                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                    <p:column selectionMode="multiple" style="width:16px;text-align:center" />
                     <p:column headerText="Group" sortBy="#{stat.assignment.slotGroup.name}" filterBy="#{stat.assignment.slotGroup.name}"
                               filterMatchMode="contains" >
                         <h:outputText value="#{stat.assignment.slotGroup.name}" />

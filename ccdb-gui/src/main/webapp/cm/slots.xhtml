@@ -28,6 +28,10 @@
                               filterBy="#{obj.description}" filterMatchMode="contains" >
                         <h:outputText value="#{obj.description}" styleClass="colCenter"/>
                     </p:column>
+                    <p:column headerText="Group" sortBy="#{obj.cmGroup.name}" 
+                              filterBy="#{obj.cmGroup.name}" filterMatchMode="contains" >
+                        <h:outputText value="#{obj.cmGroup.name}" styleClass="colCenter"/>
+                    </p:column>
 
 <!--                     <p:column headerText="Options" >
                          <ui:repeat value="#{obj.options}" var="opt">
@@ -94,17 +98,13 @@
                             <p:outputLabel for="slotGrp"  value="Group" />
                         </p:column>
                         <p:column>
-                            <p:selectOneMenu id="slotGrp" var="proc" converter="#{slotGroupConverter}"
-                                             filter="true"
+                            <p:selectOneMenu id="slotGrp" converter="#{slotGroupConverter}"
+                                            
                                              value="#{cmSlotManager.inputAction == 'CREATE'? cmSlotManager.inputEntity.cmGroup : cmSlotManager.selectedEntity.cmGroup}"                                            
                                              disabled="#{cmSlotManager.inputAction == 'DELETE'}">
+                                <f:selectItem itemLabel="None"  itemValue="#{null}"/>
                                 <f:selectItems value="#{cmSlotManager.slotGroups}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
-                                <p:column>
-                                    <h:outputText value="#{proc.name}" />
-                                </p:column>
-                                <p:column>
-                                    <h:outputText value="#{proc.description}" />
-                                </p:column>
+                                
                             </p:selectOneMenu>                       
                         </p:column>
                     </p:row>

@@ -111,9 +111,10 @@ public class StatusManager implements Serializable {
         }
 
         if (stype == null) {
-            entities = lcEJB.findAllStatuses();
+            entities = lcEJB.findAllValidStatuses();
         } else {
-            entities = lcEJB.findAllStatuses(stype);
+            entities = lcEJB.findAllValidStatuses();
+//            entities = lcEJB.findAllStatuses(stype);
             statusOptions = lcEJB.findStatusOptions(stype);
         }
         return nextView;
