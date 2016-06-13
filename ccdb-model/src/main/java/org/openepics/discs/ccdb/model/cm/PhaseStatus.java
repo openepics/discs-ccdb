@@ -39,7 +39,8 @@ import org.openepics.discs.ccdb.model.auth.User;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PhaseStatus.findAll", query = "SELECT d FROM PhaseStatus d"),
-    @NamedQuery(name = "PhaseStatus.findValid", query = "SELECT d FROM PhaseStatus d WHERE d.assignment.slot == null OR d.assignment.slot.cmGroup == null"),
+    @NamedQuery(name = "PhaseStatus.findValid", query = "SELECT d FROM PhaseStatus d"),
+//    @NamedQuery(name = "PhaseStatus.findValid", query = "SELECT d FROM PhaseStatus d WHERE d.assignment.slot is null OR d.assignment.slot.cmGroup is NOT null"),
     @NamedQuery(name = "PhaseStatus.findByGroup", query = "SELECT d FROM PhaseStatus d WHERE d.phaseOfGroup.phaseGroup = :group"),
     @NamedQuery(name = "PhaseStatus.findByAssignment", query = "SELECT d FROM PhaseStatus d WHERE d.assignment = :assignment")
 })
