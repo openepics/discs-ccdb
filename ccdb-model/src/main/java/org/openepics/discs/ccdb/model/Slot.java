@@ -46,6 +46,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import org.openepics.discs.ccdb.model.cm.LevelOfCare;
+import org.openepics.discs.ccdb.model.cm.SlotGroup;
 
 /**
  * An installation slot for devices
@@ -113,6 +114,11 @@ public class Slot extends ConfigurationEntity implements EntityWithProperties, E
     @Basic(optional = false)
     @Column(name = "afo")
     private boolean approvedForOp = false;
+    
+    // ToDO: Temporary. To be removed. For CM Group
+    @JoinColumn(name = "cm_group")
+    @ManyToOne(optional = true)
+    private SlotGroup cmGroup;
     
     // -- assembly
     
@@ -328,6 +334,14 @@ public class Slot extends ConfigurationEntity implements EntityWithProperties, E
 
     public void setApprovedForOp(boolean approvedForOp) {
         this.approvedForOp = approvedForOp;
+    }
+
+    public SlotGroup getCmGroup() {
+        return cmGroup;
+    }
+
+    public void setCmGroup(SlotGroup cmGroup) {
+        this.cmGroup = cmGroup;
     }
     
     

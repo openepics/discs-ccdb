@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/WEB-INF/template/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"              
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content"> 
+
+        <h:form id="crudForm" > 
+            <p:panel>
+                <h:outputText value="Manage Phase Status Types" styleClass="heading"/>
+                <p:dataTable id="entityTable" value="#{cmSlotManager.entities}" var="obj" 
+                             sortMode="multiple"
+                             rowKey="#{obj.id}" selectionMode="single" selection="#{cmSlotManager.selectedEntity}"                          
+                             filteredValue="#{cmSlotManager.filteredEntities}"
+                             currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
+                             rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">  
+                    <p:ajax event="rowSelect" listener="#{cmSlotManager.onRowSelect}" update="commandButtons" />
+                    <p:column headerText="Name" sortBy="#{obj.name}" 
+                              filterBy="#{obj.name}" filterMatchMode="contains" > 
+                        <h:outputText value="#{obj.name}" styleClass="colCenter"/>
+                    </p:column>
+                    <p:column headerText="Description" sortBy="#{obj.description}" 
+                              filterBy="#{obj.description}" filterMatchMode="contains" >
+                        <h:outputText value="#{obj.description}" styleClass="colCenter"/>
+                    </p:column>
+
+<!--                     <p:column headerText="Options" >
+                         <ui:repeat value="#{obj.options}" var="opt">
+                             <h:outputText value="#{opt.name} " />
+                             <br/>
+                         </ui:repeat>
+                    </p:column>-->
+                    <f:facet name="footer">
+                        <p:toolbar id="commandButtons">
+                            <f:facet name="left">
+                                <p:commandButton title="Add" icon="ui-icon-document" update=":crudInputDlg" process="@this" 
+                                                 actionListener="#{cmSlotManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"
+                                                 disabled="#{true or not securityPolicy.getUIHint('HIERARCHY_MODIFY')}"/>   
+                                <p:commandButton title="Edit" icon="ui-icon-disk" update=":crudInputDlg"  process="@this"                                          
+                                                 actionListener="#{cmSlotManager.onEditCommand}"
+                                                 oncomplete="PF('crudInputWid').show()" 
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty cmSlotManager.selectedEntity}"/>
+                                <p:commandButton title="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
+                                                 actionListener="#{cmSlotManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
+                                                 disabled="#{true or not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty cmSlotManager.selectedEntity}"/>
+                            </f:facet>
+                        </p:toolbar>
+                    </f:facet>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+
+        <p:dialog id="crudInputDlg" widgetVar="crudInputWid">
+            <h:form id="objectInputForm">              
+                <p:panelGrid>
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column colspan="2">
+                                <h:outputText value="New Process" rendered="#{cmSlotManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update Existing Process" rendered="#{cmSlotManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete Process" rendered="#{cmSlotManager.inputAction == 'DELETE'}"/>
+                            </p:column>                
+                        </p:row>
+                    </f:facet>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="procName" value="Name"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="procName" value="#{cmSlotManager.inputAction == 'CREATE'? cmSlotManager.inputEntity.name: cmSlotManager.selectedEntity.name}" 
+                                         required="true" 
+                                         validatorMessage="Name required" disabled="#{true or cmSlotManager.inputAction == 'DELETE'}"/>                             
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="procDesc"  value="Description" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="procDesc" value="#{cmSlotManager.inputAction == 'CREATE'? cmSlotManager.inputEntity.description : cmSlotManager.selectedEntity.description}" 
+                                         required="true" 
+                                         validatorMessage="Description required" disabled="#{true or cmSlotManager.inputAction == 'DELETE'}"/>                            
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="slotGrp"  value="Group" />
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="slotGrp" var="proc" converter="#{slotGroupConverter}"
+                                             filter="true"
+                                             value="#{cmSlotManager.inputAction == 'CREATE'? cmSlotManager.inputEntity.cmGroup : cmSlotManager.selectedEntity.cmGroup}"                                            
+                                             disabled="#{cmSlotManager.inputAction == 'DELETE'}">
+                                <f:selectItems value="#{cmSlotManager.slotGroups}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{proc.name}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{proc.description}" />
+                                </p:column>
+                            </p:selectOneMenu>                       
+                        </p:column>
+                    </p:row>
+
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
+                                                 onclick="PF('crudInputWid').hide()"/>
+                                <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
+                                                 action="#{cmSlotManager.saveEntity()}"  
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{cmSlotManager.inputAction != 'DELETE'}"/>
+                                <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"
+                                                 action="#{cmSlotManager.deleteEntity()}" 
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form" update=":crudForm:entityTable" rendered="#{cmSlotManager.inputAction == 'DELETE'}"/>                                
+                            </p:column>                
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define> 
+</ui:composition>

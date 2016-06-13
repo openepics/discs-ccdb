@@ -12,14 +12,14 @@
         <h:form id="crudForm" > 
             <p:panel>
                 <h:outputText value="Manage Phase Status Types" styleClass="heading"/>
-                <p:dataTable id="entityTable" value="#{statusTypeManager.entities}" var="obj" 
+                <p:dataTable id="entityTable" value="#{slotGroupManager.entities}" var="obj" 
                              sortMode="multiple"
-                             rowKey="#{obj.id}" selectionMode="single" selection="#{statusTypeManager.selectedEntity}"                          
-                             filteredValue="#{statusTypeManager.filteredEntities}"
+                             rowKey="#{obj.id}" selectionMode="single" selection="#{slotGroupManager.selectedEntity}"                          
+                             filteredValue="#{slotGroupManager.filteredEntities}"
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
                              rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">  
-                    <p:ajax event="rowSelect" listener="#{statusTypeManager.onRowSelect}" update="commandButtons" />
+                    <p:ajax event="rowSelect" listener="#{slotGroupManager.onRowSelect}" update="commandButtons" />
                     <p:column headerText="Name" sortBy="#{obj.name}" 
                               filterBy="#{obj.name}" filterMatchMode="contains" > 
                         <h:outputText value="#{obj.name}" styleClass="colCenter"/>
@@ -29,25 +29,25 @@
                         <h:outputText value="#{obj.description}" styleClass="colCenter"/>
                     </p:column>
 
-                     <p:column headerText="Options" >
+<!--                     <p:column headerText="Options" >
                          <ui:repeat value="#{obj.options}" var="opt">
                              <h:outputText value="#{opt.name} " />
                              <br/>
                          </ui:repeat>
-                    </p:column>
+                    </p:column>-->
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">
                                 <p:commandButton title="Add" icon="ui-icon-document" update=":crudInputDlg" process="@this" 
-                                                 actionListener="#{statusTypeManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"
+                                                 actionListener="#{slotGroupManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"
                                                  disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}"/>   
                                 <p:commandButton title="Edit" icon="ui-icon-disk" update=":crudInputDlg"  process="@this"                                          
-                                                 actionListener="#{statusTypeManager.onEditCommand}"
+                                                 actionListener="#{slotGroupManager.onEditCommand}"
                                                  oncomplete="PF('crudInputWid').show()" 
-                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty statusTypeManager.selectedEntity}"/>
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty slotGroupManager.selectedEntity}"/>
                                 <p:commandButton title="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
-                                                 actionListener="#{statusTypeManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
-                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty statusTypeManager.selectedEntity}"/>
+                                                 actionListener="#{slotGroupManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty slotGroupManager.selectedEntity}"/>
                             </f:facet>
                         </p:toolbar>
                     </f:facet>
@@ -61,9 +61,9 @@
                     <f:facet name="header">
                         <p:row>
                             <p:column colspan="2">
-                                <h:outputText value="New Process" rendered="#{statusTypeManager.inputAction == 'CREATE'}"/>
-                                <h:outputText value="Update Existing Process" rendered="#{statusTypeManager.inputAction == 'UPDATE'}"/>
-                                <h:outputText value="Delete Process" rendered="#{statusTypeManager.inputAction == 'DELETE'}"/>
+                                <h:outputText value="New Process" rendered="#{slotGroupManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update Existing Process" rendered="#{slotGroupManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete Process" rendered="#{slotGroupManager.inputAction == 'DELETE'}"/>
                             </p:column>                
                         </p:row>
                     </f:facet>
@@ -72,9 +72,9 @@
                             <p:outputLabel for="procName" value="Name"/>
                         </p:column>
                         <p:column>
-                            <p:inputText id="procName" value="#{statusTypeManager.inputAction == 'CREATE'? statusTypeManager.inputEntity.name: statusTypeManager.selectedEntity.name}" 
+                            <p:inputText id="procName" value="#{slotGroupManager.inputAction == 'CREATE'? slotGroupManager.inputEntity.name: slotGroupManager.selectedEntity.name}" 
                                          required="true" 
-                                         validatorMessage="Name required" disabled="#{statusTypeManager.inputAction == 'DELETE'}"/>                             
+                                         validatorMessage="Name required" disabled="#{slotGroupManager.inputAction == 'DELETE'}"/>                             
                         </p:column>
                     </p:row>
 
@@ -83,9 +83,9 @@
                             <p:outputLabel for="procDesc"  value="Description" />
                         </p:column>
                         <p:column>
-                            <p:inputText id="procDesc" value="#{statusTypeManager.inputAction == 'CREATE'? statusTypeManager.inputEntity.description : statusTypeManager.selectedEntity.description}" 
+                            <p:inputText id="procDesc" value="#{slotGroupManager.inputAction == 'CREATE'? slotGroupManager.inputEntity.description : slotGroupManager.selectedEntity.description}" 
                                          required="true" 
-                                         validatorMessage="Description required" disabled="#{statusTypeManager.inputAction == 'DELETE'}"/>                            
+                                         validatorMessage="Description required" disabled="#{slotGroupManager.inputAction == 'DELETE'}"/>                            
                         </p:column>
                     </p:row>
 
@@ -95,13 +95,13 @@
                                 <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
                                                  onclick="PF('crudInputWid').hide()"/>
                                 <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
-                                                 action="#{statusTypeManager.saveEntity()}"  
+                                                 action="#{slotGroupManager.saveEntity()}"  
                                                  oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
-                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{statusTypeManager.inputAction != 'DELETE'}"/>
+                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{slotGroupManager.inputAction != 'DELETE'}"/>
                                 <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"
-                                                 action="#{statusTypeManager.deleteEntity()}" 
+                                                 action="#{slotGroupManager.deleteEntity()}" 
                                                  oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
-                                                 process="@form" update=":crudForm:entityTable" rendered="#{statusTypeManager.inputAction == 'DELETE'}"/>                                
+                                                 process="@form" update=":crudForm:entityTable" rendered="#{slotGroupManager.inputAction == 'DELETE'}"/>                                
                             </p:column>                
                         </p:row>
                     </f:facet>

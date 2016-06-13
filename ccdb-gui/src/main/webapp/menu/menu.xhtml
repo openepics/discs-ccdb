@@ -71,6 +71,7 @@
              <p:submenu label="Checklists" icon="fa fa-list-alt">                              
                     <p:menuitem value="Assignments" icon="fa fa-list-alt" url="/cm/assignments.xhtml?type=checklist" />   
                     <p:menuitem value="Status Update" icon="fa fa-list-alt" url="/cm/status.xhtml?type=checklist" />
+                    <p:menuitem value="Slot Group" icon="fa fa-list-alt" url="/cm/slot-group.xhtml" />
                     <p:menuitem value="Status Report" icon="fa fa-list-alt" url="/cm/status-report.xhtml?type=checklist" />
                 </p:submenu>
             <p:submenu id="cm" label="CM" icon="fa fa-crosshairs"  rendered="false"> 
@@ -97,7 +98,8 @@
             <p:submenu label="Admin" icon="fa fa-cubes">               
                 <p:menuitem value="Authorizations" icon="fa fa-cubes" outcome="auth"/>        
                 <p:menuitem value="Manage Phases" icon="fa fa-list-alt" outcome="phases" />
-                 <p:menuitem value="Phase Groups" icon="fa fa-crosshairs" outcome="statustypes" />       
+                 <p:menuitem value="Phase Groups" icon="fa fa-crosshairs" outcome="statustypes" /> 
+                 <p:menuitem value="Slot Groups" icon="fa fa-list-alt" url="/cm/slot-groups.xhtml" />
             </p:submenu>
             
             <p:submenu label="Links" icon="fa fa-external-link" >

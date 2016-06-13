@@ -192,6 +192,9 @@ public class StatusReport implements Serializable {
           }
           
           for(PhaseStatus lcstat: statusList) {
+              if (slot.getCmGroup() != null) {
+                  return getGroupStatusRec(slot.getCmGroup(), phase);
+              }
               if (slot.equals(lcstat.getAssignment().getSlot()) && phase.equals(lcstat.getPhaseOfGroup().getPhase())) {
                   return lcstat;
              }
