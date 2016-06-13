@@ -9,7 +9,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import org.openepics.discs.ccdb.model.cm.LevelOfCare;
-import org.openepics.discs.ccdb.model.cm.PhaseTag;
 
 /**
  * Bean for basic data like level of care, checklists etc
@@ -39,11 +38,4 @@ public class BaseDataManager {
         return LevelOfCare.values();
     }
     
-    /**
-     * Level of Care options
-     * @return 
-     */
-    public PhaseTag[] getPhaseTags() {
-        return PhaseTag.values();
-    }
 }

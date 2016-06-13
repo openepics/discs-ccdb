@@ -26,7 +26,7 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
-import org.openepics.discs.ccdb.model.cm.StatusType;
+import org.openepics.discs.ccdb.model.cm.PhaseGroup;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -68,10 +68,10 @@ public class StatusTypeManager implements Serializable {
 //    @Inject
 //    UserSession userSession;
       
-    private List<StatusType> entities;    
-    private List<StatusType> filteredEntities;    
-    private StatusType inputEntity;
-    private StatusType selectedEntity;
+    private List<PhaseGroup> entities;    
+    private List<PhaseGroup> filteredEntities;    
+    private PhaseGroup inputEntity;
+    private PhaseGroup selectedEntity;
     private InputAction inputAction;
     
     
@@ -80,7 +80,7 @@ public class StatusTypeManager implements Serializable {
     
     @PostConstruct
     public void init() {      
-        entities = lcEJB.findAllStatusTypes();     
+        entities = lcEJB.findAllPhaseGroups();     
         resetInput();
     }
     
@@ -94,7 +94,7 @@ public class StatusTypeManager implements Serializable {
     }
     
     public void onAddCommand(ActionEvent event) {
-        inputEntity = new StatusType();
+        inputEntity = new PhaseGroup();
         inputAction = InputAction.CREATE;       
     }
     
@@ -109,10 +109,10 @@ public class StatusTypeManager implements Serializable {
     public void saveEntity() {
         try {                      
             if (inputAction == InputAction.CREATE) {
-                lcEJB.saveStatusType(inputEntity);
+                lcEJB.savePhaseGroup(inputEntity);
                 entities.add(inputEntity);                
             } else {
-                lcEJB.saveStatusType(selectedEntity);
+                lcEJB.savePhaseGroup(selectedEntity);
             }
             resetInput();
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
@@ -126,7 +126,7 @@ public class StatusTypeManager implements Serializable {
     
     public void deleteEntity() {
         try {
-            lcEJB.deleteStatusType(selectedEntity);
+            lcEJB.deletePhaseGroup(selectedEntity);
             entities.remove(selectedEntity);  
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Deletion successful", "You may have to refresh the page.");
@@ -144,31 +144,31 @@ public class StatusTypeManager implements Serializable {
         return inputAction;
     }
 
-    public List<StatusType> getEntities() {
+    public List<PhaseGroup> getEntities() {
         return entities;
     }
 
-    public List<StatusType> getFilteredEntities() {
+    public List<PhaseGroup> getFilteredEntities() {
         return filteredEntities;
     }
 
-    public void setFilteredEntities(List<StatusType> filteredEntities) {
+    public void setFilteredEntities(List<PhaseGroup> filteredEntities) {
         this.filteredEntities = filteredEntities;
     }
 
-    public StatusType getInputEntity() {
+    public PhaseGroup getInputEntity() {
         return inputEntity;
     }
 
-    public void setInputEntity(StatusType inputEntity) {
+    public void setInputEntity(PhaseGroup inputEntity) {
         this.inputEntity = inputEntity;
     }
 
-    public StatusType getSelectedEntity() {
+    public PhaseGroup getSelectedEntity() {
         return selectedEntity;
     }
 
-    public void setSelectedEntity(StatusType selectedEntity) {
+    public void setSelectedEntity(PhaseGroup selectedEntity) {
         this.selectedEntity = selectedEntity;
     }
 

@@ -41,13 +41,16 @@ import org.openepics.discs.ccdb.model.auth.User;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PhaseAssignment.findAll", query = "SELECT d FROM PhaseAssignment d"),
-    @NamedQuery(name = "PhaseAssignment.findByName", query = "SELECT d FROM PhaseAssignment d WHERE d.phase = :phase"),
-    @NamedQuery(name = "PhaseAssignment.findByType", query = "SELECT d FROM PhaseAssignment d WHERE d.phase.statusType = :type"),
+    @NamedQuery(name = "PhaseAssignment.findByGroup", query = "SELECT d FROM PhaseAssignment d WHERE d.phaseGroup = :group"),
     @NamedQuery(name = "PhaseAssignment.findBySlot", query = "SELECT d FROM PhaseAssignment d WHERE d.slot = :slot")
 })
 public class PhaseAssignment extends ConfigurationEntity {
 
     private static final long serialVersionUID = 1L;
+    
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "slot_group")
+    private SlotGroup slotGroup;
     
     @ManyToOne(optional = true)
     @JoinColumn(name = "slot")
@@ -58,8 +61,8 @@ public class PhaseAssignment extends ConfigurationEntity {
     private Device device;
     
     @ManyToOne(optional = false)
-    @JoinColumn(name = "phase")
-    private Phase phase;
+    @JoinColumn(name = "phasegroup")
+    private PhaseGroup phaseGroup;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "requestor")
@@ -67,31 +70,6 @@ public class PhaseAssignment extends ConfigurationEntity {
     
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "assignment")
     private List<PhaseApproval> approvals;
-    
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PhaseAssignment)) {
-            return false;
-        }
-        PhaseAssignment other = (PhaseAssignment) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "org.openepics.discs.ccdb.model.ReviewRequirement[ id=" + id + " ]";
-    }
     
     // getters and setters
 
@@ -111,12 +89,12 @@ public class PhaseAssignment extends ConfigurationEntity {
         this.slot = slot;
     }
 
-    public Phase getPhase() {
-        return phase;
+    public PhaseGroup getPhaseGroup() {
+        return phaseGroup;
     }
 
-    public void setPhase(Phase phase) {
-        this.phase = phase;
+    public void setPhaseGroup(PhaseGroup phaseGroup) {
+        this.phaseGroup = phaseGroup;
     }
 
     public List<PhaseApproval> getApprovals() {
@@ -134,5 +112,12 @@ public class PhaseAssignment extends ConfigurationEntity {
     public void setDevice(Device device) {
         this.device = device;
     }
-    
+
+    public SlotGroup getSlotGroup() {
+        return slotGroup;
+    }
+
+    public void setSlotGroup(SlotGroup slotGroup) {
+        this.slotGroup = slotGroup;
+    }
 }

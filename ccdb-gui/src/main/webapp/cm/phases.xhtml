@@ -29,17 +29,10 @@
                               filterBy="#{obj.description}" filterMatchMode="contains" >
                         <h:outputText value="#{obj.description}" styleClass="colCenter"/>
                     </p:column>
-                    <p:column headerText="Tag" sortBy="#{obj.tag}"  
-                              filterBy="#{obj.tag}" filterMatchMode="contains" >
-                        <h:outputText value="#{obj.tag}" styleClass="colCenter"/>
-                    </p:column>
-                    <p:column headerText="Type" sortBy="#{obj.statusType.name}" 
-                              filterBy="#{obj.statusType.name}" filterMatchMode="contains" >
-                        <h:outputText value="#{obj.statusType.name}" styleClass="colCenter"/>
-                    </p:column>
-                    <p:column headerText="LoC" sortBy="#{obj.levelOfControl}"  
-                              filterBy="#{obj.levelOfControl}" filterMatchMode="contains" >
-                        <h:outputText value="#{obj.levelOfControl}" styleClass="colCenter"/>
+                    
+                    <p:column headerText="LoC" sortBy="#{obj.levelOfCare}"  
+                              filterBy="#{obj.levelOfCare}" filterMatchMode="contains" >
+                        <h:outputText value="#{obj.levelOfCare}" styleClass="colCenter"/>
                     </p:column>
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
@@ -95,20 +88,9 @@
                         </p:column>
                     </p:row>
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="procTag"  value="Tag" />
-                        </p:column>
-                        <p:column>
-                            <p:selectOneMenu id="procTag" 
-                                             value="#{phaseManager.inputAction == 'CREATE'? phaseManager.inputEntity.tag : phaseManager.selectedEntity.tag}"                                   
-                                            disabled="#{phaseManager.inputAction == 'DELETE'}">
-                                <f:selectItems value="#{baseDataManager.phaseTags}"/>                               
-                            </p:selectOneMenu>                           
-                        </p:column>
-                    </p:row>
+                 
                     
-                    <p:row>
+<!--                    <p:row>
                         <p:column>
                             <p:outputLabel for="statType"  value="Type" />
                         </p:column>
@@ -126,7 +108,7 @@
                                 </p:column>
                             </p:selectOneMenu>                                                      
                         </p:column>
-                    </p:row>
+                    </p:row>-->
                     
                     <p:row>
                         <p:column>
@@ -134,7 +116,7 @@
                         </p:column>
                         <p:column>
                             <p:selectOneMenu id="procLoC" 
-                                             value="#{phaseManager.inputAction == 'CREATE'? phaseManager.inputEntity.levelOfControl : phaseManager.selectedEntity.levelOfControl}"                                   
+                                             value="#{phaseManager.inputAction == 'CREATE'? phaseManager.inputEntity.levelOfCare : phaseManager.selectedEntity.levelOfCare}"                                   
                                             disabled="#{phaseManager.inputAction == 'DELETE'}">
                                 <f:selectItems value="#{baseDataManager.levelOfCares}"/>                               
                             </p:selectOneMenu>                            

@@ -38,8 +38,8 @@ import org.openepics.discs.ccdb.model.auth.User;
 import org.openepics.discs.ccdb.model.cm.Phase;
 import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
-import org.openepics.discs.ccdb.model.cm.PhaseTag;
-import org.openepics.discs.ccdb.model.cm.StatusType;
+import org.openepics.discs.ccdb.model.cm.PhaseGroup;
+import org.openepics.discs.ccdb.model.cm.SlotGroup;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -98,7 +98,9 @@ public class AssignmentManager implements Serializable {
     private List<User> inputApprovers = new ArrayList<>();
     
     private List<Slot> slots;
+    private List<SlotGroup> slotGroups;
     private List<Phase> phases;
+    private List<PhaseGroup> phaseGroups;
     private List<Device> devices;
     private List<User> users;
     
@@ -109,7 +111,9 @@ public class AssignmentManager implements Serializable {
     public void init() { 
         devices = deviceEJB.findAll();
         slots = slotEJB.findByIsHostingSlot(true);
+        slotGroups = lcEJB.findAllSlotGroups();
         users = authEJB.findAllUsers();
+        phaseGroups = lcEJB.findAllPhaseGroups();
         initialize();
         resetInput();
     }
@@ -121,10 +125,10 @@ public class AssignmentManager implements Serializable {
      */
     public String initialize() {
         String nextView = null;
-        StatusType stype = null;
+        PhaseGroup stype = null;
         
         if (selectedType != null) {
-            stype = lcEJB.findStatusType(selectedType);
+            stype = lcEJB.findPhaseGroup(selectedType);
         }
         
         if (stype == null) {
@@ -174,20 +178,30 @@ public class AssignmentManager implements Serializable {
     private boolean inputIsValid() {
         PhaseAssignment assignment = inputAction == InputAction.CREATE? inputEntity : selectedEntity;
         
-        if (assignment.getDevice() == null && assignment.getSlot() == null) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must specify a slot or a device", "");
+        if (assignment.getDevice() == null && assignment.getSlotGroup() == null && assignment.getSlot() == null) {
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must specify a group, slot or a device", "");
             return false;
         }
         
         if (assignment.getDevice() != null && assignment.getSlot() != null) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must not specify bot a slot and a device", "");
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must not specify a slot and a device", "");
             return false;
         }
         
-        if (inputApprovers == null || inputApprovers.isEmpty()) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must specify a user", "");
+        if (assignment.getDevice() != null && assignment.getSlotGroup() != null) {
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must not specify a group and a device", "");
             return false;
         }
+        
+        if (assignment.getSlot() != null && assignment.getSlotGroup() != null) {
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must not specify a group and a slot", "");
+            return false;
+        }
+        
+//        if (inputApprovers == null || inputApprovers.isEmpty()) {
+//            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must specify a user", "");
+//            return false;
+//        }
         return true;
     }
     
@@ -296,4 +310,22 @@ public class AssignmentManager implements Serializable {
     public void setDevices(List<Device> devices) {
         this.devices = devices;
     }
+
+    public List<SlotGroup> getSlotGroups() {
+        return slotGroups;
+    }
+
+    public void setSlotGroups(List<SlotGroup> slotGroups) {
+        this.slotGroups = slotGroups;
+    }
+
+    public List<PhaseGroup> getPhaseGroups() {
+        return phaseGroups;
+    }
+
+    public void setPhaseGroups(List<PhaseGroup> phaseGroups) {
+        this.phaseGroups = phaseGroups;
+    }
+    
+    
 }

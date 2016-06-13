@@ -1,3 +1,5 @@
+package org.openepics.discs.ccdb.gui.cm;
+
 /*
  * This software is Copyright by the Board of Trustees of Michigan
  * State University (c) Copyright 2012.
@@ -13,30 +15,26 @@
  *   http://frib.msu.edu
  *
  */
-package org.openepics.discs.ccdb.gui.report;
+
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.model.Device;
 import org.openepics.discs.ccdb.model.Slot;
 import org.openepics.discs.ccdb.model.cm.Phase;
-import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.PhaseStatus;
-import org.openepics.discs.ccdb.model.cm.StatusType;
+import org.openepics.discs.ccdb.model.cm.PhaseGroup;
+import org.openepics.discs.ccdb.model.cm.SlotGroup;
 
 /**
  * Bean to support lifecycle phase report
@@ -71,9 +69,10 @@ public class StatusReport implements Serializable {
     @EJB
     private LifecycleEJB lcEJB;
     
-    private List<PhaseApproval> statusList;
-    private List<PhaseApproval> filteredStatus;
+    private List<PhaseStatus> statusList;
+    private List<PhaseStatus> filteredStatus;
     private List<Phase> phases;
+    private List<SlotGroup> slotGroups;
     private Set<Slot> slots;
     private Set<Device> devices;
     private Set<String> slotNames = new HashSet<>();
@@ -93,6 +92,7 @@ public class StatusReport implements Serializable {
      */
     @PostConstruct
     public void init() {
+        slotGroups = lcEJB.findAllSlotGroups();
         initialize();
         
     }
@@ -104,22 +104,22 @@ public class StatusReport implements Serializable {
      */
     public String initialize() {
         String nextView = null;
-        StatusType stype = null;
+        PhaseGroup stype = null;
         
         if (selectedType != null) {
-            stype = lcEJB.findStatusType(selectedType);
+            stype = lcEJB.findPhaseGroup(selectedType);
         }
         
         if (stype == null) {
-            statusList = lcEJB.findAllApprovals();
+            statusList = lcEJB.findAllStatuses();
             phases = lcEJB.findAllPhases();
         } else {                 
-            statusList = lcEJB.findApprovals(stype); 
+            statusList = lcEJB.findAllStatuses(stype); 
             phases = lcEJB.findPhases(stype);
         }
         slots = statusList.stream().filter(stat -> stat.getAssignment().getSlot() != null).map(stat -> stat.getAssignment().getSlot()).collect(Collectors.toSet());
         devices = statusList.stream().filter(stat -> stat.getAssignment().getDevice() != null).map(stat -> stat.getAssignment().getDevice()).collect(Collectors.toSet());
-//        for(PhaseApproval lcstat: statusList) {
+//        for(PhaseStatus lcstat: statusList) {
 //              if (lcstat.getAssignment().getSlot() != null) {
 //                  slotNames.add(lcstat.getAssignment().getSlot().getName());
 //              }
@@ -157,7 +157,7 @@ public class StatusReport implements Serializable {
 //              return "";
 //          }
 //          
-//          for(PhaseApproval lcstat: statusList) {
+//          for(PhaseStatus lcstat: statusList) {
 //              if (slot.equals(lcstat.getAssignment().getSlot())) {
 //                  if (lcstat.getStatus() == null || "No".equals(lcstat.getStatus().getName())) {
 //                      return "No";
@@ -174,7 +174,7 @@ public class StatusReport implements Serializable {
 //              return "";
 //          }
 //          
-//          for(PhaseApproval lcstat: statusList) {
+//          for(PhaseStatus lcstat: statusList) {
 //              if (device.equals(lcstat.getAssignment().getDevice())) {
 //                  if (lcstat.getStatus() == null || "No".equals(lcstat.getStatus().getName())) {
 //                      return "No";
@@ -185,14 +185,29 @@ public class StatusReport implements Serializable {
 //        return "Yes";
 //    }   
 //    
-    public PhaseApproval getStatusRec(Slot slot, Phase phase) {
+    public PhaseStatus getStatusRec(Slot slot, Phase phase) {
        
           if (slot == null || phase == null ) {
               return null;
           }
           
-          for(PhaseApproval lcstat: statusList) {
-              if (slot.equals(lcstat.getAssignment().getSlot()) && phase.equals(lcstat.getAssignment().getPhase())) {
+          for(PhaseStatus lcstat: statusList) {
+              if (slot.equals(lcstat.getAssignment().getSlot()) && phase.equals(lcstat.getPhaseOfGroup().getPhase())) {
+                  return lcstat;
+             }
+          }
+          
+        return null;
+    }
+    
+    public PhaseStatus getGroupStatusRec(SlotGroup group, Phase phase) {
+       
+          if (group == null || phase == null ) {
+              return null;
+          }
+          
+          for(PhaseStatus lcstat: statusList) {
+              if (group.equals(lcstat.getAssignment().getSlotGroup()) && phase.equals(lcstat.getPhaseOfGroup().getPhase())) {
                   return lcstat;
              }
           }
@@ -206,7 +221,7 @@ public class StatusReport implements Serializable {
 //              return "";
 //          }
 //          
-//          for(PhaseApproval lcstat: statusList) {
+//          for(PhaseStatus lcstat: statusList) {
 //              if (device.equals(lcstat.getAssignment().getDevice()) && phase.equals(lcstat.getAssignment().getPhase())) {
 //                  return lcstat.getStatus() == null? "" : lcstat.getStatus().getName();
 //             }
@@ -215,14 +230,14 @@ public class StatusReport implements Serializable {
 //        return "N/R";
 //    }
 //    
-    public PhaseApproval getDeviceStatusRec(Device device, Phase phase) {
+    public PhaseStatus getDeviceStatusRec(Device device, Phase phase) {
        
           if (device == null || phase == null ) {
               return null;
           }
           
-          for(PhaseApproval lcstat: statusList) {
-              if (device.equals(lcstat.getAssignment().getDevice()) && phase.equals(lcstat.getAssignment().getPhase())) {
+          for(PhaseStatus lcstat: statusList) {
+              if (device.equals(lcstat.getAssignment().getDevice()) && phase.equals(lcstat.getPhaseOfGroup().getPhase())) {
                   return lcstat;
              }
           }
@@ -232,11 +247,11 @@ public class StatusReport implements Serializable {
     
     // getters and setters
 
-    public List<PhaseApproval> getFilteredStatus() {
+    public List<PhaseStatus> getFilteredStatus() {
         return filteredStatus;
     }
 
-    public void setFilteredStatus(List<PhaseApproval> filteredStatus) {
+    public void setFilteredStatus(List<PhaseStatus> filteredStatus) {
         this.filteredStatus = filteredStatus;
     }
 
@@ -258,6 +273,14 @@ public class StatusReport implements Serializable {
 
     public Set<Device> getDevices() {
         return devices;
+    }
+
+    public List<SlotGroup> getSlotGroups() {
+        return slotGroups;
+    }
+
+    public void setSlotGroups(List<SlotGroup> slotGroups) {
+        this.slotGroups = slotGroups;
     }
     
 }

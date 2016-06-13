@@ -16,15 +16,13 @@
 
 package org.openepics.discs.ccdb.model.cm;
 
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -32,20 +30,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
 
 /**
- *
+ * Status values for a phase group
+ * 
+ * ToDo: fix the findDefault query
+ * 
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "cm_status_type" )
+@Table(name = "cm_status_option" )
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "StatusType.findAll", query = "SELECT d FROM StatusType d"),
-    @NamedQuery(name = "StatusType.findByName", query = "SELECT d FROM StatusType d WHERE  d.name = :name")
+    @NamedQuery(name = "StatusOption.findAll", query = "SELECT d FROM StatusOption d"),
+    @NamedQuery(name = "StatusOption.findByGroup", query = "SELECT d FROM StatusOption d WHERE d.phaseGroup = :group"),
+    @NamedQuery(name = "StatusOption.findDefault", query = "SELECT d FROM StatusOption d WHERE d.phaseGroup = :group"),
+    @NamedQuery(name = "StatusOption.findByName", query = "SELECT d FROM StatusOption d WHERE  d.name = :name")
 })
-public class StatusType extends ConfigurationEntity {
+public class StatusOption extends ConfigurationEntity {
 
     private static final long serialVersionUID = 1L; 
-
+    
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "phase_group")
+    private PhaseGroup phaseGroup;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min=1, max=64)
@@ -57,34 +65,7 @@ public class StatusType extends ConfigurationEntity {
     @Size(min=1, max=255)
     @Column(name = "description")
     private String description;
-    
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "statusType")
-    private List<StatusTypeOption> options;
-    
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof StatusType)) {
-            return false;
-        }
-        StatusType other = (StatusType) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "org.openepics.discs.ccdb.model.CMProcess[ id=" + id + " ]";
-    }
+ 
     
     // getters and setters
 
@@ -104,12 +85,12 @@ public class StatusType extends ConfigurationEntity {
         this.description = description;
     }
 
-    public List<StatusTypeOption> getOptions() {
-        return options;
+    public PhaseGroup getPhaseGroup() {
+        return phaseGroup;
     }
 
-    public void setOptions(List<StatusTypeOption> options) {
-        this.options = options;
+    public void setPhaseGroup(PhaseGroup phaseGroup) {
+        this.phaseGroup = phaseGroup;
     }
     
 }

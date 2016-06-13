@@ -32,7 +32,6 @@ import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
 import org.openepics.discs.ccdb.model.auth.User;
 import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.PhaseGroup;
-import org.openepics.discs.ccdb.model.cm.PhaseStatus;
 import org.openepics.discs.ccdb.model.cm.StatusOption;
 
 import org.primefaces.context.RequestContext;
@@ -64,7 +63,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @ViewScoped
-public class StatusManager implements Serializable {
+public class ApprovalManager implements Serializable {
 //    @EJB
 //    private AuthEJB authEJB;
 
@@ -73,23 +72,23 @@ public class StatusManager implements Serializable {
     @Inject
     private SecurityPolicy securityPolicy;
 
-    private static final Logger LOGGER = Logger.getLogger(StatusManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ApprovalManager.class.getName());
 //    @Inject
 //    UserSession userSession;
 
-    private List<PhaseStatus> entities;
-    private List<PhaseStatus> filteredEntities;
+    private List<PhaseApproval> entities;
+    private List<PhaseApproval> filteredEntities;
     private List<StatusOption> statusOptions;
-    private PhaseStatus inputEntity;
-    private PhaseStatus selectedEntity;
+    private PhaseApproval inputEntity;
+    private PhaseApproval selectedEntity;
     private InputAction inputAction;
     private StatusOption inputStatus;
     private String selectedType;
     private String inputComment;
 
-    private List<PhaseStatus> selectedApprovals;
+    private List<PhaseApproval> selectedApprovals;
 
-    public StatusManager() {
+    public ApprovalManager() {
     }
 
     @PostConstruct
@@ -111,9 +110,9 @@ public class StatusManager implements Serializable {
         }
 
         if (stype == null) {
-            entities = lcEJB.findAllStatuses();
+            entities = lcEJB.findAllApprovals();
         } else {
-            entities = lcEJB.findAllStatuses(stype);
+            entities = lcEJB.findApprovals(stype);
             statusOptions = lcEJB.findStatusOptions(stype);
         }
         return nextView;
@@ -128,7 +127,7 @@ public class StatusManager implements Serializable {
     }
 
     public void onRowSelect(SelectEvent event) {
-        PhaseStatus approval = (PhaseStatus) event.getObject();
+        PhaseApproval approval = (PhaseApproval) event.getObject();
         inputComment = approval.getComment();
         inputStatus = approval.getStatus();
         // inputRole = selectedRole;
@@ -136,7 +135,7 @@ public class StatusManager implements Serializable {
     }
 
     public void onAddCommand(ActionEvent event) {
-        inputEntity = new PhaseStatus();
+        inputEntity = new PhaseApproval();
         inputAction = InputAction.CREATE;
     }
 
@@ -151,10 +150,10 @@ public class StatusManager implements Serializable {
     public void saveEntity() {
         try {
             if (inputAction == InputAction.CREATE) {
-                lcEJB.savePhaseStatus(inputEntity);
+                lcEJB.saveApproval(inputEntity);
                 entities.add(inputEntity);
             } else {
-                lcEJB.savePhaseStatus(selectedEntity);
+                lcEJB.saveApproval(selectedEntity);
             }
             resetInput();
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
@@ -168,7 +167,7 @@ public class StatusManager implements Serializable {
 
     public void deleteEntity() {
         try {
-            lcEJB.deletePhaseStatus(selectedEntity);
+            lcEJB.deleteApproval(selectedEntity);
             entities.remove(selectedEntity);
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Deletion successful", "You may have to refresh the page.");
@@ -192,8 +191,8 @@ public class StatusManager implements Serializable {
             }
             User user = new User(userId);
 
-            for (PhaseStatus selectedApproval : selectedApprovals) {
-                if (selectedApproval.getAssignedSME() != null && !selectedApproval.getAssignedSME().equals(user)) {
+            for (PhaseApproval selectedApproval : selectedApprovals) {
+                if (selectedApproval.getAssignedApprover() != null && !selectedApproval.getAssignedApprover().equals(user)) {
                     UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Update Failed",
                             "You are not assigned to one or more of the selected assignments.");
                     RequestContext.getCurrentInstance().addCallbackParam("success", false);
@@ -201,12 +200,13 @@ public class StatusManager implements Serializable {
                 }
             }
 
-            for (PhaseStatus selectedApproval : selectedApprovals) {
-                selectedApproval.setModifiedAt(new Date());
-                selectedApproval.setModifiedBy(user.getUserId());
+            for (PhaseApproval selectedApproval : selectedApprovals) {
+                selectedApproval.setApproved_at(new Date());
+                selectedApproval.setApproved_by(user);
+                selectedApproval.setApproved(true);
                 selectedApproval.setStatus(inputStatus);
                 selectedApproval.setComment(inputComment);
-                lcEJB.savePhaseStatus(selectedApproval);
+                lcEJB.saveApproval(selectedApproval);
             }
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
@@ -232,10 +232,11 @@ public class StatusManager implements Serializable {
                 return;
             }
             User user = new User(userId);
-            for (PhaseStatus selectedApproval : selectedApprovals) {
-                selectedApproval.setModifiedAt(new Date());
-                selectedApproval.setModifiedBy(user.getUserId());
-                lcEJB.savePhaseStatus(selectedApproval);
+            for (PhaseApproval selectedApproval : selectedApprovals) {
+                selectedApproval.setApproved_at(new Date());
+                selectedApproval.setApproved_by(user);
+                selectedApproval.setApproved(false);
+                lcEJB.saveApproval(selectedApproval);
             }
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
                     "Disappproval successful.");
@@ -253,42 +254,41 @@ public class StatusManager implements Serializable {
         return inputAction;
     }
 
-    public List<PhaseStatus> getEntities() {
+    public List<PhaseApproval> getEntities() {
         return entities;
     }
 
-    public List<PhaseStatus> getFilteredEntities() {
+    public List<PhaseApproval> getFilteredEntities() {
         return filteredEntities;
     }
 
-    public void setFilteredEntities(List<PhaseStatus> filteredEntities) {
+    public void setFilteredEntities(List<PhaseApproval> filteredEntities) {
         this.filteredEntities = filteredEntities;
     }
 
-    public PhaseStatus getInputEntity() {
+    public PhaseApproval getInputEntity() {
         return inputEntity;
     }
 
-    public void setInputEntity(PhaseStatus inputEntity) {
+    public void setInputEntity(PhaseApproval inputEntity) {
         this.inputEntity = inputEntity;
     }
 
-    public PhaseStatus getSelectedEntity() {
+    public PhaseApproval getSelectedEntity() {
         return selectedEntity;
     }
 
-    public void setSelectedEntity(PhaseStatus selectedEntity) {
+    public void setSelectedEntity(PhaseApproval selectedEntity) {
         this.selectedEntity = selectedEntity;
     }
 
-    public List<PhaseStatus> getSelectedApprovals() {
+    public List<PhaseApproval> getSelectedApprovals() {
         return selectedApprovals;
     }
 
-    public void setSelectedApprovals(List<PhaseStatus> selectedApprovals) {
+    public void setSelectedApprovals(List<PhaseApproval> selectedApprovals) {
         this.selectedApprovals = selectedApprovals;
     }
-    
 
     public StatusOption getInputStatus() {
         return inputStatus;

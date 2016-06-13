@@ -14,14 +14,10 @@
  */
 package org.openepics.discs.ccdb.model.auth;
 
-import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -42,14 +38,8 @@ import org.openepics.discs.ccdb.model.ConfigurationEntity;
 @Table(name = "auth_user_role")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AuthUserRole.findAll", query = "SELECT a FROM AuthUserRole a"),
-    @NamedQuery(name = "AuthUserRole.findByUserRoleId", query = "SELECT a FROM AuthUserRole a WHERE a.userRoleId = :userRoleId"),
-    @NamedQuery(name = "AuthUserRole.findByCanDelegate", query = "SELECT a FROM AuthUserRole a WHERE a.canDelegate = :canDelegate"),
-    @NamedQuery(name = "AuthUserRole.findByIsRoleManager", query = "SELECT a FROM AuthUserRole a WHERE a.isRoleManager = :isRoleManager"),
-    @NamedQuery(name = "AuthUserRole.findByStartTime", query = "SELECT a FROM AuthUserRole a WHERE a.startTime = :startTime"),
-    @NamedQuery(name = "AuthUserRole.findByEndTime", query = "SELECT a FROM AuthUserRole a WHERE a.endTime = :endTime"),
-    @NamedQuery(name = "AuthUserRole.findByComment", query = "SELECT a FROM AuthUserRole a WHERE a.comment = :comment"),
-    @NamedQuery(name = "AuthUserRole.findByVersion", query = "SELECT a FROM AuthUserRole a WHERE a.version = :version")})
+    @NamedQuery(name = "AuthUserRole.findAll", query = "SELECT a FROM AuthUserRole a")
+    })
 public class AuthUserRole extends ConfigurationEntity {
     private static final long serialVersionUID = 1L;
     

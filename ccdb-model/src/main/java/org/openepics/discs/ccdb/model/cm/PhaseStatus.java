@@ -16,14 +16,18 @@
 
 package org.openepics.discs.ccdb.model.cm;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
+import org.openepics.discs.ccdb.model.auth.User;
 
 /**
  * Status of a phase assignment 
@@ -35,6 +39,7 @@ import org.openepics.discs.ccdb.model.ConfigurationEntity;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PhaseStatus.findAll", query = "SELECT d FROM PhaseStatus d"),
+    @NamedQuery(name = "PhaseStatus.findByGroup", query = "SELECT d FROM PhaseStatus d WHERE d.phaseOfGroup.phaseGroup = :group"),
     @NamedQuery(name = "PhaseStatus.findByAssignment", query = "SELECT d FROM PhaseStatus d WHERE d.assignment = :assignment")
 })
 public class PhaseStatus extends ConfigurationEntity {
@@ -45,42 +50,39 @@ public class PhaseStatus extends ConfigurationEntity {
     @JoinColumn(name = "assignment")
     private PhaseAssignment assignment;
     
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "phaseOfGroup")
+    private PhaseOfGroup phaseOfGroup;
+    
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "assigned_sme")
+    private User assignedSME;
+    
     @ManyToOne(optional = false)
     @JoinColumn(name = "status")
-    private StatusTypeOption status;
-       
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PhaseStatus)) {
-            return false;
-        }
-        PhaseStatus other = (PhaseStatus) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "org.openepics.discs.ccdb.model.CMStatus[ id=" + id + " ]";
-    }
+    private StatusOption status;
     
+//    @ManyToOne
+//    @JoinColumn(name = "approved_by")
+//    private User approved_by;
+//    
+//    @Column(name = "approved_at")
+//    @Basic
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private Date approved_at;
+    
+    @Column(name = "comment")
+    @Size(max = 1024)
+    @Basic
+    private String comment;
     // --
 
-    public StatusTypeOption getStatus() {
+    public StatusOption getStatus() {
         return status;
     }
 
-    public void setStatus(StatusTypeOption status) {
+    public void setStatus(StatusOption status) {
         this.status = status;
     }  
 
@@ -92,5 +94,27 @@ public class PhaseStatus extends ConfigurationEntity {
         this.assignment = assignment;
     }
 
-    
+    public User getAssignedSME() {
+        return assignedSME;
+    }
+
+    public void setAssignedSME(User assignedSME) {
+        this.assignedSME = assignedSME;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public PhaseOfGroup getPhaseOfGroup() {
+        return phaseOfGroup;
+    }
+
+    public void setPhaseOfGroup(PhaseOfGroup phaseOfGroup) {
+        this.phaseOfGroup = phaseOfGroup;
+    }
 }

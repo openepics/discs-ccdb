@@ -42,7 +42,7 @@ import org.openepics.discs.ccdb.model.auth.User;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PhaseApproval.findAll", query = "SELECT d FROM PhaseApproval d"),
-    @NamedQuery(name = "PhaseApproval.findByType", query = "SELECT d FROM PhaseApproval d WHERE d.assignment.phase.statusType = :type"),
+    @NamedQuery(name = "PhaseApproval.findByType", query = "SELECT d FROM PhaseApproval d WHERE d.assignment.phaseGroup = :group"),
     @NamedQuery(name = "PhaseApproval.findByName", query = "SELECT d FROM PhaseApproval d WHERE d.assignment = :assignment")
 })
 public class PhaseApproval extends ConfigurationEntity {
@@ -54,6 +54,10 @@ public class PhaseApproval extends ConfigurationEntity {
     private PhaseAssignment assignment;
     
     @ManyToOne(optional = false)
+    @JoinColumn(name = "phaseOfGroup")
+    private PhaseOfGroup phaseOfGroup;
+    
+    @ManyToOne(optional = false)
     @JoinColumn(name = "assigned_approver")
     private User assignedApprover;
     
@@ -63,7 +67,7 @@ public class PhaseApproval extends ConfigurationEntity {
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "status")
-    private StatusTypeOption status;
+    private StatusOption status;
     
     @ManyToOne
     @JoinColumn(name = "approved_by")
@@ -79,30 +83,6 @@ public class PhaseApproval extends ConfigurationEntity {
     @Basic
     private String comment;
     
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PhaseApproval)) {
-            return false;
-        }
-        PhaseApproval other = (PhaseApproval) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "org.openepics.discs.ccdb.model.PhaseApproval[ id=" + id + " ]";
-    }
     // --
 
     public PhaseAssignment getAssignment() {
@@ -153,12 +133,20 @@ public class PhaseApproval extends ConfigurationEntity {
         this.comment = comment;
     }
 
-    public StatusTypeOption getStatus() {
+    public StatusOption getStatus() {
         return status;
     }
 
-    public void setStatus(StatusTypeOption status) {
+    public void setStatus(StatusOption status) {
         this.status = status;
+    }
+
+    public PhaseOfGroup getPhaseOfGroup() {
+        return phaseOfGroup;
+    }
+
+    public void setPhaseOfGroup(PhaseOfGroup phaseOfGroup) {
+        this.phaseOfGroup = phaseOfGroup;
     }
     
 }

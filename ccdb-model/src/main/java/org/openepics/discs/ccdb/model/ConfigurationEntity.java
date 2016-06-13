@@ -52,7 +52,8 @@ public class ConfigurationEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "modified_at")
     @Temporal(TemporalType.TIMESTAMP)
-    protected Date modifiedAt = new Date(0L);
+//    protected Date modifiedAt = new Date(0L);
+    protected Date modifiedAt = new Date();
 
     @Basic(optional = false)
     @Size(min = 1, max = 64)
@@ -121,5 +122,10 @@ public class ConfigurationEntity implements Serializable {
         }
 
         return this==object;
+    }
+    
+    @Override
+    public String toString() {
+        return this.getClass().getCanonicalName() + "[ id=" + id + " ]";
     }
 }

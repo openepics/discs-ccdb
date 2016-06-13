@@ -26,14 +26,13 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
-import org.openepics.discs.ccdb.model.cm.Phase;
-import org.openepics.discs.ccdb.model.cm.PhaseGroup;
+import org.openepics.discs.ccdb.model.cm.SlotGroup;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 /**
- * Description: State for Manage Phase View
+ * Description: State for Manage Process View
  *
  * Methods:
  * <p>
@@ -59,55 +58,30 @@ import org.primefaces.event.SelectEvent;
 
 @Named
 @ViewScoped
-public class PhaseManager implements Serializable {
+public class SlotGroupManager implements Serializable {
 //    @EJB
 //    private AuthEJB authEJB;
     @EJB
     private LifecycleEJB lcEJB;
             
-    private static final Logger LOGGER = Logger.getLogger(PhaseManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(SlotGroupManager.class.getName());
 //    @Inject
 //    UserSession userSession;
       
-    private List<Phase> entities;    
-    private List<Phase> filteredEntities;    
-    private Phase inputEntity;
-    private Phase selectedEntity;
+    private List<SlotGroup> entities;    
+    private List<SlotGroup> filteredEntities;    
+    private SlotGroup inputEntity;
+    private SlotGroup selectedEntity;
     private InputAction inputAction;
-    private String selectedType;
     
-    private List<PhaseGroup> statusTypes;
     
-    public PhaseManager() {
+    public SlotGroupManager() {
     }
     
     @PostConstruct
-    public void init() { 
-        initialize();
-        statusTypes = lcEJB.findAllPhaseGroups();
+    public void init() {      
+        entities = lcEJB.findAllSlotGroups();     
         resetInput();
-    }
-    
-    /**
-     * Initialize data in view
-     * 
-     * @return 
-     */
-    public String initialize() {
-        String nextView = null;
-        PhaseGroup stype = null;
-        
-        if (selectedType != null) {
-            stype = lcEJB.findPhaseGroup(selectedType);
-        }
-        if (stype == null) {
-            entities = lcEJB.findAllPhases();
-        } else {
-            entities = lcEJB.findPhases(stype);
-        }
-        
-        return nextView;
-    
     }
     
     private void resetInput() {                
@@ -120,7 +94,7 @@ public class PhaseManager implements Serializable {
     }
     
     public void onAddCommand(ActionEvent event) {
-        inputEntity = new Phase();
+        inputEntity = new SlotGroup();
         inputAction = InputAction.CREATE;       
     }
     
@@ -135,16 +109,16 @@ public class PhaseManager implements Serializable {
     public void saveEntity() {
         try {                      
             if (inputAction == InputAction.CREATE) {
-                lcEJB.savePhase(inputEntity);
+                lcEJB.saveSlotGroup(inputEntity);
                 entities.add(inputEntity);                
             } else {
-                lcEJB.savePhase(selectedEntity);
+                lcEJB.saveSlotGroup(selectedEntity);
             }
             resetInput();
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Saved", "");
         } catch (Exception e) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save", e.getMessage());
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save ", e.getMessage());
             RequestContext.getCurrentInstance().addCallbackParam("success", false);
             System.out.println(e);
         }
@@ -152,7 +126,7 @@ public class PhaseManager implements Serializable {
     
     public void deleteEntity() {
         try {
-            lcEJB.deletePhase(selectedEntity);
+            lcEJB.deleteSlotGroup(selectedEntity);
             entities.remove(selectedEntity);  
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Deletion successful", "You may have to refresh the page.");
@@ -170,51 +144,31 @@ public class PhaseManager implements Serializable {
         return inputAction;
     }
 
-    public List<Phase> getEntities() {
+    public List<SlotGroup> getEntities() {
         return entities;
     }
 
-    public List<Phase> getFilteredEntities() {
+    public List<SlotGroup> getFilteredEntities() {
         return filteredEntities;
     }
 
-    public void setFilteredEntities(List<Phase> filteredEntities) {
+    public void setFilteredEntities(List<SlotGroup> filteredEntities) {
         this.filteredEntities = filteredEntities;
     }
 
-    public Phase getInputEntity() {
+    public SlotGroup getInputEntity() {
         return inputEntity;
     }
 
-    public void setInputEntity(Phase inputEntity) {
+    public void setInputEntity(SlotGroup inputEntity) {
         this.inputEntity = inputEntity;
     }
 
-    public Phase getSelectedEntity() {
+    public SlotGroup getSelectedEntity() {
         return selectedEntity;
     }
 
-    public void setSelectedEntity(Phase selectedEntity) {
+    public void setSelectedEntity(SlotGroup selectedEntity) {
         this.selectedEntity = selectedEntity;
-    }
-
-    public List<PhaseGroup> getStatusTypes() {
-        return statusTypes;
-    }   
-
-    public LifecycleEJB getLcEJB() {
-        return lcEJB;
-    }
-
-    public void setLcEJB(LifecycleEJB lcEJB) {
-        this.lcEJB = lcEJB;
-    }
-
-    public String getSelectedType() {
-        return selectedType;
-    }
-
-    public void setSelectedType(String selectedType) {
-        this.selectedType = selectedType;
     }
 }

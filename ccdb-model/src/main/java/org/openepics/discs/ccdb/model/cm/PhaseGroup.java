@@ -16,13 +16,14 @@
 
 package org.openepics.discs.ccdb.model.cm;
 
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -34,22 +35,16 @@ import org.openepics.discs.ccdb.model.ConfigurationEntity;
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "cm_status_option" )
+@Table(name = "cm_phasegroup" )
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "StatusTypeOption.findAll", query = "SELECT d FROM StatusTypeOption d"),
-    @NamedQuery(name = "StatusTypeOption.findByType", query = "SELECT d FROM StatusTypeOption d WHERE d.statusType = :type"),
-    @NamedQuery(name = "StatusTypeOption.findByName", query = "SELECT d FROM StatusTypeOption d WHERE  d.name = :name")
+    @NamedQuery(name = "PhaseGroup.findAll", query = "SELECT d FROM PhaseGroup d"),
+    @NamedQuery(name = "PhaseGroup.findByName", query = "SELECT d FROM PhaseGroup d WHERE  d.name = :name")
 })
-public class StatusTypeOption extends ConfigurationEntity {
+public class PhaseGroup extends ConfigurationEntity {
 
     private static final long serialVersionUID = 1L; 
-    
-    @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "status_type")
-    private StatusType statusType;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min=1, max=64)
@@ -62,30 +57,17 @@ public class StatusTypeOption extends ConfigurationEntity {
     @Column(name = "description")
     private String description;
     
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof StatusTypeOption)) {
-            return false;
-        }
-        StatusTypeOption other = (StatusTypeOption) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "org.openepics.discs.ccdb.model.CMProcess[ id=" + id + " ]";
-    }
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "phaseGroup")
+    private List<StatusOption> options;
+    
+//    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinTable( name = "cm_phase_in_group", 
+//                joinColumns = @JoinColumn(name = "phasegroup"),
+//                inverseJoinColumns = @JoinColumn(name = "phase") )
+//    private List<Phase> phases;
+  
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy="phaseGroup")
+    private List<PhaseOfGroup> phases;
     
     // getters and setters
 
@@ -105,12 +87,19 @@ public class StatusTypeOption extends ConfigurationEntity {
         this.description = description;
     }
 
-    public StatusType getStatusType() {
-        return statusType;
+    public List<StatusOption> getOptions() {
+        return options;
     }
 
-    public void setStatusType(StatusType statusType) {
-        this.statusType = statusType;
+    public void setOptions(List<StatusOption> options) {
+        this.options = options;
     }
-    
+
+    public List<PhaseOfGroup> getPhases() {
+        return phases;
+    }
+
+    public void setPhases(List<PhaseOfGroup> phases) {
+        this.phases = phases;
+    }
 }

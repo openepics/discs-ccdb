@@ -24,6 +24,10 @@
                              rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">
 
                     <p:ajax event="rowSelect" listener="#{assignmentManager.onRowSelect}" update="commandButtons" />
+                    <p:column headerText="Group" sortBy="#{entity.slotGroup.name}" filterBy="#{entity.slotGroup.name}"
+                              filterMatchMode="contains" >
+                        <h:outputText value="#{entity.slotGroup.name}" />
+                    </p:column>
                     <p:column headerText="Slot" sortBy="#{entity.slot.name}" filterBy="#{entity.slot.name}"
                               filterMatchMode="contains" >
                         <h:outputText value="#{entity.slot.name}" />
@@ -33,14 +37,14 @@
                               filterMatchMode="contains" >
                         <h:outputText value="#{entity.device.serialNumber}" />
                     </p:column>
-                    
-                    <p:column headerText="Checklist" sortBy="#{entity.phase.name}"  filterBy="#{entity.phase.name}" filterMatchMode="contains" >
-                        <h:outputText value="#{entity.phase.name}" />
+
+                    <p:column headerText="Checklist" sortBy="#{entity.phaseGroup.name}" >
+                        <h:outputText value="#{entity.phaseGroup.name}" />
                     </p:column>
 
-                    <p:column headerText="Assignees"  >                      
-                            <h:outputText value="#{entity.approvals.stream().map(appr -> appr.assignedApprover.name).toList()}" />               
-                    </p:column>
+                    <!--                    <p:column headerText="Assignees"  >                      
+                                                <h:outputText value="#{entity.approvals.stream().map(appr -> appr.assignedApprover.name).toList()}" />               
+                                        </p:column>-->
 
                     <p:column headerText="Requestor" sortBy="#{entity.requestor.name}" filterBy="#{entity.requestor.name}"
                               filterMatchMode="contains" >
@@ -85,6 +89,26 @@
                     </f:facet>
                     <p:row>
                         <p:column>
+                            <p:outputLabel for="slotGrpList" value="Slot Group"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="slotGrpList" var="grp" converter="#{slotGroupConverter}"
+                                             filter="true"
+                                             value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputEntity.slotGroup : assignmentManager.selectedEntity.slotGroup}"                                            
+                                             disabled="#{assignmentManager.inputAction == 'DELETE'}">
+                                <f:selectItem itemLabel="N/A" itemValue="#{null}" />
+                                <f:selectItems value="#{assignmentManager.slotGroups}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{grp.name}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{grp.description}" />
+                                </p:column>
+                            </p:selectOneMenu>                                                    
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
                             <p:outputLabel for="slotList" value="Slot"/>
                         </p:column>
                         <p:column>
@@ -127,17 +151,17 @@
                             </p:selectOneMenu>                                                    
                         </p:column>
                     </p:row>
-                    
+
                     <p:row>
                         <p:column>
                             <p:outputLabel for="procList" value="#{assignmentManager.selectedType}"/>
                         </p:column>
                         <p:column>
-                            <p:selectOneMenu id="procList" var="proc" converter="#{processConverter}"
+                            <p:selectOneMenu id="procList" var="proc" converter="#{statusTypeConverter}"
                                              filter="true"
-                                             value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputEntity.phase : assignmentManager.selectedEntity.phase}"                                            
+                                             value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputEntity.phaseGroup : assignmentManager.selectedEntity.phaseGroup}"                                            
                                              disabled="#{assignmentManager.inputAction == 'DELETE'}">
-                                <f:selectItems value="#{assignmentManager.phases}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <f:selectItems value="#{assignmentManager.phaseGroups}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
                                 <p:column>
                                     <h:outputText value="#{proc.name}" />
                                 </p:column>
@@ -147,25 +171,25 @@
                             </p:selectOneMenu>                                                     
                         </p:column>
                     </p:row>
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="apprList" value="Assignees"/>
-                        </p:column>
-                        <p:column>
-                            <p:selectManyMenu id="apprList" var="appr" converter="#{userConverter}"
-                                              filter="true" showCheckbox="true" scrollHeight="100"
-                                              value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputApprovers : assignmentManager.inputApprovers}"                                            
-                                              disabled="#{assignmentManager.inputAction == 'DELETE'}">
-                                <f:selectItems value="#{assignmentManager.users}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
-                                <p:column>
-                                    <h:outputText value="#{appr.userId}" />
-                                </p:column>
-                                <p:column rendered="false">
-                                    <h:outputText value="#{appr.name}" />
-                                </p:column>
-                            </p:selectManyMenu>                                                     
-                        </p:column>
-                    </p:row>
+                    <!--                    <p:row>
+                                            <p:column>
+                                                <p:outputLabel for="apprList" value="Assignees"/>
+                                            </p:column>
+                                            <p:column>
+                                                <p:selectManyMenu id="apprList" var="appr" converter="#{userConverter}"
+                                                                  filter="true" showCheckbox="true" scrollHeight="100"
+                                                                  value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputApprovers : assignmentManager.inputApprovers}"                                            
+                                                                  disabled="#{assignmentManager.inputAction == 'DELETE'}">
+                                                    <f:selectItems value="#{assignmentManager.users}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                                    <p:column>
+                                                        <h:outputText value="#{appr.userId}" />
+                                                    </p:column>
+                                                    <p:column rendered="false">
+                                                        <h:outputText value="#{appr.name}" />
+                                                    </p:column>
+                                                </p:selectManyMenu>                                                     
+                                            </p:column>
+                                        </p:row>-->
 
                     <f:facet name="footer">
                         <p:row>

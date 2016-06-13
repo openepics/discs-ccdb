@@ -13,7 +13,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.inject.Named;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
-import org.openepics.discs.ccdb.model.cm.StatusTypeOption;
+import org.openepics.discs.ccdb.model.cm.StatusOption;
 
 /**
  *
@@ -50,8 +50,8 @@ public class StatusOptionConverter implements Converter {
             return "";
         }
         
-        if (modelObject instanceof StatusTypeOption) {
-            return ((StatusTypeOption) modelObject).getId().toString();
+        if (modelObject instanceof StatusOption) {
+            return ((StatusOption) modelObject).getId().toString();
         } else {
             throw new ConverterException("Not a valid entity");
         }

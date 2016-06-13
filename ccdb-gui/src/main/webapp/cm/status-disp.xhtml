@@ -6,9 +6,9 @@
     <ui:fragment  rendered="#{not empty statusRec}">
         <ui:fragment  rendered="#{not empty statusRec.status}">
             <h:outputText value="#{statusRec.status.name} " title="#{statusRec.status.description}" />
-            <h:outputText value=" [#{statusRec.approved_by.userId}"/>
+            <h:outputText value=" [#{statusRec.modifiedBy}"/>
             <p:spacer width="5"/>
-            <h:outputText value="#{statusRec.approved_at}" >
+            <h:outputText value="#{statusRec.modifiedAt}" >
                 <f:convertDateTime type="both"  pattern="#{msgs.timestampFormat}"/>
             </h:outputText>  
             <h:outputText value="]" />

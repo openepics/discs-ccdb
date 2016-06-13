@@ -26,6 +26,10 @@
 
                     <p:ajax event="rowSelectCheckbox" listener="#{statusManager.onRowSelect}" update="commandButtons" />
                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                    <p:column headerText="Group" sortBy="#{stat.assignment.slotGroup.name}" filterBy="#{stat.assignment.slotGroup.name}"
+                              filterMatchMode="contains" >
+                        <h:outputText value="#{stat.assignment.slotGroup.name}" />
+                    </p:column>
                     <p:column headerText="Slot" sortBy="#{stat.assignment.slot.name}" filterBy="#{stat.assignment.slot.name}"
                               filterMatchMode="contains" >
                         <h:outputText value="#{stat.assignment.slot.name}" />
@@ -34,28 +38,28 @@
                               filterMatchMode="contains" >
                         <h:outputText value="#{stat.assignment.device.serialNumber}" />
                     </p:column>
-                    <p:column headerText="Phase" sortBy="#{stat.assignment.phase.name}"  filterBy="#{stat.assignment.phase.name}" >
-                        <h:outputText value="#{stat.assignment.phase.name}" />
+                    <p:column headerText="Phase" sortBy="#{stat.phaseOfGroup.phase.name}"  filterBy="#{stat.phaseOfGroup.phase.name}" >
+                        <h:outputText value="#{stat.phaseOfGroup.phase.name}" />
                     </p:column>
 
                     <p:column headerText="Requestor" sortBy="#{stat.assignment.requestor.name}" filterBy="#{stat.assignment.requestor.name}"
                               filterMatchMode="contains" >
                         <h:outputText value="#{stat.assignment.requestor.name}" />
                     </p:column>
-                    <p:column headerText="Assigned To" sortBy="#{stat.assignedApprover.userId}"  filterBy="#{stat.assignedApprover.userId}" >
-                        <h:outputText value="#{stat.assignedApprover.userId}" />
+                    <p:column headerText="Assigned To" sortBy="#{stat.assignedSME.userId}"  filterBy="#{stat.assignedSME.userId}" >
+                        <h:outputText value="#{stat.assignedSME.userId}" />
                     </p:column>
-                    <p:column headerText="Approved" sortBy="#{stat.approved}"   rendered="false">
+<!--                    <p:column headerText="Approved" sortBy="#{stat.approved}"   rendered="false">
                         <h:outputText value="#{stat.approved ? 'Yes': 'No'}"  rendered="#{stat.approved_at ne null}"/>
-                    </p:column>
+                    </p:column>-->
                     <p:column headerText="Status" sortBy="#{stat.status.name}"  >
                         <h:outputText value="#{stat.status.name}"/>
                     </p:column>
-                    <p:column headerText="By" sortBy="#{stat.approved_by.userId}"  >
-                        <h:outputText value="#{stat.approved_by.userId}" />
+                    <p:column headerText="By" sortBy="#{stat.modifiedBy}"  >
+                        <h:outputText value="#{stat.modifiedBy}" />
                     </p:column>
-                    <p:column headerText="Date" sortBy="#{stat.approved_at}"  >
-                        <h:outputText value="#{stat.approved_at}" />
+                    <p:column headerText="Date" sortBy="#{stat.modifiedAt}"  >
+                        <h:outputText value="#{stat.modifiedAt}" />
                     </p:column>
                     <p:column headerText="Comment" >
                         <h:outputText value="#{stat.comment}" />

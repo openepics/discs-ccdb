@@ -15,6 +15,45 @@
             <p:panel>
                 <h:outputText value="Status Report" styleClass="heading"/>
 
+                <h:outputText value="Groups" />
+                <p:dataTable id="groupTable" var="group" value="#{statusReport.slotGroups}" widgetVar="statusTableWid"
+                             rowKey="#{group.id}" > 
+                    <p:column headerText="Group" sortBy="#{group.name}" filterBy="#{group.name}">
+                        <h:outputText value="#{group.name}" />
+                    </p:column>
+                    <p:columns value="#{statusReport.phases}" var="phase" columnIndexVar="colIndex" >
+                        <f:facet name="header">
+                            <h:outputText value="#{phase.name}" />
+                        </f:facet>
+                        <div style="text-align: center;">
+                            <ui:include src="status-disp.xhtml">
+                                <ui:param name="statusRec" value="#{statusReport.getGroupStatusRec(group, phase)}" />
+                            </ui:include>
+                        </div>
+                    </p:columns>
+                    
+<!--                        <p:column headerText="Sum OK"  width="5%" rendered="false">
+                            <div style="text-align: center;">
+                            <h:outputText value="#{statusReport.getSlotSumOk(slot)}" />
+                             </div>
+                        </p:column>-->
+                   
+                </p:dataTable>
+
+                <h:commandLink title="Export to Excel">  
+                    <p:graphicImage value="#{resource['images/excel.png']}" />                      
+                    <p:dataExporter type="xls"  target="statusTable" fileName="status-report"  />  
+                </h:commandLink>  
+                <h:commandLink title="Export to CSV">  
+                    <p:graphicImage value="#{resource['images/csv.png']}" />  
+                    <p:dataExporter type="csv" target="statusTable" fileName="status-report"  /> 
+                </h:commandLink>  
+                <h:commandLink title="Export to XML">  
+                    <p:graphicImage value="#{resource['images/xml.png']}" />  
+                    <p:dataExporter type="xml" target="statusTable" fileName="status-report" />  
+                </h:commandLink>
+                <br/>
+                
                 <h:outputText value="Slots:" />
                 <p:dataTable id="statusTable" var="slot" value="#{statusReport.slots}" widgetVar="statusTableWid"
                              rowKey="#{slot.id}" > 
@@ -32,11 +71,11 @@
                         </div>
                     </p:columns>
                     
-                        <p:column headerText="Sum OK"  width="5%" rendered="false">
+<!--                        <p:column headerText="Sum OK"  width="5%" rendered="false">
                             <div style="text-align: center;">
                             <h:outputText value="#{statusReport.getSlotSumOk(slot)}" />
                              </div>
-                        </p:column>
+                        </p:column>-->
                    
                 </p:dataTable>
 

@@ -13,7 +13,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.inject.Named;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
-import org.openepics.discs.ccdb.model.cm.StatusType;
+import org.openepics.discs.ccdb.model.cm.PhaseGroup;
 
 /**
  *
@@ -38,7 +38,7 @@ public class StatusTypeConverter implements Converter {
         } 
         
         try {
-            return lcEJB.findStatusType(Long.valueOf(stringValue));
+            return lcEJB.findPhaseGroup(Long.valueOf(stringValue));
         } catch (Exception e){
             throw new ConverterException("Not a valid ID");
         }
@@ -50,8 +50,8 @@ public class StatusTypeConverter implements Converter {
             return "";
         }
         
-        if (modelObject instanceof StatusType) {
-            return ((StatusType) modelObject).getId().toString();
+        if (modelObject instanceof PhaseGroup) {
+            return ((PhaseGroup) modelObject).getId().toString();
         } else {
             throw new ConverterException("Not a valid entity");
         }

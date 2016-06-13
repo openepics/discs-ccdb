@@ -19,8 +19,6 @@ package org.openepics.discs.ccdb.model.cm;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -30,18 +28,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
 
 /**
- * Life cycle phase
+ * A group of slots (for configuration management)
  * 
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "cm_phase" )
+@Table(name = "cm_slot_group" )
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Phase.findAll", query = "SELECT d FROM Phase d"),
-    @NamedQuery(name = "Phase.findByName", query = "SELECT d FROM Phase d WHERE d.name = :name")
+    @NamedQuery(name = "SlotGroup.findAll", query = "SELECT d FROM SlotGroup d"),
+    @NamedQuery(name = "SlotGroup.findByName", query = "SELECT d FROM SlotGroup d WHERE d.name = :name")
 })
-public class Phase extends ConfigurationEntity {
+public class SlotGroup extends ConfigurationEntity {
 
     private static final long serialVersionUID = 1L; 
 
@@ -57,12 +55,6 @@ public class Phase extends ConfigurationEntity {
     @Column(name = "description")
     private String description;
     
-    @Basic(optional = false)
-    @Column(name = "loc")
-    @Enumerated(EnumType.STRING)
-    private LevelOfCare levelOfCare = LevelOfCare.NONE;
-    
-   
     // getters and setters
 
     public String getName() {
@@ -79,13 +71,5 @@ public class Phase extends ConfigurationEntity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public LevelOfCare getLevelOfCare() {
-        return levelOfCare;
-    }
-
-    public void setLevelOfCare(LevelOfCare levelOfCare) {
-        this.levelOfCare = levelOfCare;
     }
 }

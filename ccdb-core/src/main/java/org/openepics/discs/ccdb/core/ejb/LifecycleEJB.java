@@ -29,9 +29,10 @@ import org.openepics.discs.ccdb.model.cm.Phase;
 import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
 import org.openepics.discs.ccdb.model.cm.PhaseStatus;
-import org.openepics.discs.ccdb.model.cm.PhaseTag;
-import org.openepics.discs.ccdb.model.cm.StatusType;
-import org.openepics.discs.ccdb.model.cm.StatusTypeOption;
+import org.openepics.discs.ccdb.model.cm.PhaseGroup;
+import org.openepics.discs.ccdb.model.cm.PhaseOfGroup;
+import org.openepics.discs.ccdb.model.cm.SlotGroup;
+import org.openepics.discs.ccdb.model.cm.StatusOption;
 
 /**
  *
@@ -59,12 +60,12 @@ public class LifecycleEJB {
      /**
      * Reviews with a given tag
      * 
-     * @param type
+     * @param group
      * 
      * @return a list of all {@link Phase}s ordered by name.
      */
-    public List<Phase> findPhases(StatusType type) {
-        return em.createNamedQuery("Phase.findByType", Phase.class).setParameter("type", type).getResultList();
+    public List<Phase> findPhases(PhaseGroup group) {
+        return em.createNamedQuery("PhaseOfGroup.findPhasesByGroup", Phase.class).setParameter("group", group).getResultList();
     }
     
     
@@ -118,8 +119,8 @@ public class LifecycleEJB {
      * @param type
      * @return a list of all {@link Phase}s ordered by name.
      */
-    public List<PhaseAssignment> findAssignments(StatusType type) {
-        return em.createNamedQuery("PhaseAssignment.findByType", PhaseAssignment.class).setParameter("type", type).getResultList();
+    public List<PhaseAssignment> findAssignments(PhaseGroup type) {
+        return em.createNamedQuery("PhaseAssignment.findByGroup", PhaseAssignment.class).setParameter("group", type).getResultList();
     }
     
     /**
@@ -167,40 +168,48 @@ public class LifecycleEJB {
         } else {
             em.merge(assignment);
         }
-
-        if (assignment.getApprovals() != null && approvers != null) {
-            Iterator<PhaseApproval> iterator =  assignment.getApprovals().iterator();
-            while (iterator.hasNext()) {
-                PhaseApproval approval = iterator.next();
-                
-                LOGGER.log(Level.INFO, "checking for removed approvers {0}", approval.getAssignedApprover());
-//                if (! approvers.contains(iterator.next().getApproved_by())) {
-                if (! approvers.contains(approval.getAssignedApprover())) {
-                    iterator.remove();
-                    em.remove(approval);
-                    LOGGER.log(Level.INFO, "removed approval record {0}", approval.getAssignedApprover());
-                }
-            }
-        }
-
-        if (approvers != null) {
-            if (assignment.getApprovals() == null) {
-                assignment.setApprovals(new ArrayList<>());
-            }
-            for(User user : approvers) {
-                LOGGER.log(Level.INFO, "checking for new approver {0}", user.getName());
-                if (!isAnApprover(assignment.getApprovals(), user)) {
-                    PhaseApproval approval = new PhaseApproval();
-                    approval.setAssignedApprover(user);
-                    approval.setAssignment(assignment);
-                    em.persist(approval);
-                    assignment.getApprovals().add(approval);
-                    LOGGER.log(Level.INFO, "added approver {0}", user.getName());
-                }
-            }
-        }
         
-        em.flush(); // ToDo: should not be needed
+        for(PhaseOfGroup pog : assignment.getPhaseGroup().getPhases()) {
+            PhaseStatus phaseStatus = new PhaseStatus();
+            phaseStatus.setAssignment(assignment);
+            phaseStatus.setPhaseOfGroup(pog);
+            phaseStatus.setStatus(defaultStatusOption(pog.getPhaseGroup()));
+            em.persist(phaseStatus);
+        }
+
+//        if (assignment.getApprovals() != null && approvers != null) {
+//            Iterator<PhaseApproval> iterator =  assignment.getApprovals().iterator();
+//            while (iterator.hasNext()) {
+//                PhaseApproval approval = iterator.next();
+//                
+//                LOGGER.log(Level.INFO, "checking for removed approvers {0}", approval.getAssignedApprover());
+//                if (! approvers.contains(iterator.next().getApproved_by())) {
+//                if (! approvers.contains(approval.getAssignedApprover())) {
+//                    iterator.remove();
+//                    em.remove(approval);
+//                    LOGGER.log(Level.INFO, "removed approval record {0}", approval.getAssignedApprover());
+//                }
+//            }
+//        }
+//
+//        if (approvers != null) {
+//            if (assignment.getApprovals() == null) {
+//                assignment.setApprovals(new ArrayList<>());
+//            }
+//            for(User user : approvers) {
+//                LOGGER.log(Level.INFO, "checking for new approver {0}", user.getName());
+//                if (!isAnApprover(assignment.getApprovals(), user)) {
+//                    PhaseApproval approval = new PhaseApproval();
+//                    approval.setAssignedApprover(user);
+//                    approval.setAssignment(assignment);
+//                    em.persist(approval);
+//                    assignment.getApprovals().add(approval);
+//                    LOGGER.log(Level.INFO, "added approver {0}", user.getName());
+//                }
+//            }
+//        }
+//        
+//        em.flush(); // ToDo: should not be needed
     }
 
     /**
@@ -236,10 +245,11 @@ public class LifecycleEJB {
     /**
      * All approvals
      * 
+     * @param group
      * @return a list of all {@link PhaseApproval}s ordered by name.
      */
-    public List<PhaseApproval> findApprovals(StatusType type) {
-        return em.createNamedQuery("PhaseApproval.findByType", PhaseApproval.class).setParameter("type", type).getResultList();
+    public List<PhaseApproval> findApprovals(PhaseGroup group) {
+        return em.createNamedQuery("PhaseApproval.findByGroup", PhaseApproval.class).setParameter("group", group).getResultList();
     } 
     
     /**
@@ -276,14 +286,68 @@ public class LifecycleEJB {
         em.remove(src);
     }
     
-    // ------------------ Status type
+//    // ------------------ Status type
+//    /**
+//     * All types
+//     * 
+//     * @return a list of all {@link Phase}s ordered by name.
+//     */
+//    public List<PhaseGroup> findAllPhaseGroups() {
+//        return em.createNamedQuery("PhaseGroup.findAll", PhaseGroup.class).getResultList();
+//    } 
+//    
+//    /**
+//     * PHase type 
+//     * 
+//     * @param name
+//     * @return a list of all {@link Phase}s ordered by name.
+//     */
+//    public PhaseGroup findPhaseGroup(String name) {
+//        return em.createNamedQuery("PhaseGroup.findByName", PhaseGroup.class).setParameter("name", name).getSingleResult();
+//    } 
+//    
+//    /**
+//     * save a status type
+//     *
+//     * @param group type
+//     */
+//    public void savePhaseGroup(PhaseGroup group) {
+//        if (group.getId() == null) {
+//            em.persist(group);
+//        } else {
+//            em.merge(group);
+//        }
+//        LOGGER.log(Level.FINE, "status type saved - {0}", group.getId());
+//    }
+//
+//    /**
+//     * delete a given process
+//     *
+//     * @param group
+//     */
+//    public void deletePhaseGroup(PhaseGroup group) {
+//        PhaseGroup src = em.find(PhaseGroup.class, group.getId());
+//        em.remove(src);
+//    }
+//
+//    /**
+//     * find a status type given its id
+//     *
+//     * @param id
+//     * @return the status type
+//     */
+//    public PhaseGroup findPhaseGroup(Long id) {
+//        return em.find(PhaseGroup.class, id);
+//    }
+    
+    // ------------------ Slot Groups
     /**
-     * All types
+     * All groups
      * 
      * @return a list of all {@link Phase}s ordered by name.
      */
-    public List<StatusType> findAllStatusTypes() {
-        return em.createNamedQuery("StatusType.findAll", StatusType.class).getResultList();
+    public List<SlotGroup> findAllSlotGroups() {
+        return em.createNamedQuery("SlotGroup.findAll", SlotGroup.class).getResultList();
     } 
     
     /**
@@ -292,8 +356,8 @@ public class LifecycleEJB {
      * @param name
      * @return a list of all {@link Phase}s ordered by name.
      */
-    public StatusType findStatusType(String name) {
-        return em.createNamedQuery("StatusType.findByName", StatusType.class).setParameter("name", name).getSingleResult();
+    public SlotGroup findSlotGroup(String name) {
+        return em.createNamedQuery("SlotGroup.findByName", SlotGroup.class).setParameter("name", name).getSingleResult();
     } 
     
     /**
@@ -301,7 +365,7 @@ public class LifecycleEJB {
      *
      * @param status type
      */
-    public void saveStatusType(StatusType status) {
+    public void saveSlotGroup(SlotGroup status) {
         if (status.getId() == null) {
             em.persist(status);
         } else {
@@ -315,8 +379,8 @@ public class LifecycleEJB {
      *
      * @param status
      */
-    public void deleteStatusType(StatusType status) {
-        StatusType src = em.find(StatusType.class, status.getId());
+    public void deleteSlotGroup(SlotGroup status) {
+        SlotGroup src = em.find(SlotGroup.class, status.getId());
         em.remove(src);
     }
 
@@ -326,31 +390,108 @@ public class LifecycleEJB {
      * @param id
      * @return the status type
      */
-    public StatusType findStatusType(Long id) {
-        return em.find(StatusType.class, id);
+    public SlotGroup findSlotGroup(Long id) {
+        return em.find(SlotGroup.class, id);
     }
+    
+    // ------------------ Phase Groups
+    /**
+     * All groups
+     * 
+     * @return a list of all {@link Phase}s ordered by name.
+     */
+    public List<PhaseGroup> findAllPhaseGroups() {
+        return em.createNamedQuery("PhaseGroup.findAll", PhaseGroup.class).getResultList();
+    } 
+    
+    /**
+     * PHase type 
+     * 
+     * @param name
+     * @return a list of all {@link Phase}s ordered by name.
+     */
+    public PhaseGroup findPhaseGroup(String name) {
+        return em.createNamedQuery("PhaseGroup.findByName", PhaseGroup.class).setParameter("name", name).getSingleResult();
+    } 
+    
+    /**
+     * save a status type
+     *
+     * @param group type
+     */
+    public void savePhaseGroup(PhaseGroup group) {
+        if (group.getId() == null) {
+            em.persist(group);
+        } else {
+            em.merge(group);
+        }
+        LOGGER.log(Level.FINE, "status type saved - {0}", group.getId());
+    }
+
+    /**
+     * delete a given process
+     *
+     * @param group
+     */
+    public void deletePhaseGroup(PhaseGroup group) {
+        PhaseGroup src = em.find(PhaseGroup.class, group.getId());
+        em.remove(src);
+    }
+
+    /**
+     * find a status type given its id
+     *
+     * @param id
+     * @return the status type
+     */
+    public PhaseGroup findPhaseGroup(Long id) {
+        return em.find(PhaseGroup.class, id);
+    }
+    
+    /**
+     * All groups
+     * 
+     * @param group
+     * @return a list of all {@link Phase}s ordered by name.
+     */
+//    public List<PhaseOfGroup> findAllPhaseOfGroups(PhaseGroup group) {
+//        return em.createNamedQuery("PhaseOfGroup.findByGroup", PhaseOfGroup.class).setParameter("group", group).getResultList();
+//    }
     
     /**
      * All status options
      * 
-     * @return a list of all {@link StatusTypeOption}s .
+     * @return a list of all {@link StatusOption}s .
      */
-    public List<StatusTypeOption> findAllStatusOptions() {
-        return em.createNamedQuery("StatusTypeOption.findAll", StatusTypeOption.class).getResultList();
+    public List<StatusOption> findAllStatusOptions() {
+        return em.createNamedQuery("StatusOption.findAll", StatusOption.class).getResultList();
     } 
+    
+    
     
     /**
      * All status options for a type
      * 
-     * @param type given status type
-     * @return a list of all {@link StatusTypeOption}s.
+     * @param group given status type
+     * @return a list of all {@link StatusOption}s.
      */
-    public List<StatusTypeOption> findAllStatusOptions(StatusType type) {
-        return em.createNamedQuery("StatusTypeOption.findByType", StatusTypeOption.class)
-                .setParameter("type", type)
+    public List<StatusOption> findAllStatusOptions(PhaseGroup group) {
+        return em.createNamedQuery("StatusOption.findByGroup", StatusOption.class)
+                .setParameter("group", group)
                 .getResultList();
     } 
     
+    /**
+     * default status option of a group
+     * 
+     * @param group
+     * @return 
+     */
+    public StatusOption defaultStatusOption(PhaseGroup group) {
+        return em.createNamedQuery("StatusOption.findByName",StatusOption.class)
+                .setParameter("name", "No")
+                .getSingleResult();
+    }
     //----------------- phase status
     /**
      * 
@@ -371,14 +512,54 @@ public class LifecycleEJB {
                 .getResultList();
     }
     
+    public List<PhaseStatus> findAllStatuses(PhaseGroup group) {
+        return em.createNamedQuery("PhaseStatus.findByGroup", PhaseStatus.class)
+                .setParameter("group", group)
+                .getResultList();
+    }
+    
+     /**
+     * save a status type
+     *
+     * @param status type
+     */
+    public void savePhaseStatus(PhaseStatus status) {
+        if (status.getId() == null) {
+            em.persist(status);
+        } else {
+            em.merge(status);
+        }
+        LOGGER.log(Level.FINE, "status  saved - {0}", status.getId());
+    }
+
+    /**
+     * delete a given process
+     *
+     * @param status
+     */
+    public void deletePhaseStatus(PhaseStatus status) {
+        PhaseStatus src = em.find(PhaseStatus.class, status.getId());
+        em.remove(src);
+    }
+
+    /**
+     * find a status type given its id
+     *
+     * @param id
+     * @return the status type
+     */
+    public PhaseStatus findPhaseStatus(Long id) {
+        return em.find(PhaseStatus.class, id);
+    }
+    
     /**
      * Find status options of a given type
      * 
-     * @param type
+     * @param group
      * @return 
      */
-    public List<StatusTypeOption> findStatusOptions(StatusType type) {
-        return em.createNamedQuery("StatusTypeOption.findByType", StatusTypeOption.class).setParameter("type",type).getResultList();
+    public List<StatusOption> findStatusOptions(PhaseGroup group) {
+        return em.createNamedQuery("StatusOption.findByGroup", StatusOption.class).setParameter("group",group).getResultList();
     }  
     
     /**
@@ -387,7 +568,7 @@ public class LifecycleEJB {
      * @param id
      * @return 
      */
-    public StatusTypeOption findStatusOption(Long id) {
-        return em.find(StatusTypeOption.class,id);
+    public StatusOption findStatusOption(Long id) {
+        return em.find(StatusOption.class,id);
     } 
 }
