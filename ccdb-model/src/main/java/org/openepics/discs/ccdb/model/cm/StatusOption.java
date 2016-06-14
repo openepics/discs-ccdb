@@ -42,7 +42,7 @@ import org.openepics.discs.ccdb.model.ConfigurationEntity;
 @NamedQueries({
     @NamedQuery(name = "StatusOption.findAll", query = "SELECT d FROM StatusOption d"),
     @NamedQuery(name = "StatusOption.findByGroup", query = "SELECT d FROM StatusOption d WHERE d.phaseGroup = :group"),
-    @NamedQuery(name = "StatusOption.findDefault", query = "SELECT d FROM StatusOption d WHERE d.phaseGroup = :group"),
+    
     @NamedQuery(name = "StatusOption.findByName", query = "SELECT d FROM StatusOption d WHERE  d.name = :name")
 })
 public class StatusOption extends ConfigurationEntity {
@@ -66,6 +66,10 @@ public class StatusOption extends ConfigurationEntity {
     @Column(name = "description")
     private String description;
  
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "logical_value")
+    private Boolean logicalValue = true;
     
     // getters and setters
 
@@ -91,6 +95,14 @@ public class StatusOption extends ConfigurationEntity {
 
     public void setPhaseGroup(PhaseGroup phaseGroup) {
         this.phaseGroup = phaseGroup;
+    }
+
+    public Boolean getLogicalValue() {
+        return logicalValue;
+    }
+
+    public void setLogicalValue(Boolean logicalValue) {
+        this.logicalValue = logicalValue;
     }
     
 }

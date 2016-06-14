@@ -195,7 +195,7 @@ public class StatusReport implements Serializable {
               if (slot.getCmGroup() != null) {
                   return getGroupStatusRec(slot.getCmGroup(), phase);
               }
-              if (slot.equals(lcstat.getAssignment().getSlot()) && phase.equals(lcstat.getPhaseOfGroup().getPhase())) {
+              if (slot.equals(lcstat.getAssignment().getSlot()) && phase.equals(lcstat.getGroupMember().getPhase())) {
                   return lcstat;
              }
           }
@@ -210,7 +210,7 @@ public class StatusReport implements Serializable {
           }
           
           for(PhaseStatus lcstat: statusList) {
-              if (group.equals(lcstat.getAssignment().getSlotGroup()) && phase.equals(lcstat.getPhaseOfGroup().getPhase())) {
+              if (group.equals(lcstat.getAssignment().getSlotGroup()) && phase.equals(lcstat.getGroupMember().getPhase())) {
                   return lcstat;
              }
           }
@@ -240,7 +240,7 @@ public class StatusReport implements Serializable {
           }
           
           for(PhaseStatus lcstat: statusList) {
-              if (device.equals(lcstat.getAssignment().getDevice()) && phase.equals(lcstat.getPhaseOfGroup().getPhase())) {
+              if (device.equals(lcstat.getAssignment().getDevice()) && phase.equals(lcstat.getGroupMember().getPhase())) {
                   return lcstat;
              }
           }

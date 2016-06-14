@@ -41,6 +41,7 @@ import org.openepics.discs.ccdb.model.auth.Role;
     @NamedQuery(name = "PhaseGroupMember.findAll", query = "SELECT d FROM PhaseGroupMember d"),
     @NamedQuery(name = "PhaseGroupMember.findByPhase", query = "SELECT d FROM PhaseGroupMember d WHERE d.phase = :phase"),
     @NamedQuery(name = "PhaseGroupMember.findPhasesByGroup", query = "SELECT d.phase FROM PhaseGroupMember d WHERE d.phaseGroup = :group"),
+    @NamedQuery(name = "PhaseGroupMember.findDefault", query = "SELECT d.defaultStatus FROM PhaseGroupMember d WHERE d.phaseGroup = :group AND d.phase = :phase"),
     @NamedQuery(name = "PhaseGroupMember.findByGroup", query = "SELECT d FROM PhaseGroupMember d WHERE d.phaseGroup = :group")
 })
 public class PhaseGroupMember extends ConfigurationEntity {
@@ -63,6 +64,15 @@ public class PhaseGroupMember extends ConfigurationEntity {
     @NotNull
     @Column(name = "summary_phase")
     private Boolean summaryPhase = false;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "optional")
+    private Boolean optional = true;
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "default_status")
+    private StatusOption defaultStatus;
     
     // --
 
@@ -97,6 +107,21 @@ public class PhaseGroupMember extends ConfigurationEntity {
     public void setSummaryPhase(Boolean summaryPhase) {
         this.summaryPhase = summaryPhase;
     }
-    
+
+    public Boolean getOptional() {
+        return optional;
+    }
+
+    public void setOptional(Boolean optional) {
+        this.optional = optional;
+    }
+
+    public StatusOption getDefaultStatus() {
+        return defaultStatus;
+    }
+
+    public void setDefaultStatus(StatusOption defaultStatus) {
+        this.defaultStatus = defaultStatus;
+    }
     
 }

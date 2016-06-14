@@ -24,11 +24,10 @@
                               filterBy="#{obj.name}" filterMatchMode="contains" > 
                         <h:outputText value="#{obj.name}" styleClass="colCenter"/>
                     </p:column>
-                    <p:column headerText="Description" sortBy="#{obj.description}" 
-                              filterBy="#{obj.description}" filterMatchMode="contains" >
+                    <p:column headerText="Description" >
                         <h:outputText value="#{obj.description}" styleClass="colCenter"/>
                     </p:column>
-
+                    
                      <p:column headerText="Options" >
                          <ui:repeat value="#{obj.options}" var="opt">
                              <h:outputText value="#{opt.name} " />

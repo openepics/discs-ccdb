@@ -17,7 +17,6 @@ package org.openepics.discs.ccdb.gui.cm;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -26,19 +25,16 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
-import org.openepics.discs.ccdb.core.ejb.AuthEJB;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
-import org.openepics.discs.ccdb.model.auth.Role;
 import org.openepics.discs.ccdb.model.cm.Phase;
 import org.openepics.discs.ccdb.model.cm.PhaseGroup;
-import org.openepics.discs.ccdb.model.cm.PhaseGroupMember;
 import org.openepics.discs.ccdb.model.cm.StatusOption;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 /**
- * Description: State for Manage Process View
+ * Description: State for Manage Phase View
  *
  * Methods:
  * <p>
@@ -64,45 +60,34 @@ import org.primefaces.event.SelectEvent;
 
 @Named
 @ViewScoped
-public class PhaseMemberManager implements Serializable {
+public class StatusOptionManager implements Serializable {
 //    @EJB
 //    private AuthEJB authEJB;
     @EJB
     private LifecycleEJB lcEJB;
-    @EJB
-    private AuthEJB authEJB;
             
-    private static final Logger LOGGER = Logger.getLogger(PhaseMemberManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(StatusOptionManager.class.getName());
 //    @Inject
 //    UserSession userSession;
       
-    private List<PhaseGroupMember> entities;    
-    private List<PhaseGroupMember> filteredEntities;    
-    private PhaseGroupMember inputEntity;
-    private PhaseGroupMember selectedEntity;
+    private List<StatusOption> entities;    
+    private List<StatusOption> filteredEntities;    
+    private StatusOption inputEntity;
+    private StatusOption selectedEntity;
     private InputAction inputAction;
-    private List<PhaseGroup> phaseGroups;
-    private List<Phase> phases;
-    private List<Role> roles ;
-    private List<StatusOption> statusOptions;
     
-    public PhaseMemberManager() {
+    private List<PhaseGroup> phaseGroups;
+    
+    public StatusOptionManager() {
     }
     
     @PostConstruct
-    public void init() {      
-        entities = lcEJB.findAllPhaseGroupMembers();    
+    public void init() { 
         phaseGroups = lcEJB.findAllPhaseGroups();
-        phases = lcEJB.findAllPhases();
-        roles = authEJB.findAllRoles();
-        if (phaseGroups == null || phaseGroups.isEmpty()) {
-            LOGGER.log(Level.SEVERE, "There are no phase groups!");
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "No Phase Groups", "You must first add one ore more phase groups");
-        } else {
-            statusOptions = lcEJB.findStatusOptions(phaseGroups.get(0));
-        }
+        entities = lcEJB.findAllStatusOptions();
         resetInput();
     }
+    
     
     private void resetInput() {                
         inputAction = InputAction.READ;
@@ -114,7 +99,7 @@ public class PhaseMemberManager implements Serializable {
     }
     
     public void onAddCommand(ActionEvent event) {
-        inputEntity = new PhaseGroupMember();
+        inputEntity = new StatusOption();
         inputAction = InputAction.CREATE;       
     }
     
@@ -129,16 +114,16 @@ public class PhaseMemberManager implements Serializable {
     public void saveEntity() {
         try {                      
             if (inputAction == InputAction.CREATE) {
-                lcEJB.savePhaseGroupMember(inputEntity);
+                lcEJB.saveStatusOption(inputEntity);
                 entities.add(inputEntity);                
             } else {
-                lcEJB.savePhaseGroupMember(selectedEntity);
+                lcEJB.saveStatusOption(selectedEntity);
             }
             resetInput();
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Saved", "");
         } catch (Exception e) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save ", e.getMessage());
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save", e.getMessage());
             RequestContext.getCurrentInstance().addCallbackParam("success", false);
             System.out.println(e);
         }
@@ -146,7 +131,7 @@ public class PhaseMemberManager implements Serializable {
     
     public void deleteEntity() {
         try {
-            lcEJB.deletePhaseGroupMember(selectedEntity);
+            lcEJB.deleteStatusOption(selectedEntity);
             entities.remove(selectedEntity);  
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Deletion successful", "You may have to refresh the page.");
@@ -158,71 +143,41 @@ public class PhaseMemberManager implements Serializable {
         }
     }
     
-    /**
-     * when a new group is selected
-     * 
-     */
-    public void onGroupChange() {
-        PhaseGroup phaseGroup = inputAction == InputAction.CREATE? inputEntity.getPhaseGroup() : selectedEntity.getPhaseGroup();
-        if( phaseGroup != null) {
-            statusOptions = lcEJB.findStatusOptions(phaseGroup);
-            if (statusOptions == null || statusOptions.isEmpty()) {
-                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "No status options defined for this group", "You must first define status options for this group");
-            }
-        } else {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "No Phase Group selected", "You must first select a phase group");
-            statusOptions = lcEJB.findAllStatusOptions();
-        }
-    }
-    
     //-- Getters/Setters 
     
     public InputAction getInputAction() {
         return inputAction;
     }
 
-    public List<PhaseGroupMember> getEntities() {
+    public List<StatusOption> getEntities() {
         return entities;
     }
 
-    public List<PhaseGroupMember> getFilteredEntities() {
+    public List<StatusOption> getFilteredEntities() {
         return filteredEntities;
     }
 
-    public void setFilteredEntities(List<PhaseGroupMember> filteredEntities) {
+    public void setFilteredEntities(List<StatusOption> filteredEntities) {
         this.filteredEntities = filteredEntities;
     }
 
-    public PhaseGroupMember getInputEntity() {
+    public StatusOption getInputEntity() {
         return inputEntity;
     }
 
-    public void setInputEntity(PhaseGroupMember inputEntity) {
+    public void setInputEntity(StatusOption inputEntity) {
         this.inputEntity = inputEntity;
     }
 
-    public PhaseGroupMember getSelectedEntity() {
+    public StatusOption getSelectedEntity() {
         return selectedEntity;
     }
 
-    public void setSelectedEntity(PhaseGroupMember selectedEntity) {
+    public void setSelectedEntity(StatusOption selectedEntity) {
         this.selectedEntity = selectedEntity;
-    }    
+    }
 
     public List<PhaseGroup> getPhaseGroups() {
         return phaseGroups;
     }
-
-    public List<Phase> getPhases() {
-        return phases;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public List<StatusOption> getStatusOptions() {
-        return statusOptions;
-    }
-    
 }

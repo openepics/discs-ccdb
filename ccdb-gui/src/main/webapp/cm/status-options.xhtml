@@ -28,7 +28,10 @@
                     <p:column headerText="Description" sortBy="#{obj.description}" 
                               filterBy="#{obj.description}" filterMatchMode="contains" >
                         <h:outputText value="#{obj.description}" styleClass="colCenter"/>
-                    </p:column>                  
+                    </p:column>
+                    <p:column headerText="Logical" >
+                        <h:outputText value="#{obj.logicalValue}" styleClass="colCenter"/>
+                    </p:column>
 
                     <p:column headerText="LoC" sortBy="#{obj.levelOfCare}"  
                               filterBy="#{obj.levelOfCare}" filterMatchMode="contains" >
@@ -87,7 +90,17 @@
                                          validatorMessage="Description required" disabled="#{phaseManager.inputAction == 'DELETE'}"/>                            
                         </p:column>
                     </p:row>
-
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="phaseLogic"  value="Logical Value" />
+                        </p:column>
+                        <p:column>
+                            <p:selectBooleanCheckbox id="phaseLogic" value="#{phaseManager.inputAction == 'CREATE'? phaseManager.inputEntity.logicalValue : phaseManager.selectedEntity.logicalValue}" 
+                                                     required="true" 
+                                                     validatorMessage="Description required" disabled="#{phaseManager.inputAction == 'DELETE'}"/>                            
+                        </p:column>
+                    </p:row>
+                    
                     <p:row>
                         <p:column>
                             <p:outputLabel for="procLoC"  value="Level of Care" />

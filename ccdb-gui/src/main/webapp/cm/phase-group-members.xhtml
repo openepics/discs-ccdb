@@ -35,6 +35,12 @@
                     <p:column headerText="Summary" >
                         <h:outputText value="#{obj.summaryPhase}" styleClass="colCenter"/>
                     </p:column>
+                    <p:column headerText="Default" >
+                         <h:outputText value="#{obj.defaultStatus.name}" styleClass="colCenter"/>
+                    </p:column>
+                    <p:column headerText="Optional" >
+                        <h:outputText value="#{obj.optional}" styleClass="colCenter"/>
+                    </p:column>
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">
@@ -55,15 +61,15 @@
             </p:panel>
         </h:form>
 
-        <p:dialog id="crudInputDlg" widgetVar="crudInputWid">
+        <p:dialog id="crudInputDlg" widgetVar="crudInputWid"  dynamic="true">
             <h:form id="objectInputForm">              
                 <p:panelGrid>
                     <f:facet name="header">
                         <p:row>
                             <p:column colspan="2">
-                                <h:outputText value="New Process" rendered="#{phaseMemberManager.inputAction == 'CREATE'}"/>
-                                <h:outputText value="Update Existing Process" rendered="#{phaseMemberManager.inputAction == 'UPDATE'}"/>
-                                <h:outputText value="Delete Process" rendered="#{phaseMemberManager.inputAction == 'DELETE'}"/>
+                                <h:outputText value="New Member" rendered="#{phaseMemberManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update Existing Member" rendered="#{phaseMemberManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete Member" rendered="#{phaseMemberManager.inputAction == 'DELETE'}"/>
                             </p:column>                
                         </p:row>
                     </f:facet>
@@ -75,7 +81,8 @@
                             <p:selectOneMenu id="phaseGrp" var="grp" converter="#{phaseGroupConverter}"
                                              filter="true"
                                              value="#{phaseMemberManager.inputAction == 'CREATE'? phaseMemberManager.inputEntity.phaseGroup : phaseMemberManager.selectedEntity.phaseGroup}"                                            
-                                             disabled="#{phaseMemberManager.inputAction == 'DELETE'}">                            
+                                             disabled="#{phaseMemberManager.inputAction == 'DELETE'}">  
+                                <p:ajax listener="#{phaseMemberManager.onGroupChange}" update="defaultStatus" />
                                 <f:selectItems value="#{phaseMemberManager.phaseGroups}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
                                 <p:column>
                                     <h:outputText value="#{grp.name}" />
@@ -97,7 +104,7 @@
                                              value="#{phaseMemberManager.inputAction == 'CREATE'? phaseMemberManager.inputEntity.phase : phaseMemberManager.selectedEntity.phase}"                                            
                                              disabled="#{phaseMemberManager.inputAction == 'DELETE'}">
 
-                                <f:selectItems value="#{phaseMemberManager.phases}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <f:selectItems value="#{phaseMemberManager.phases}" var="p" itemLabel="#{p.name}" itemValue="#{b}" />
                                 <p:column>
                                     <h:outputText value="#{grp.name}" />
                                 </p:column>
@@ -134,6 +141,36 @@
                         </p:column>
                         <p:column>
                             <p:selectBooleanCheckbox id="phaseSum" value="#{phaseMemberManager.inputAction == 'CREATE'? phaseMemberManager.inputEntity.summaryPhase : phaseMemberManager.selectedEntity.summaryPhase}" 
+                                                     required="true" 
+                                                     validatorMessage="Value Required" disabled="#{phaseMemberManager.inputAction == 'DELETE'}"/>                            
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="defaultStatus"  value="Default Status"  title="Default status"/>
+                        </p:column>
+                        <p:column>
+                             <p:selectOneMenu id="defaultStatus" var="stat" converter="#{statusOptionConverter}"
+                                             filter="true"
+                                             value="#{phaseMemberManager.inputAction == 'CREATE'? phaseMemberManager.inputEntity.defaultStatus : phaseMemberManager.selectedEntity.defaultStatus}"                                            
+                                             disabled="#{phaseMemberManager.inputAction == 'DELETE'}">
+
+                                 <f:selectItems value="#{phaseMemberManager.statusOptions}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{stat.name}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{stat.description}" />
+                                </p:column>
+                            </p:selectOneMenu>                            
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="phaseOpt"  value="Optional"  title="Is this phase optional?"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectBooleanCheckbox id="phaseOpt" value="#{phaseMemberManager.inputAction == 'CREATE'? phaseMemberManager.inputEntity.optional : phaseMemberManager.selectedEntity.optional}" 
                                                      required="true" 
                                                      validatorMessage="Value Required" disabled="#{phaseMemberManager.inputAction == 'DELETE'}"/>                            
                         </p:column>

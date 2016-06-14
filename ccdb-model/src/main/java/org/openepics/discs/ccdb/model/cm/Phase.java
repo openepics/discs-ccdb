@@ -57,11 +57,6 @@ public class Phase extends ConfigurationEntity {
     @Column(name = "description")
     private String description;
     
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "logical_value")
-    private Boolean logicalValue = true;
-    
    
     @Basic(optional = false)
     @Column(name = "loc")
@@ -93,13 +88,5 @@ public class Phase extends ConfigurationEntity {
 
     public void setLevelOfCare(LevelOfCare levelOfCare) {
         this.levelOfCare = levelOfCare;
-    }
-
-    public Boolean getLogicalValue() {
-        return logicalValue;
-    }
-
-    public void setLogicalValue(Boolean logicalValue) {
-        this.logicalValue = logicalValue;
     }
 }

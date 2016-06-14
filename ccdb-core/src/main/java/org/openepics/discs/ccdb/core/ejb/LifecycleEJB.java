@@ -181,8 +181,8 @@ public class LifecycleEJB {
         for(PhaseGroupMember pog : assignment.getPhaseGroup().getPhases()) {
             PhaseStatus phaseStatus = new PhaseStatus();
             phaseStatus.setAssignment(assignment);
-            phaseStatus.setPhaseOfGroup(pog);
-            phaseStatus.setStatus(defaultStatusOption(pog.getPhaseGroup()));
+            phaseStatus.setGroupMember(pog);
+            phaseStatus.setStatus(pog.getDefaultStatus());
             em.persist(phaseStatus);
         }
 
@@ -531,30 +531,50 @@ public class LifecycleEJB {
         return em.createNamedQuery("StatusOption.findAll", StatusOption.class).getResultList();
     } 
     
-    
-    
     /**
      * All status options for a type
      * 
      * @param group given status type
      * @return a list of all {@link StatusOption}s.
      */
-    public List<StatusOption> findAllStatusOptions(PhaseGroup group) {
+    public List<StatusOption> findStatusOptions(PhaseGroup group) {
         return em.createNamedQuery("StatusOption.findByGroup", StatusOption.class)
                 .setParameter("group", group)
                 .getResultList();
     } 
     
-    /**
-     * default status option of a group
-     * 
-     * @param group
-     * @return 
+     /**
+     * save a status option
+     *
+     * @param option 
      */
-    public StatusOption defaultStatusOption(PhaseGroup group) {
-        return em.createNamedQuery("StatusOption.findByName",StatusOption.class)
-                .setParameter("name", "No")
-                .getSingleResult();
+    public void saveStatusOption(StatusOption option) {
+        if (option.getId() == null) {
+            em.persist(option);
+        } else {
+            em.merge(option);
+        }
+        LOGGER.log(Level.FINE, "Status Option saved - {0}", option.getId());
+    }
+
+    /**
+     * delete a given process
+     *
+     * @param option
+     */
+    public void deleteStatusOption(StatusOption option) {
+        StatusOption src = em.find(StatusOption.class, option.getId());
+        em.remove(src);
+    }
+
+    /**
+     * find a status type given its id
+     *
+     * @param id
+     * @return the status type
+     */
+    public StatusOption findStatusOption(Long id) {
+        return em.find(StatusOption.class, id);
     }
     //----------------- phase status
     /**
@@ -619,23 +639,4 @@ public class LifecycleEJB {
         return em.find(PhaseStatus.class, id);
     }
     
-    /**
-     * Find status options of a given type
-     * 
-     * @param group
-     * @return 
-     */
-    public List<StatusOption> findStatusOptions(PhaseGroup group) {
-        return em.createNamedQuery("StatusOption.findByGroup", StatusOption.class).setParameter("group",group).getResultList();
-    }  
-    
-    /**
-     * Find status option for a given id
-     * 
-     * @param id
-     * @return 
-     */
-    public StatusOption findStatusOption(Long id) {
-        return em.find(StatusOption.class,id);
-    } 
 }

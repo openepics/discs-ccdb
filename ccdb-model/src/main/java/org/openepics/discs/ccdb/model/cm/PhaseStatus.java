@@ -41,7 +41,7 @@ import org.openepics.discs.ccdb.model.auth.User;
     @NamedQuery(name = "PhaseStatus.findAll", query = "SELECT d FROM PhaseStatus d"),
     @NamedQuery(name = "PhaseStatus.findValid", query = "SELECT d FROM PhaseStatus d"),
 //    @NamedQuery(name = "PhaseStatus.findValid", query = "SELECT d FROM PhaseStatus d WHERE d.assignment.slot is null OR d.assignment.slot.cmGroup is NOT null"),
-    @NamedQuery(name = "PhaseStatus.findByGroup", query = "SELECT d FROM PhaseStatus d WHERE d.phaseOfGroup.phaseGroup = :group"),
+    @NamedQuery(name = "PhaseStatus.findByGroup", query = "SELECT d FROM PhaseStatus d WHERE d.groupMember.phaseGroup = :group"),
     @NamedQuery(name = "PhaseStatus.findByAssignment", query = "SELECT d FROM PhaseStatus d WHERE d.assignment = :assignment")
 })
 public class PhaseStatus extends ConfigurationEntity {
@@ -54,14 +54,14 @@ public class PhaseStatus extends ConfigurationEntity {
     
     
     @ManyToOne(optional = false)
-    @JoinColumn(name = "phaseOfGroup")
-    private PhaseGroupMember phaseOfGroup;
+    @JoinColumn(name = "group_member")
+    private PhaseGroupMember groupMember;
     
     @ManyToOne(optional = true)
     @JoinColumn(name = "assigned_sme")
     private User assignedSME;
     
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "status")
     private StatusOption status;
     
@@ -112,11 +112,11 @@ public class PhaseStatus extends ConfigurationEntity {
         this.comment = comment;
     }
 
-    public PhaseGroupMember getPhaseOfGroup() {
-        return phaseOfGroup;
+    public PhaseGroupMember getGroupMember() {
+        return groupMember;
     }
 
-    public void setPhaseOfGroup(PhaseGroupMember phaseOfGroup) {
-        this.phaseOfGroup = phaseOfGroup;
+    public void setGroupMember(PhaseGroupMember groupMember) {
+        this.groupMember = groupMember;
     }
 }
