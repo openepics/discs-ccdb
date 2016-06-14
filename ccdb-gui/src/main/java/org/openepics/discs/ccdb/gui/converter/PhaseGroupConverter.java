@@ -21,14 +21,14 @@ import org.openepics.discs.ccdb.model.cm.PhaseGroup;
  */
 @Named
 @RequestScoped // Can be ApplicationScoped but have to be careful with state
-public class StatusTypeConverter implements Converter {
+public class PhaseGroupConverter implements Converter {
 
     @EJB private LifecycleEJB lcEJB;
 
     /**
      * Creates a new instance of DeviceConverter
      */
-    public StatusTypeConverter() {
+    public PhaseGroupConverter() {
     }
 
     @Override

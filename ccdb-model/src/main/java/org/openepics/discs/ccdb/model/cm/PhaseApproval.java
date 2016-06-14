@@ -55,7 +55,7 @@ public class PhaseApproval extends ConfigurationEntity {
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "phaseOfGroup")
-    private PhaseOfGroup phaseOfGroup;
+    private PhaseGroupMember phaseOfGroup;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "assigned_approver")
@@ -141,11 +141,11 @@ public class PhaseApproval extends ConfigurationEntity {
         this.status = status;
     }
 
-    public PhaseOfGroup getPhaseOfGroup() {
+    public PhaseGroupMember getPhaseOfGroup() {
         return phaseOfGroup;
     }
 
-    public void setPhaseOfGroup(PhaseOfGroup phaseOfGroup) {
+    public void setPhaseOfGroup(PhaseGroupMember phaseOfGroup) {
         this.phaseOfGroup = phaseOfGroup;
     }
     

@@ -67,7 +67,7 @@ public class PhaseGroup extends ConfigurationEntity {
 //    private List<Phase> phases;
   
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy="phaseGroup")
-    private List<PhaseOfGroup> phases;
+    private List<PhaseGroupMember> phases;
     
     // getters and setters
 
@@ -95,11 +95,11 @@ public class PhaseGroup extends ConfigurationEntity {
         this.options = options;
     }
 
-    public List<PhaseOfGroup> getPhases() {
+    public List<PhaseGroupMember> getPhases() {
         return phases;
     }
 
-    public void setPhases(List<PhaseOfGroup> phases) {
+    public void setPhases(List<PhaseGroupMember> phases) {
         this.phases = phases;
     }
 }

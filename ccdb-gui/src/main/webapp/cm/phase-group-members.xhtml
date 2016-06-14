@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/WEB-INF/template/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"              
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content"> 
+
+        <h:form id="crudForm" > 
+            <p:panel>
+                <h:outputText value="Manage Phase Group Membership" styleClass="heading"/>
+                <p:dataTable id="entityTable" value="#{phaseMemberManager.entities}" var="obj" 
+                             sortMode="multiple"
+                             rowKey="#{obj.id}" selectionMode="single" selection="#{phaseMemberManager.selectedEntity}"                          
+                             filteredValue="#{phaseMemberManager.filteredEntities}"
+                             currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
+                             rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">  
+                    <p:ajax event="rowSelect" listener="#{phaseMemberManager.onRowSelect}" update="commandButtons" />
+                    <p:column headerText="Group" sortBy="#{obj.phaseGroup.name}" 
+                              filterBy="#{obj.phaseGroup.name}" filterMatchMode="contains" > 
+                        <h:outputText value="#{obj.phaseGroup.name}" styleClass="colCenter"/>
+                    </p:column>
+                    <p:column headerText="Phase" sortBy="#{obj.phase.name}" 
+                              filterBy="#{obj.phase.name}" filterMatchMode="contains" >
+                        <h:outputText value="#{obj.phase.name}" styleClass="colCenter"/>
+                    </p:column>
+
+                    <p:column headerText="SME" >
+                        <h:outputText value="#{obj.sme}" styleClass="colCenter"/>
+                    </p:column>
+                    <p:column headerText="Summary" >
+                        <h:outputText value="#{obj.summaryPhase}" styleClass="colCenter"/>
+                    </p:column>
+                    <f:facet name="footer">
+                        <p:toolbar id="commandButtons">
+                            <f:facet name="left">
+                                <p:commandButton title="Add" icon="ui-icon-document" update=":crudInputDlg" process="@this" 
+                                                 actionListener="#{phaseMemberManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}"/>   
+                                <p:commandButton title="Edit" icon="ui-icon-disk" update=":crudInputDlg"  process="@this"                                          
+                                                 actionListener="#{phaseMemberManager.onEditCommand}"
+                                                 oncomplete="PF('crudInputWid').show()" 
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty phaseMemberManager.selectedEntity}"/>
+                                <p:commandButton title="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
+                                                 actionListener="#{phaseMemberManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty phaseMemberManager.selectedEntity}"/>
+                            </f:facet>
+                        </p:toolbar>
+                    </f:facet>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+
+        <p:dialog id="crudInputDlg" widgetVar="crudInputWid">
+            <h:form id="objectInputForm">              
+                <p:panelGrid>
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column colspan="2">
+                                <h:outputText value="New Process" rendered="#{phaseMemberManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update Existing Process" rendered="#{phaseMemberManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete Process" rendered="#{phaseMemberManager.inputAction == 'DELETE'}"/>
+                            </p:column>                
+                        </p:row>
+                    </f:facet>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="phaseGrp" value="Name"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="phaseGrp" var="grp" converter="#{phaseGroupConverter}"
+                                             filter="true"
+                                             value="#{phaseMemberManager.inputAction == 'CREATE'? phaseMemberManager.inputEntity.phaseGroup : phaseMemberManager.selectedEntity.phaseGroup}"                                            
+                                             disabled="#{phaseMemberManager.inputAction == 'DELETE'}">                            
+                                <f:selectItems value="#{phaseMemberManager.phaseGroups}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{grp.name}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{grp.description}" />
+                                </p:column>
+                            </p:selectOneMenu>                              
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="phase"  value="Phase" />
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="phase" var="grp" converter="#{phaseConverter}"
+                                             filter="true"
+                                             value="#{phaseMemberManager.inputAction == 'CREATE'? phaseMemberManager.inputEntity.phase : phaseMemberManager.selectedEntity.phase}"                                            
+                                             disabled="#{phaseMemberManager.inputAction == 'DELETE'}">
+
+                                <f:selectItems value="#{phaseMemberManager.phases}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{grp.name}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{grp.description}" />
+                                </p:column>
+                            </p:selectOneMenu>                            
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="smeInp"  value="SME" />
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="smeInp" var="role" converter="#{roleConverter}"
+                                             filter="true"
+                                             value="#{phaseMemberManager.inputAction == 'CREATE'? phaseMemberManager.inputEntity.sme : phaseMemberManager.selectedEntity.sme}"                                            
+                                             disabled="#{phaseMemberManager.inputAction == 'DELETE'}">
+
+                                <f:selectItems value="#{phaseMemberManager.roles}" var="b" itemLabel="#{b.roleId}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{role.roleId}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{role.description}" />
+                                </p:column>
+                            </p:selectOneMenu>                            
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="phaseSum"  value="Summary Phase" />
+                        </p:column>
+                        <p:column>
+                            <p:selectBooleanCheckbox id="phaseSum" value="#{phaseMemberManager.inputAction == 'CREATE'? phaseMemberManager.inputEntity.summaryPhase : phaseMemberManager.selectedEntity.summaryPhase}" 
+                                                     required="true" 
+                                                     validatorMessage="Value Required" disabled="#{phaseMemberManager.inputAction == 'DELETE'}"/>                            
+                        </p:column>
+                    </p:row>
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
+                                                 onclick="PF('crudInputWid').hide()"/>
+                                <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
+                                                 action="#{phaseMemberManager.saveEntity()}"  
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{phaseMemberManager.inputAction != 'DELETE'}"/>
+                                <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"
+                                                 action="#{phaseMemberManager.deleteEntity()}" 
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form" update=":crudForm:entityTable" rendered="#{phaseMemberManager.inputAction == 'DELETE'}"/>                                
+                            </p:column>                
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define> 
+</ui:composition>

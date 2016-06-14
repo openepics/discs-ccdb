@@ -58,13 +58,13 @@ import org.primefaces.event.SelectEvent;
 
 @Named
 @ViewScoped
-public class StatusTypeManager implements Serializable {
+public class PhaseGroupManager implements Serializable {
 //    @EJB
 //    private AuthEJB authEJB;
     @EJB
     private LifecycleEJB lcEJB;
             
-    private static final Logger LOGGER = Logger.getLogger(StatusTypeManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(PhaseGroupManager.class.getName());
 //    @Inject
 //    UserSession userSession;
       
@@ -75,7 +75,7 @@ public class StatusTypeManager implements Serializable {
     private InputAction inputAction;
     
     
-    public StatusTypeManager() {
+    public PhaseGroupManager() {
     }
     
     @PostConstruct

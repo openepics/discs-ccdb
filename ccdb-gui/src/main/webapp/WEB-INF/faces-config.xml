@@ -75,11 +75,7 @@
             <to-view-id>/cm/phases.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-        <navigation-case>
-            <from-outcome>statustypes</from-outcome>
-            <to-view-id>/cm/status-type.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
+        
          
         <navigation-case>
             <from-outcome>properties</from-outcome>

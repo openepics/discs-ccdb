@@ -55,7 +55,7 @@ public class PhaseStatus extends ConfigurationEntity {
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "phaseOfGroup")
-    private PhaseOfGroup phaseOfGroup;
+    private PhaseGroupMember phaseOfGroup;
     
     @ManyToOne(optional = true)
     @JoinColumn(name = "assigned_sme")
@@ -112,11 +112,11 @@ public class PhaseStatus extends ConfigurationEntity {
         this.comment = comment;
     }
 
-    public PhaseOfGroup getPhaseOfGroup() {
+    public PhaseGroupMember getPhaseOfGroup() {
         return phaseOfGroup;
     }
 
-    public void setPhaseOfGroup(PhaseOfGroup phaseOfGroup) {
+    public void setPhaseOfGroup(PhaseGroupMember phaseOfGroup) {
         this.phaseOfGroup = phaseOfGroup;
     }
 }

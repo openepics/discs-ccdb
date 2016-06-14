@@ -30,7 +30,7 @@ import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
 import org.openepics.discs.ccdb.model.cm.PhaseStatus;
 import org.openepics.discs.ccdb.model.cm.PhaseGroup;
-import org.openepics.discs.ccdb.model.cm.PhaseOfGroup;
+import org.openepics.discs.ccdb.model.cm.PhaseGroupMember;
 import org.openepics.discs.ccdb.model.cm.SlotGroup;
 import org.openepics.discs.ccdb.model.cm.StatusOption;
 
@@ -178,7 +178,7 @@ public class LifecycleEJB {
             em.merge(assignment);
         }
         
-        for(PhaseOfGroup pog : assignment.getPhaseGroup().getPhases()) {
+        for(PhaseGroupMember pog : assignment.getPhaseGroup().getPhases()) {
             PhaseStatus phaseStatus = new PhaseStatus();
             phaseStatus.setAssignment(assignment);
             phaseStatus.setPhaseOfGroup(pog);
@@ -457,6 +457,61 @@ public class LifecycleEJB {
         return em.find(PhaseGroup.class, id);
     }
     
+    // ------------------------------------
+    // ------------------ Phase Group Members
+    /**
+     * All groups
+     * 
+     * @return a list of all {@link Phase}s ordered by name.
+     */
+    public List<PhaseGroupMember> findAllPhaseGroupMembers() {
+        return em.createNamedQuery("PhaseGroupMember.findAll", PhaseGroupMember.class).getResultList();
+    } 
+    
+    /**
+     * PHase type 
+     * 
+     * @param group
+     * @return a list of all {@link Phase}s ordered by name.
+     */
+    public PhaseGroupMember findPhaseGroupMember(PhaseGroup group) {
+        return em.createNamedQuery("PhaseGroupMember.findByGroup", PhaseGroupMember.class).setParameter("group", group).getSingleResult();
+    } 
+    
+    /**
+     * save a status type
+     *
+     * @param group type
+     */
+    public void savePhaseGroupMember(PhaseGroupMember group) {
+        if (group.getId() == null) {
+            em.persist(group);
+        } else {
+            em.merge(group);
+        }
+        LOGGER.log(Level.FINE, "phase group member saved - {0}", group.getId());
+    }
+
+    /**
+     * delete a given process
+     *
+     * @param group
+     */
+    public void deletePhaseGroupMember(PhaseGroupMember group) {
+        PhaseGroupMember src = em.find(PhaseGroupMember.class, group.getId());
+        em.remove(src);
+    }
+
+    /**
+     * find a status type given its id
+     *
+     * @param id
+     * @return the status type
+     */
+    public PhaseGroupMember findPhaseGroupMember(Long id) {
+        return em.find(PhaseGroupMember.class, id);
+    }
+    // ------------------------------------
     /**
      * All groups
      * 

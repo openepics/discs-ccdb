@@ -8,7 +8,7 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content"> 
-        
+
         <h:form id="crudForm" > 
             <p:panel>
                 <h:outputText value="Manage Phases" styleClass="heading"/>
@@ -29,7 +29,10 @@
                               filterBy="#{obj.description}" filterMatchMode="contains" >
                         <h:outputText value="#{obj.description}" styleClass="colCenter"/>
                     </p:column>
-                    
+                    <p:column headerText="Logical" >
+                        <h:outputText value="#{obj.logicalValue}" styleClass="colCenter"/>
+                    </p:column>
+
                     <p:column headerText="LoC" sortBy="#{obj.levelOfCare}"  
                               filterBy="#{obj.levelOfCare}" filterMatchMode="contains" >
                         <h:outputText value="#{obj.levelOfCare}" styleClass="colCenter"/>
@@ -87,28 +90,16 @@
                                          validatorMessage="Description required" disabled="#{phaseManager.inputAction == 'DELETE'}"/>                            
                         </p:column>
                     </p:row>
-
-                 
-                    
-<!--                    <p:row>
+                    <p:row>
                         <p:column>
-                            <p:outputLabel for="statType"  value="Type" />
+                            <p:outputLabel for="phaseLogic"  value="Logical Value" />
                         </p:column>
                         <p:column>
-                            <p:selectOneMenu id="statType" var="type" converter="#{statusTypeConverter}"
-                                             filter="true"
-                                             value="#{phaseManager.inputAction == 'CREATE'? phaseManager.inputEntity.statusType : phaseManager.selectedEntity.statusType}"                                            
-                                             disabled="#{phaseManager.inputAction == 'DELETE'}">
-                                <f:selectItems value="#{phaseManager.statusTypes}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
-                                <p:column>
-                                    <h:outputText value="#{type.name}" />
-                                </p:column>
-                                <p:column>
-                                    <h:outputText value="#{type.description}" />
-                                </p:column>
-                            </p:selectOneMenu>                                                      
+                            <p:selectBooleanCheckbox id="phaseLogic" value="#{phaseManager.inputAction == 'CREATE'? phaseManager.inputEntity.logicalValue : phaseManager.selectedEntity.logicalValue}" 
+                                                     required="true" 
+                                                     validatorMessage="Description required" disabled="#{phaseManager.inputAction == 'DELETE'}"/>                            
                         </p:column>
-                    </p:row>-->
+                    </p:row>
                     
                     <p:row>
                         <p:column>
@@ -117,12 +108,12 @@
                         <p:column>
                             <p:selectOneMenu id="procLoC" 
                                              value="#{phaseManager.inputAction == 'CREATE'? phaseManager.inputEntity.levelOfCare : phaseManager.selectedEntity.levelOfCare}"                                   
-                                            disabled="#{phaseManager.inputAction == 'DELETE'}">
+                                             disabled="#{phaseManager.inputAction == 'DELETE'}">
                                 <f:selectItems value="#{baseDataManager.levelOfCares}"/>                               
                             </p:selectOneMenu>                            
                         </p:column>
                     </p:row>
-                    
+
                     <f:facet name="footer">
                         <p:row>
                             <p:column colspan="2">

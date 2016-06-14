@@ -16,12 +16,15 @@
 
 package org.openepics.discs.ccdb.model.cm;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
 import org.openepics.discs.ccdb.model.auth.Role;
@@ -32,15 +35,15 @@ import org.openepics.discs.ccdb.model.auth.Role;
  * @author <a href="mailto:vuppala@frib.msu.edu">Vasu Vuppala</a>
  */
 @Entity
-@Table(name = "cm_phase_of_group")
+@Table(name = "cm_phasegroup_member")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PhaseOfGroup.findAll", query = "SELECT d FROM PhaseOfGroup d"),
-    @NamedQuery(name = "PhaseOfGroup.findByPhase", query = "SELECT d FROM PhaseOfGroup d WHERE d.phase = :phase"),
-    @NamedQuery(name = "PhaseOfGroup.findPhasesByGroup", query = "SELECT d.phase FROM PhaseOfGroup d WHERE d.phaseGroup = :group"),
-    @NamedQuery(name = "PhaseOfGroup.findByGroup", query = "SELECT d FROM PhaseOfGroup d WHERE d.phaseGroup = :group")
+    @NamedQuery(name = "PhaseGroupMember.findAll", query = "SELECT d FROM PhaseGroupMember d"),
+    @NamedQuery(name = "PhaseGroupMember.findByPhase", query = "SELECT d FROM PhaseGroupMember d WHERE d.phase = :phase"),
+    @NamedQuery(name = "PhaseGroupMember.findPhasesByGroup", query = "SELECT d.phase FROM PhaseGroupMember d WHERE d.phaseGroup = :group"),
+    @NamedQuery(name = "PhaseGroupMember.findByGroup", query = "SELECT d FROM PhaseGroupMember d WHERE d.phaseGroup = :group")
 })
-public class PhaseOfGroup extends ConfigurationEntity {
+public class PhaseGroupMember extends ConfigurationEntity {
 
     private static final long serialVersionUID = 1L;
     
@@ -55,6 +58,12 @@ public class PhaseOfGroup extends ConfigurationEntity {
     @ManyToOne(optional = true)
     @JoinColumn(name = "sme")
     private Role sme;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "summary_phase")
+    private Boolean summaryPhase = false;
+    
     // --
 
     public Phase getPhase() {
@@ -80,4 +89,14 @@ public class PhaseOfGroup extends ConfigurationEntity {
     public void setSme(Role sme) {
         this.sme = sme;
     }
+
+    public Boolean getSummaryPhase() {
+        return summaryPhase;
+    }
+
+    public void setSummaryPhase(Boolean summaryPhase) {
+        this.summaryPhase = summaryPhase;
+    }
+    
+    
 }

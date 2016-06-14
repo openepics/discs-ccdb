@@ -157,7 +157,7 @@
                             <p:outputLabel for="procList" value="#{assignmentManager.selectedType}"/>
                         </p:column>
                         <p:column>
-                            <p:selectOneMenu id="procList" var="proc" converter="#{statusTypeConverter}"
+                            <p:selectOneMenu id="procList" var="proc" converter="#{phaseGroupConverter}"
                                              filter="true"
                                              value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputEntity.phaseGroup : assignmentManager.selectedEntity.phaseGroup}"                                            
                                              disabled="#{assignmentManager.inputAction == 'DELETE'}">
