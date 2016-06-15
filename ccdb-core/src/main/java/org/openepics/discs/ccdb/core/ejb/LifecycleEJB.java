@@ -65,7 +65,7 @@ public class LifecycleEJB {
      * @return a list of all {@link Phase}s ordered by name.
      */
     public List<Phase> findPhases(PhaseGroup group) {
-        return em.createNamedQuery("PhaseOfGroup.findPhasesByGroup", Phase.class).setParameter("group", group).getResultList();
+        return em.createNamedQuery("PhaseGroupMember.findPhasesByGroup", Phase.class).setParameter("group", group).getResultList();
     }
     
     
@@ -512,15 +512,7 @@ public class LifecycleEJB {
         return em.find(PhaseGroupMember.class, id);
     }
     // ------------------------------------
-    /**
-     * All groups
-     * 
-     * @param group
-     * @return a list of all {@link Phase}s ordered by name.
-     */
-//    public List<PhaseOfGroup> findAllPhaseOfGroups(PhaseGroup group) {
-//        return em.createNamedQuery("PhaseOfGroup.findByGroup", PhaseOfGroup.class).setParameter("group", group).getResultList();
-//    }
+  
     
     /**
      * All status options

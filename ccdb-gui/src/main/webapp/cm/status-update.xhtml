@@ -18,13 +18,14 @@
                 <p:dataTable var="stat" id="entityTable" value="#{statusManager.entities}" 
                              emptyMessage="No records found." 
                              rowKey="#{stat.id}" 
-                             selection="#{statusManager.selectedApprovals}"
+                             selection="#{statusManager.selectedEntities}"
                              resizableColumns="true" filteredValue="#{statusManager.filteredEntities}" 
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
                              rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">   
 
                     <p:ajax event="rowSelectCheckbox" listener="#{statusManager.onRowSelect}" update="commandButtons" />
+                    <p:ajax event="toggleSelect"  update="commandButtons" />
                     <p:column selectionMode="multiple" style="width:16px;text-align:center" />
                     <p:column headerText="Group" sortBy="#{stat.assignment.slotGroup.name}" filterBy="#{stat.assignment.slotGroup.name}"
                               filterMatchMode="contains" >
@@ -38,8 +39,8 @@
                               filterMatchMode="contains" >
                         <h:outputText value="#{stat.assignment.device.serialNumber}" />
                     </p:column>
-                    <p:column headerText="Phase" sortBy="#{stat.phaseOfGroup.phase.name}"  filterBy="#{stat.phaseOfGroup.phase.name}" >
-                        <h:outputText value="#{stat.phaseOfGroup.phase.name}" />
+                    <p:column headerText="Phase" sortBy="#{stat.groupMember.phase.name}"  filterBy="#{stat.groupMember.phase.name}" >
+                        <h:outputText value="#{stat.groupMember.phase.name}" />
                     </p:column>
 
                     <p:column headerText="Requestor" sortBy="#{stat.assignment.requestor.name}" filterBy="#{stat.assignment.requestor.name}"
@@ -68,13 +69,13 @@
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">
-                                <p:commandButton title="Modify"  value="Modify" icon="ui-icon-document" update=":crudInputDlg" process="@this" 
+                                <p:commandButton title="Modify"  value="Modify" icon="ui-icon-document" update=":crudInputDlg" process="@(form)" 
                                                  actionListener="#{statusManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"
-                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty statusManager.selectedApprovals}" />   
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty statusManager.selectedEntities}" />   
          
                                 <p:commandButton title="Delete" value="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
                                                  actionListener="#{statusManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
-                                                 disabled="#{true or empty statusManager.selectedApprovals}"/>
+                                                 disabled="#{true or empty statusManager.selectedEntities}"/>
                             </f:facet>
                         </p:toolbar>
                     </f:facet>
@@ -82,7 +83,7 @@
             </p:panel>
         </h:form>
 
-        <p:dialog id="crudInputDlg" widgetVar="crudInputWid">
+        <p:dialog id="crudInputDlg" widgetVar="crudInputWid" >
             <h:form id="objectInputForm" >              
                 <p:panelGrid >
                     <f:facet name="header">
@@ -100,16 +101,12 @@
                             <p:outputLabel for="status" value="Status"/>
                         </p:column>
                         <p:column>
-                            <p:selectOneMenu id="status" var="opt" converter="#{statusOptionConverter}"
-                                             filter="true"
+                            <p:selectOneMenu id="status"  converter="#{statusOptionConverter}"
+                                             
                                              value="#{statusManager.inputStatus}" >
-                                <f:selectItems value="#{statusManager.statusOptions}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
-                                <p:column>
-                                    <h:outputText value="#{opt.name}" />
-                                </p:column>
-                                <p:column>
-                                    <h:outputText value="#{opt.description}" />
-                                </p:column>
+                                <f:selectItem itemLabel="NR: Not Required" itemValue="#{null}" rendered="#{statusManager.allPhasesOptional}" />
+                                <f:selectItems value="#{statusManager.statusOptions}" var="b" itemLabel="#{b.name}: #{b.description}" itemValue="#{b}" />
+                                
                             </p:selectOneMenu>                                                    
                         </p:column>
                     </p:row>

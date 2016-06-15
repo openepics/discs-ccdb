@@ -12,44 +12,43 @@
         <h:form id="crudForm" > 
             <p:panel>
                 <h:outputText value="Manage Phases" styleClass="heading"/>
-                <p:dataTable id="entityTable" value="#{phaseManager.entities}" var="obj" 
+                <p:dataTable id="entityTable" value="#{statusOptionManager.entities}" var="obj" 
                              sortMode="multiple"
-                             rowKey="#{obj.id}" selectionMode="single" selection="#{phaseManager.selectedEntity}"                          
-                             filteredValue="#{phaseManager.filteredEntities}"
+                             rowKey="#{obj.id}" selectionMode="single" selection="#{statusOptionManager.selectedEntity}"                          
+                             filteredValue="#{statusOptionManager.filteredEntities}"
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
                              rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">  
 
-                    <p:ajax event="rowSelect" listener="#{phaseManager.onRowSelect}" update="commandButtons" />
+                    <p:ajax event="rowSelect" listener="#{statusOptionManager.onRowSelect}" update="commandButtons" />
+                    <p:column headerText="Logical" sortBy="#{obj.phaseGroup.name}" 
+                              filterBy="#{obj.phaseGroup.name}" filterMatchMode="contains">
+                        <h:outputText value="#{obj.phaseGroup.name}" styleClass="colCenter"/>
+                    </p:column>
                     <p:column headerText="Name" sortBy="#{obj.name}" 
                               filterBy="#{obj.name}" filterMatchMode="contains" > 
                         <h:outputText value="#{obj.name}" styleClass="colCenter"/>
                     </p:column>
-                    <p:column headerText="Description" sortBy="#{obj.description}" 
-                              filterBy="#{obj.description}" filterMatchMode="contains" >
+                    <p:column headerText="Description" >
                         <h:outputText value="#{obj.description}" styleClass="colCenter"/>
                     </p:column>
+
                     <p:column headerText="Logical" >
                         <h:outputText value="#{obj.logicalValue}" styleClass="colCenter"/>
-                    </p:column>
-
-                    <p:column headerText="LoC" sortBy="#{obj.levelOfCare}"  
-                              filterBy="#{obj.levelOfCare}" filterMatchMode="contains" >
-                        <h:outputText value="#{obj.levelOfCare}" styleClass="colCenter"/>
                     </p:column>
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">
                                 <p:commandButton title="Add" icon="ui-icon-document" update=":crudInputDlg" process="@this" 
-                                                 actionListener="#{phaseManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"
+                                                 actionListener="#{statusOptionManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"
                                                  disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}"/>   
                                 <p:commandButton title="Edit" icon="ui-icon-disk" update=":crudInputDlg"  process="@this"                                          
-                                                 actionListener="#{phaseManager.onEditCommand}"
+                                                 actionListener="#{statusOptionManager.onEditCommand}"
                                                  oncomplete="PF('crudInputWid').show()" 
-                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty phaseManager.selectedEntity}"/>
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty statusOptionManager.selectedEntity}"/>
                                 <p:commandButton title="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
-                                                 actionListener="#{phaseManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
-                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty phaseManager.selectedEntity}"/>
+                                                 actionListener="#{statusOptionManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty statusOptionManager.selectedEntity}"/>
                             </f:facet>
                         </p:toolbar>
                     </f:facet>
@@ -57,26 +56,47 @@
             </p:panel>
         </h:form>
 
-        <p:dialog id="crudInputDlg" widgetVar="crudInputWid">
-            <h:form id="objectInputForm" rendered="#{phaseManager.inputAction != 'READ'}">              
+        <p:dialog id="crudInputDlg" widgetVar="crudInputWid" dynamic="true">
+            <h:form id="objectInputForm" rendered="#{statusOptionManager.inputAction != 'READ'}">              
                 <p:panelGrid>
                     <f:facet name="header">
                         <p:row>
                             <p:column colspan="2">
-                                <h:outputText value="New Phase" rendered="#{phaseManager.inputAction == 'CREATE'}"/>
-                                <h:outputText value="Update Existing Phase" rendered="#{phaseManager.inputAction == 'UPDATE'}"/>
-                                <h:outputText value="Delete Phase" rendered="#{phaseManager.inputAction == 'DELETE'}"/>
+                                <h:outputText value="New Status" rendered="#{statusOptionManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update Existing Status" rendered="#{statusOptionManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete Status" rendered="#{statusOptionManager.inputAction == 'DELETE'}"/>
                             </p:column>                
                         </p:row>
                     </f:facet>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="phaseGrp" value="Name"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="phaseGrp" var="grp" converter="#{phaseGroupConverter}"
+                                             filter="true"
+                                             value="#{statusOptionManager.inputAction == 'CREATE'? statusOptionManager.inputEntity.phaseGroup : statusOptionManager.selectedEntity.phaseGroup}"                                            
+                                             disabled="#{statusOptionManager.inputAction == 'DELETE'}">  
+                                
+                                <f:selectItems value="#{statusOptionManager.phaseGroups}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{grp.name}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{grp.description}" />
+                                </p:column>
+                            </p:selectOneMenu>                              
+                        </p:column>
+                    </p:row>
                     <p:row>
                         <p:column>
                             <p:outputLabel for="procName" value="Name"/>
                         </p:column>
                         <p:column>
-                            <p:inputText id="procName" value="#{phaseManager.inputAction == 'CREATE'? phaseManager.inputEntity.name: phaseManager.selectedEntity.name}" 
+                            <p:inputText id="procName" value="#{statusOptionManager.inputAction == 'CREATE'? statusOptionManager.inputEntity.name: statusOptionManager.selectedEntity.name}" 
                                          required="true" 
-                                         validatorMessage="Name required" disabled="#{phaseManager.inputAction == 'DELETE'}"/>                             
+                                         validatorMessage="Name required" disabled="#{statusOptionManager.inputAction == 'DELETE'}"/>                             
                         </p:column>
                     </p:row>
 
@@ -85,9 +105,9 @@
                             <p:outputLabel for="procDesc"  value="Description" />
                         </p:column>
                         <p:column>
-                            <p:inputText id="procDesc" value="#{phaseManager.inputAction == 'CREATE'? phaseManager.inputEntity.description : phaseManager.selectedEntity.description}" 
+                            <p:inputText id="procDesc" value="#{statusOptionManager.inputAction == 'CREATE'? statusOptionManager.inputEntity.description : statusOptionManager.selectedEntity.description}" 
                                          required="true" 
-                                         validatorMessage="Description required" disabled="#{phaseManager.inputAction == 'DELETE'}"/>                            
+                                         validatorMessage="Description required" disabled="#{statusOptionManager.inputAction == 'DELETE'}"/>                            
                         </p:column>
                     </p:row>
                     <p:row>
@@ -95,24 +115,12 @@
                             <p:outputLabel for="phaseLogic"  value="Logical Value" />
                         </p:column>
                         <p:column>
-                            <p:selectBooleanCheckbox id="phaseLogic" value="#{phaseManager.inputAction == 'CREATE'? phaseManager.inputEntity.logicalValue : phaseManager.selectedEntity.logicalValue}" 
+                            <p:selectBooleanCheckbox id="phaseLogic" value="#{statusOptionManager.inputAction == 'CREATE'? statusOptionManager.inputEntity.logicalValue : statusOptionManager.selectedEntity.logicalValue}" 
                                                      required="true" 
-                                                     validatorMessage="Description required" disabled="#{phaseManager.inputAction == 'DELETE'}"/>                            
+                                                     validatorMessage="Description required" disabled="#{statusOptionManager.inputAction == 'DELETE'}"/>                            
                         </p:column>
                     </p:row>
                     
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="procLoC"  value="Level of Care" />
-                        </p:column>
-                        <p:column>
-                            <p:selectOneMenu id="procLoC" 
-                                             value="#{phaseManager.inputAction == 'CREATE'? phaseManager.inputEntity.levelOfCare : phaseManager.selectedEntity.levelOfCare}"                                   
-                                             disabled="#{phaseManager.inputAction == 'DELETE'}">
-                                <f:selectItems value="#{baseDataManager.levelOfCares}"/>                               
-                            </p:selectOneMenu>                            
-                        </p:column>
-                    </p:row>
 
                     <f:facet name="footer">
                         <p:row>
@@ -120,13 +128,13 @@
                                 <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
                                                  onclick="PF('crudInputWid').hide()"/>
                                 <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
-                                                 action="#{phaseManager.saveEntity()}"  
+                                                 action="#{statusOptionManager.saveEntity()}"  
                                                  oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
-                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{phaseManager.inputAction != 'DELETE'}"/>
+                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{statusOptionManager.inputAction != 'DELETE'}"/>
                                 <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"
-                                                 action="#{phaseManager.deleteEntity()}" 
+                                                 action="#{statusOptionManager.deleteEntity()}" 
                                                  oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
-                                                 process="@form" update=":crudForm:entityTable" rendered="#{phaseManager.inputAction == 'DELETE'}"/>                                
+                                                 process="@form" update=":crudForm:entityTable" rendered="#{statusOptionManager.inputAction == 'DELETE'}"/>                                
                             </p:column>                
                         </p:row>
                     </f:facet>

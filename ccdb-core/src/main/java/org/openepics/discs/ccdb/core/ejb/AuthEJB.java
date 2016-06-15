@@ -63,4 +63,8 @@ public class AuthEJB extends DAO<Role> {
     public User findUser(String userid) {
         return em.find(User.class, userid);
     }
+    
+    public Role findRole(String roleid) {
+        return em.find(Role.class, roleid);
+    }
 }

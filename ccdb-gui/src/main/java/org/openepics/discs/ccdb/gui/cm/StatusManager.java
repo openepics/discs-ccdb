@@ -18,6 +18,7 @@ import com.google.common.base.Preconditions;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -86,8 +87,9 @@ public class StatusManager implements Serializable {
     private StatusOption inputStatus;
     private String selectedType;
     private String inputComment;
+    private Boolean allPhasesOptional = false;
 
-    private List<PhaseStatus> selectedApprovals;
+    private List<PhaseStatus> selectedEntities;
 
     public StatusManager() {
     }
@@ -136,9 +138,25 @@ public class StatusManager implements Serializable {
         // Utility.showMessage(FacesMessage.SEVERITY_INFO, "Role Selected", "");
     }
 
+    /**
+     * Are all the selected group members optional?
+     * 
+     * @return 
+     */
+    private boolean allPhasesOptional() {
+        LOGGER.log(Level.INFO, "get all optional", "enter");
+        for (PhaseStatus status: selectedEntities) {
+            LOGGER.log(Level.INFO, "checking {0}", status.getGroupMember().getPhase().getName());
+            if (status.getGroupMember().getOptional() == false) return false;
+        }
+        return true;
+    }
+    
     public void onAddCommand(ActionEvent event) {
         inputEntity = new PhaseStatus();
         inputAction = InputAction.CREATE;
+        allPhasesOptional = allPhasesOptional();
+        LOGGER.log(Level.INFO, "allphaseOptional {0}", allPhasesOptional);
     }
 
     public void onEditCommand(ActionEvent event) {
@@ -181,9 +199,25 @@ public class StatusManager implements Serializable {
         }
     }
 
+    private boolean inputValid() {
+        boolean allpass = true;
+        
+        for (PhaseStatus status : selectedEntities) {
+                if (status.getGroupMember().getOptional() == false && status.getStatus() == null) {
+                 UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Update Failed", 
+                         status.getGroupMember().getPhase().getName() + " cannot be NR");
+                 return false;
+                }
+//                if (status.getStatus().getLogicalValue() == false) {
+//                    allpass = false;
+//                }
+            }
+        return true;
+    }
+    
     public void onApprove() {
         try {
-            Preconditions.checkNotNull(selectedApprovals);
+            Preconditions.checkNotNull(selectedEntities);
             String userId = securityPolicy.getUserId();
             if (userId == null) {
                 UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Update Failed",
@@ -193,7 +227,7 @@ public class StatusManager implements Serializable {
             }
             User user = new User(userId);
 
-            for (PhaseStatus selectedApproval : selectedApprovals) {
+            for (PhaseStatus selectedApproval : selectedEntities) {
                 if (selectedApproval.getAssignedSME() != null && !selectedApproval.getAssignedSME().equals(user)) {
                     UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Update Failed",
                             "You are not assigned to one or more of the selected assignments.");
@@ -202,7 +236,7 @@ public class StatusManager implements Serializable {
                 }
             }
 
-            for (PhaseStatus selectedApproval : selectedApprovals) {
+            for (PhaseStatus selectedApproval : selectedEntities) {
                 selectedApproval.setModifiedAt(new Date());
                 selectedApproval.setModifiedBy(user.getUserId());
                 selectedApproval.setStatus(inputStatus);
@@ -224,7 +258,7 @@ public class StatusManager implements Serializable {
 
     public void onDisapprove() {
         try {
-            Preconditions.checkNotNull(selectedApprovals);
+            Preconditions.checkNotNull(selectedEntities);
             String userId = securityPolicy.getUserId();
             if (userId == null) {
                 UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
@@ -233,7 +267,7 @@ public class StatusManager implements Serializable {
                 return;
             }
             User user = new User(userId);
-            for (PhaseStatus selectedApproval : selectedApprovals) {
+            for (PhaseStatus selectedApproval : selectedEntities) {
                 selectedApproval.setModifiedAt(new Date());
                 selectedApproval.setModifiedBy(user.getUserId());
                 lcEJB.savePhaseStatus(selectedApproval);
@@ -282,14 +316,13 @@ public class StatusManager implements Serializable {
         this.selectedEntity = selectedEntity;
     }
 
-    public List<PhaseStatus> getSelectedApprovals() {
-        return selectedApprovals;
+    public List<PhaseStatus> getSelectedEntities() {
+        return selectedEntities;
     }
 
-    public void setSelectedApprovals(List<PhaseStatus> selectedApprovals) {
-        this.selectedApprovals = selectedApprovals;
+    public void setSelectedEntities(List<PhaseStatus> selectedEntities) {
+        this.selectedEntities = selectedEntities;
     }
-    
 
     public StatusOption getInputStatus() {
         return inputStatus;
@@ -319,4 +352,9 @@ public class StatusManager implements Serializable {
         this.selectedType = selectedType;
     }
 
+    public Boolean getAllPhasesOptional() {
+        return allPhasesOptional;
+    }
+
+    
 }

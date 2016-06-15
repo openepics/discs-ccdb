@@ -1,21 +1,21 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:rc="http://java.sun.com/jsf/composite/comps"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:rc="http://java.sun.com/jsf/composite/comps"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
     <h:form id="menuform">
         <script type="text/javascript">
-        // <![CDATA[
-        function templateDownloadStart() {
-            PF('statusDialog').show();
-        }
-        function templateDownloadStop() {
-            PF('statusDialog').hide();
-        }
-        // ]]>
+            // <![CDATA[
+            function templateDownloadStart() {
+                PF('statusDialog').show();
+            }
+            function templateDownloadStop() {
+                PF('statusDialog').hide();
+            }
+            // ]]>
         </script>
 
         <p:growl id="menumsgs" showDetail="true" />
@@ -27,13 +27,13 @@
                 <p:menuitem value="Device Search" icon="fa fa-cogs" outcome="device"  rendered="false"/>
                 <p:menuitem value="Device List" icon="fa fa-cogs" outcome="devicelist" />
             </p:submenu>
-            
+
             <p:submenu label="Slots" icon="fa  fa-server">
                 <p:menuitem value="Slot Tree" icon="fa  fa-server" outcome="slottree" />
                 <p:menuitem value="Slot List" icon="fa  fa-server" outcome="slotlist" />
                 <p:menuitem value="Manage Slots" icon="fa  fa-server" outcome="slotmanage" />
             </p:submenu>
-            
+
             <p:submenu label="Racks" icon="fa  fa-building-o">
                 <p:menuitem value="Rack Layout" icon="fa  fa-building-o" outcome="racklayout" />
                 <p:menuitem value="Rack List" icon="fa  fa-building-o" outcome="racklist" />
@@ -47,33 +47,33 @@
                     <p:menuitem value="BPMs in FE" icon="fa  fa-pagelines" outcome="home"  disabled="true"/>
                 </p:submenu>
             </p:submenu>
-            
+
             <p:submenu label="Reports" icon="fa  fa-line-chart ">
                 <p:menuitem value="Differential Report" icon="fa  fa-line-chart " outcome="diffreport" />             
                 <p:menuitem value="Approval Status" icon="fa  fa-line-chart " outcome="statusreport"/>
                 <p:menuitem value="Slot Status Report" icon="fa  fa-line-chart o" outcome="slotreport" />
             </p:submenu>
-            
+
             <p:submenu label="Device Types" icon="fa fa-tablet">
                 <p:menuitem value="Device Type List" icon="fa fa-tablet" outcome="device-types" />
             </p:submenu>
-                      
+
             <p:submenu label="Properties" icon="fa fa-connectdevelop">
                 <p:menuitem value="Property List" icon="fa fa-connectdevelop" outcome="properties" />
             </p:submenu>         
-            
+
             <p:submenu label="Base" icon="fa fa-database">
                 <p:menuitem value="Audit Log" icon="fa fa-database" outcome="log" />
                 <p:menuitem value="Enumerations" icon="fa fa-database" outcome="enums" />                              
                 <p:menuitem value="Units" icon="fa fa-database" outcome="units" />
             </p:submenu>
-                      
-             <p:submenu label="Checklists" icon="fa fa-list-alt">                              
-                    <p:menuitem value="Assignments" icon="fa fa-list-alt" url="/cm/assignments.xhtml?type=checklist" />   
-                    <p:menuitem value="Status Update" icon="fa fa-list-alt" url="/cm/status.xhtml?type=checklist" />
-                    <p:menuitem value="Slot Group" icon="fa fa-list-alt" url="/cm/slots.xhtml" />
-                    <p:menuitem value="Status Report" icon="fa fa-list-alt" url="/cm/status-report.xhtml?type=checklist" />
-                </p:submenu>
+
+            <p:submenu label="Checklists" icon="fa fa-list-alt">                              
+                <p:menuitem value="Assignments" icon="fa fa-list-alt" url="/cm/assignments.xhtml?type=Slot-Checklist" />   
+                <p:menuitem value="Status Update" icon="fa fa-list-alt" url="/cm/status-update.xhtml?type=Slot-Checklist" />
+                <p:menuitem value="Slot Group" icon="fa fa-list-alt" url="/cm/slots.xhtml" />
+                <p:menuitem value="Status Report" icon="fa fa-list-alt" url="/cm/status-report.xhtml?type=Slot-Checklist" />
+            </p:submenu>
             <p:submenu id="cm" label="CM" icon="fa fa-crosshairs"  rendered="false"> 
                 <p:submenu label="Reviews" icon="fa fa-crosshairs">             
                     <p:menuitem value="Assignments" icon="fa fa-crosshairs" url="/cm/assignments.xhtml?type=review" />    
@@ -81,12 +81,12 @@
                 </p:submenu>
 
                 <p:submenu label="Checklists" icon="fa fa-list-alt">                              
-                    <p:menuitem value="Assignments" icon="fa fa-list-alt" url="/cm/assignments.xhtml?type=checklist" />   
-                    <p:menuitem value="Status Update" icon="fa fa-list-alt" url="/cm/status.xhtml?type=checklist" />
-                    <p:menuitem value="Status Report" icon="fa fa-list-alt" url="/cm/status-report.xhtml?type=checklist" />
+                    <p:menuitem value="Assignments" icon="fa fa-list-alt" url="/cm/assignments.xhtml?type=Slot-Checklist" />   
+                    <p:menuitem value="Status Update" icon="fa fa-list-alt" url="/cm/status.xhtml?type=Slot-Checklist" />
+                    <p:menuitem value="Status Report" icon="fa fa-list-alt" url="/cm/status-report.xhtml?type=Slot-Checklist" />
                 </p:submenu>
             </p:submenu>
-            
+
             <p:submenu label="Import" icon="fa fa-upload" rendered="false">               
                 <p:menuitem value="Devices" icon="fa fa-upload" url="#" disabled="true"/>
                 <p:menuitem value="Device Types" icon="fa fa-upload" url="#" disabled="true"/>
@@ -94,15 +94,16 @@
                 <p:menuitem value="Slots" icon="fa fa-upload" url="#" disabled="true"/>               
                 <p:menuitem value="Units" icon="fa fa-upload" url="#" disabled="true"/>
             </p:submenu>
-            
+
             <p:submenu label="Admin" icon="fa fa-cubes">               
                 <p:menuitem value="Authorizations" icon="fa fa-cubes" outcome="auth"/>        
                 <p:menuitem value="Manage Phases" icon="fa fa-list-alt" outcome="phases" />
-                 <p:menuitem value="Phase Groups" icon="fa fa-crosshairs" outcome="/cm/phase-groups.xhtml" /> 
-                 <p:menuitem value="Phase Group Membership" icon="fa fa-crosshairs" outcome="/cm/phase-group-members.xhtml" /> 
-                 <p:menuitem value="Slot Groups" icon="fa fa-list-alt" url="/cm/slot-groups.xhtml" />
+                <p:menuitem value="Phase Groups" icon="fa fa-crosshairs" outcome="/cm/phase-groups.xhtml" /> 
+                <p:menuitem value="Phase Group Membership" icon="fa fa-crosshairs" outcome="/cm/phase-group-members.xhtml" /> 
+                <p:menuitem value="Slot Groups" icon="fa fa-list-alt" url="/cm/slot-groups.xhtml" />
+                <p:menuitem value="Status Options" icon="fa fa-list-alt" url="/cm/status-options.xhtml" />
             </p:submenu>
-            
+
             <p:submenu label="Links" icon="fa fa-external-link" >
                 <p:menuitem value="Cables" icon="fa  fa-external-link" url="#{msgs.cables}" target="_blank"/>
                 <p:menuitem value="Traveler" icon="fa  fa-external-link" url="#{msgs.traveler}" target="_blank"/>
@@ -111,22 +112,22 @@
                 <p:menuitem value="Logbook" icon="fa  fa-external-link" url="#{msgs.logbook}" target="_blank"/>
                 <p:menuitem value="Lattice/Model" icon="fa  fa-external-link" url="#{msgs.latticeModel}" target="_blank" disabled="true" />
             </p:submenu>  
-           
+
             <p:menuitem value="Preferences"  url="/prefs/" icon="fa fa-cog"  disabled="true"/> 
-        
+
             <p:submenu label="Help" icon="fa fa-info">
                 <p:menuitem value="Online Help" title="Online Help" 
                             icon="ui-icon-info" 
                             url="/help/help.xhtml"   rendered="false"/>   
-                
+
                 <p:menuitem value=" RESTful API" title="API Manual" 
-                                icon="ui-icon-script" target="_blank"  url="/help/api/" />
+                            icon="ui-icon-script" target="_blank"  url="/help/api/" />
                 <p:menuitem value="Report Problems" id="reportProblem" icon="fa fa-info"  immediate="true"
                             title="Report Problems"  onclick="PF('reportProblemWid').show()" disabled="true"/>
                 <p:menuitem value="About" id="aboutMenu" icon="fa fa-info"  immediate="true"
                             title="About HourLog"  onclick="PF('aboutPanelWid').show()"/>    
             </p:submenu> 
-            
+
             <f:facet name="options">                              
                 <rc:logincomp /> 
             </f:facet>
