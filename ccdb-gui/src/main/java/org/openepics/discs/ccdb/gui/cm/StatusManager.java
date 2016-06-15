@@ -31,7 +31,6 @@ import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.core.security.SecurityPolicy;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
 import org.openepics.discs.ccdb.model.auth.User;
-import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.PhaseGroup;
 import org.openepics.discs.ccdb.model.cm.PhaseStatus;
 import org.openepics.discs.ccdb.model.cm.StatusOption;
@@ -199,25 +198,42 @@ public class StatusManager implements Serializable {
         }
     }
 
+    /**
+     * is input valid?
+     * 
+     * @return 
+     */
     private boolean inputValid() {
         boolean allpass = true;
-        
+
         for (PhaseStatus status : selectedEntities) {
-                if (status.getGroupMember().getOptional() == false && status.getStatus() == null) {
-                 UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Update Failed", 
-                         status.getGroupMember().getPhase().getName() + " cannot be NR");
-                 return false;
-                }
-//                if (status.getStatus().getLogicalValue() == false) {
-//                    allpass = false;
-//                }
+            if (status.getStatus() != null && status.getStatus().getLogicalValue() == false) {
+                allpass = false;
+                break;
             }
+        }
+        for (PhaseStatus status : selectedEntities) {
+            if (status.getGroupMember().getOptional() == false && status.getStatus() == null) {
+                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Update Failed",
+                        status.getGroupMember().getPhase().getName() + " is mandatory");
+                return false;
+            }
+            if (status.getGroupMember().getSummaryPhase() && allpass == false) {
+                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Warning",
+                        "Some of the fields are not Y");
+                return false;
+            }
+        }
+
         return true;
     }
     
     public void onApprove() {
         try {
             Preconditions.checkNotNull(selectedEntities);
+            if (! inputValid() ) {
+                return;
+            }
             String userId = securityPolicy.getUserId();
             if (userId == null) {
                 UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Update Failed",
