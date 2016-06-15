@@ -214,7 +214,7 @@ public class StatusManager implements Serializable {
         }
         for (PhaseStatus status : selectedEntities) {
             if (status.getGroupMember().getOptional() == false && status.getStatus() == null) {
-                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Update Failed",
+                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Validation Error",
                         status.getGroupMember().getPhase().getName() + " is mandatory");
                 return false;
             }
@@ -232,6 +232,9 @@ public class StatusManager implements Serializable {
         try {
             Preconditions.checkNotNull(selectedEntities);
             if (! inputValid() ) {
+                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Fix validation errors",
+                            "");
+                    RequestContext.getCurrentInstance().addCallbackParam("success", false);
                 return;
             }
             String userId = securityPolicy.getUserId();
