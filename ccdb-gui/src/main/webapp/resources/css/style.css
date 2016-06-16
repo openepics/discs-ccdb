@@ -21,6 +21,18 @@ a {
     color: cadetblue;
 }
 
+/* --- configuration managerment classes ---- */
+.PhaseSummaryGreen {
+    color: green;
+}
+
+.PhaseSummaryRed {
+    color: red;
+}
+
+.PhaseSummaryYellow {
+    color:  #b7b700;
+}
 
 /* -------------------------------------------------------- */
 

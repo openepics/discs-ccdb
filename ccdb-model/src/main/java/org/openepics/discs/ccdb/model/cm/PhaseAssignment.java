@@ -72,6 +72,9 @@ public class PhaseAssignment extends ConfigurationEntity {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "assignment")
     private List<PhaseApproval> approvals;
     
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "assignment")
+    private List<PhaseStatus> statuses;
+    
     // getters and setters
 
     public User getRequestor() {
@@ -120,5 +123,9 @@ public class PhaseAssignment extends ConfigurationEntity {
 
     public void setSlotGroup(SlotGroup slotGroup) {
         this.slotGroup = slotGroup;
+    }
+
+    public List<PhaseStatus> getStatuses() {
+        return statuses;
     }
 }

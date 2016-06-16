@@ -31,6 +31,7 @@ import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.core.security.SecurityPolicy;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
 import org.openepics.discs.ccdb.model.auth.User;
+import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
 import org.openepics.discs.ccdb.model.cm.PhaseGroup;
 import org.openepics.discs.ccdb.model.cm.PhaseStatus;
 import org.openepics.discs.ccdb.model.cm.StatusOption;
@@ -86,6 +87,7 @@ public class StatusManager implements Serializable {
     private StatusOption inputStatus;
     private String selectedType;
     private String inputComment;
+    // private boolean phaseNR = false; // Phase not required
     private Boolean allPhasesOptional = false;
 
     private List<PhaseStatus> selectedEntities;
@@ -114,25 +116,28 @@ public class StatusManager implements Serializable {
         if (stype == null) {
             entities = lcEJB.findAllValidStatuses();
         } else {
-            entities = lcEJB.findAllValidStatuses();
-//            entities = lcEJB.findAllStatuses(stype);
+//            entities = lcEJB.findAllValidStatuses();
+            entities = lcEJB.findAllStatuses(stype);
             statusOptions = lcEJB.findStatusOptions(stype);
         }
         return nextView;
     }
 
-    private void resetInput() {
+    public void resetInput() {
         inputAction = InputAction.READ;
         inputComment = null;
+        // phaseNR = false;
         if (statusOptions != null) {
             inputStatus = statusOptions.get(0);
         }
     }
 
     public void onRowSelect(SelectEvent event) {
-        PhaseStatus approval = (PhaseStatus) event.getObject();
-        inputComment = approval.getComment();
-        inputStatus = approval.getStatus();
+        PhaseStatus status = (PhaseStatus) event.getObject();
+        inputComment = status.getComment();
+        inputStatus = status.getStatus();
+        // phaseNR = status.getGroupMember().getOptional() && status.getStatus() == null;
+        
         // inputRole = selectedRole;
         // Utility.showMessage(FacesMessage.SEVERITY_INFO, "Role Selected", "");
     }
@@ -142,10 +147,10 @@ public class StatusManager implements Serializable {
      * 
      * @return 
      */
-    private boolean allPhasesOptional() {
-        LOGGER.log(Level.INFO, "get all optional", "enter");
+    private boolean findOptional() {
+        // LOGGER.log(Level.INFO, "get all optional", "enter");
         for (PhaseStatus status: selectedEntities) {
-            LOGGER.log(Level.INFO, "checking {0}", status.getGroupMember().getPhase().getName());
+            // LOGGER.log(Level.INFO, "checking {0}", status.getGroupMember().getPhase().getName());
             if (status.getGroupMember().getOptional() == false) return false;
         }
         return true;
@@ -154,35 +159,36 @@ public class StatusManager implements Serializable {
     public void onAddCommand(ActionEvent event) {
         inputEntity = new PhaseStatus();
         inputAction = InputAction.CREATE;
-        allPhasesOptional = allPhasesOptional();
-        LOGGER.log(Level.INFO, "allphaseOptional {0}", allPhasesOptional);
+        
     }
 
     public void onEditCommand(ActionEvent event) {
         inputAction = InputAction.UPDATE;
+        allPhasesOptional = findOptional();
+        LOGGER.log(Level.INFO, "allphaseOptional {0}", allPhasesOptional);
     }
 
     public void onDeleteCommand(ActionEvent event) {
         inputAction = InputAction.DELETE;
     }
 
-    public void saveEntity() {
-        try {
-            if (inputAction == InputAction.CREATE) {
-                lcEJB.savePhaseStatus(inputEntity);
-                entities.add(inputEntity);
-            } else {
-                lcEJB.savePhaseStatus(selectedEntity);
-            }
-            resetInput();
-            RequestContext.getCurrentInstance().addCallbackParam("success", true);
-            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Saved", "");
-        } catch (Exception e) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save", e.getMessage());
-            RequestContext.getCurrentInstance().addCallbackParam("success", false);
-            System.out.println(e);
-        }
-    }
+//    public void saveEntity() {
+//        try {
+//            if (inputAction == InputAction.CREATE) {
+//                lcEJB.savePhaseStatus(inputEntity);
+//                entities.add(inputEntity);
+//            } else {
+//                lcEJB.savePhaseStatus(selectedEntity);
+//            }
+//            resetInput();
+//            RequestContext.getCurrentInstance().addCallbackParam("success", true);
+//            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Saved", "");
+//        } catch (Exception e) {
+//            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save", e.getMessage());
+//            RequestContext.getCurrentInstance().addCallbackParam("success", false);
+//            System.out.println(e);
+//        }
+//    }
 
     public void deleteEntity() {
         try {
@@ -204,23 +210,17 @@ public class StatusManager implements Serializable {
      * @return 
      */
     private boolean inputValid() {
-        boolean allpass = true;
-
+       
         for (PhaseStatus status : selectedEntities) {
-            if (status.getStatus() != null && status.getStatus().getLogicalValue() == false) {
-                allpass = false;
-                break;
-            }
-        }
-        for (PhaseStatus status : selectedEntities) {
-            if (status.getGroupMember().getOptional() == false && status.getStatus() == null) {
-                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Validation Error",
-                        status.getGroupMember().getPhase().getName() + " is mandatory");
-                return false;
-            }
-            if (status.getGroupMember().getSummaryPhase() && allpass == false) {
-                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Warning",
-                        "Some of the fields are not Y");
+//            if (status.getGroupMember().getOptional() == false && status.getStatus() == null ) { 
+//                // user says that phase is not required but the phase is not optional
+//                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Validation Error",
+//                        status.getGroupMember().getPhase().getName() + " is mandatory");
+//                return false;
+//            }
+            if (status.getGroupMember().getSummaryPhase() && !isValid(status, inputStatus)) {             
+                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Invalid summary status",
+                        "Make sure status for summary (eg AM OK) is valid.");
                 return false;
             }
         }
@@ -228,7 +228,79 @@ public class StatusManager implements Serializable {
         return true;
     }
     
-    public void onApprove() {
+    /**
+     * 
+     * @param status
+     * @return 
+     */
+    private Integer toInt(StatusOption status) {
+        switch (status.getName()) {
+            case "NR": return 2; 
+            case "Y": return 1; 
+            case "YC": return 0; 
+            case "N": return 0;
+        }
+        
+        return 0;
+    }
+    
+    /**
+     * 
+     * @param summaryStatus
+     * @return 
+     */
+    private boolean isValid(PhaseStatus summaryStatus, StatusOption inputStatus) {        
+        Integer summaryWeight = summaryWeight(summaryStatus);
+        Integer inputWeight = toInt(inputStatus);
+        
+        LOGGER.log(Level.INFO, "summary status {0}", summaryStatus.getStatus().getName());
+        LOGGER.log(Level.INFO, "weights summary, min: {0} {1} ", new Object[] {inputWeight, summaryWeight});
+        return inputWeight <= summaryWeight;
+    }
+    
+    /**
+     * 
+     * @param status
+     * @return 
+     */
+    private Integer summaryWeight(PhaseStatus status) {
+        List <PhaseStatus> statuses = lcEJB.findAllStatuses(status.getAssignment());
+        Integer minWeight = statuses.stream()
+                .filter(stat -> stat.getGroupMember().getSummaryPhase() == false)
+                .filter(stat -> stat.getStatus() != null)
+                .map(stat -> toInt(stat.getStatus()))
+                .min(Integer::compare)
+                .get();
+        
+        return minWeight;
+    }
+    
+    /**
+     * 
+     * @param status
+     * @return 
+     */
+    public String summaryStatus(PhaseStatus status) {
+        if (! status.getGroupMember().getSummaryPhase()) {
+            return "";
+        }
+        
+       for(PhaseStatus stat: lcEJB.findAllStatuses(status.getAssignment())) {
+           if (!stat.getGroupMember().getSummaryPhase() && stat.getStatus() != null && "N".equals(stat.getStatus().getName())) {
+               return "N";
+           }
+       }
+       
+       for(PhaseStatus stat: lcEJB.findAllStatuses(status.getAssignment())) {
+           if (!stat.getGroupMember().getSummaryPhase() && stat.getStatus() != null && "YC".equals(stat.getStatus().getName())) {
+               return "YC";
+           }
+       }
+       
+       return "Y";
+    }
+    
+    public void saveEntity() {
         try {
             Preconditions.checkNotNull(selectedEntities);
             if (! inputValid() ) {
@@ -255,12 +327,13 @@ public class StatusManager implements Serializable {
                 }
             }
 
-            for (PhaseStatus selectedApproval : selectedEntities) {
-                selectedApproval.setModifiedAt(new Date());
-                selectedApproval.setModifiedBy(user.getUserId());
-                selectedApproval.setStatus(inputStatus);
-                selectedApproval.setComment(inputComment);
-                lcEJB.savePhaseStatus(selectedApproval);
+            for (PhaseStatus status : selectedEntities) {
+                status.setModifiedAt(new Date());
+                status.setModifiedBy(user.getUserId());
+                status.setStatus(inputStatus);
+//                status.setStatus(phaseNR? null: inputStatus);
+                status.setComment(inputComment);
+                lcEJB.savePhaseStatus(status);
             }
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
@@ -275,32 +348,32 @@ public class StatusManager implements Serializable {
         }
     }
 
-    public void onDisapprove() {
-        try {
-            Preconditions.checkNotNull(selectedEntities);
-            String userId = securityPolicy.getUserId();
-            if (userId == null) {
-                UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
-                        "Not authorized. User Id is null.");
-                RequestContext.getCurrentInstance().addCallbackParam("success", false);
-                return;
-            }
-            User user = new User(userId);
-            for (PhaseStatus selectedApproval : selectedEntities) {
-                selectedApproval.setModifiedAt(new Date());
-                selectedApproval.setModifiedBy(user.getUserId());
-                lcEJB.savePhaseStatus(selectedApproval);
-            }
-            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
-                    "Disappproval successful.");
-        } catch (Exception e) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not complete disapproval", e.getMessage());
-            RequestContext.getCurrentInstance().addCallbackParam("success", false);
-            System.out.println(e);
-        } finally {
-//            selectedApproval = null;           
-        }
-    }
+//    public void onDisapprove() {
+//        try {
+//            Preconditions.checkNotNull(selectedEntities);
+//            String userId = securityPolicy.getUserId();
+//            if (userId == null) {
+//                UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
+//                        "Not authorized. User Id is null.");
+//                RequestContext.getCurrentInstance().addCallbackParam("success", false);
+//                return;
+//            }
+//            User user = new User(userId);
+//            for (PhaseStatus selectedApproval : selectedEntities) {
+//                selectedApproval.setModifiedAt(new Date());
+//                selectedApproval.setModifiedBy(user.getUserId());
+//                lcEJB.savePhaseStatus(selectedApproval);
+//            }
+//            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
+//                    "Disappproval successful.");
+//        } catch (Exception e) {
+//            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not complete disapproval", e.getMessage());
+//            RequestContext.getCurrentInstance().addCallbackParam("success", false);
+//            System.out.println(e);
+//        } finally {
+////            selectedApproval = null;           
+//        }
+//    }
     //-- Getters/Setters 
 
     public InputAction getInputAction() {
@@ -374,6 +447,4 @@ public class StatusManager implements Serializable {
     public Boolean getAllPhasesOptional() {
         return allPhasesOptional;
     }
-
-    
 }

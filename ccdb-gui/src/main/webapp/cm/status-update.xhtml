@@ -26,6 +26,7 @@
 
                     <p:ajax event="rowSelectCheckbox" listener="#{statusManager.onRowSelect}" update="commandButtons" />
                     <p:ajax event="toggleSelect"  update="commandButtons" />
+                    <p:ajax event="rowUnselectCheckbox"  update="commandButtons" />
                     <p:column selectionMode="multiple" style="width:16px;text-align:center" />
                     <p:column headerText="Group" sortBy="#{stat.assignment.slotGroup.name}" filterBy="#{stat.assignment.slotGroup.name}"
                               filterMatchMode="contains" >
@@ -40,7 +41,10 @@
                         <h:outputText value="#{stat.assignment.device.serialNumber}" />
                     </p:column>
                     <p:column headerText="Phase" sortBy="#{stat.groupMember.phase.name}"  filterBy="#{stat.groupMember.phase.name}" >
-                        <h:outputText value="#{stat.groupMember.phase.name}" />
+                        <h:outputText value=" #{stat.groupMember.phase.name}" rendered="#{empty statusManager.summaryStatus(stat)}"  /> 
+                        <h:outputText value=" #{stat.groupMember.phase.name}" styleClass="PhaseSummaryGreen fa fa-thumbs-o-up" rendered="#{statusManager.summaryStatus(stat) == 'Y'}"  /> 
+                        <h:outputText value=" #{stat.groupMember.phase.name}" styleClass="PhaseSummaryYellow fa fa-hand-o-right" rendered="#{statusManager.summaryStatus(stat) == 'YC'}"  /> 
+                        <h:outputText value=" #{stat.groupMember.phase.name}" styleClass="PhaseSummaryRed fa fa-thumbs-o-down" rendered="#{statusManager.summaryStatus(stat) == 'N'}"  /> 
                     </p:column>
 
                     <p:column headerText="Requestor" sortBy="#{stat.assignment.requestor.name}" filterBy="#{stat.assignment.requestor.name}"
@@ -50,11 +54,9 @@
                     <p:column headerText="Assigned To" sortBy="#{stat.assignedSME.userId}"  filterBy="#{stat.assignedSME.userId}" >
                         <h:outputText value="#{stat.assignedSME.userId}" />
                     </p:column>
-<!--                    <p:column headerText="Approved" sortBy="#{stat.approved}"   rendered="false">
-                        <h:outputText value="#{stat.approved ? 'Yes': 'No'}"  rendered="#{stat.approved_at ne null}"/>
-                    </p:column>-->
                     <p:column headerText="Status" sortBy="#{stat.status.name}"  >
-                        <h:outputText value="#{stat.status.name}"/>
+                        <h:outputText value="NR"  title="Not Required" rendered="#{empty stat.status}"/>
+                        <h:outputText value="#{stat.status.name}" title="#{stat.status.description}" rendered="#{not empty stat.status}"/>
                     </p:column>
                     <p:column headerText="By" sortBy="#{stat.modifiedBy}"  >
                         <h:outputText value="#{stat.modifiedBy}" />
@@ -69,8 +71,8 @@
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">
-                                <p:commandButton title="Modify"  value="Modify" icon="ui-icon-document" update=":crudInputDlg" process="@(form)" 
-                                                 actionListener="#{statusManager.onAddCommand}" oncomplete="PF('crudInputWid').show()"
+                                <p:commandButton title="Modify"  value="Modify" icon="ui-icon-document" update=":crudInputDlg" process="@form" 
+                                                 actionListener="#{statusManager.onEditCommand}" oncomplete="PF('crudInputWid').show()"
                                                  disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty statusManager.selectedEntities}" />   
          
                                 <p:commandButton title="Delete" value="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
@@ -96,18 +98,30 @@
                         </p:row>
                         
                     </f:facet>
-                    <p:row>
+<!--                    <p:row rendered="#{statusManager.allPhasesOptional}">
                         <p:column>
-                            <p:outputLabel for="status" value="Status"/>
+                            <p:outputLabel for="nr" value="Not Required"/>                        
                         </p:column>
                         <p:column>
-                            <p:selectOneMenu id="status"  converter="#{statusOptionConverter}"
-                                             
-                                             value="#{statusManager.inputStatus}" >
-                                <f:selectItem itemLabel="NR: Not Required" itemValue="#{null}" rendered="#{statusManager.allPhasesOptional}" />
-                                <f:selectItems value="#{statusManager.statusOptions}" var="b" itemLabel="#{b.name}: #{b.description}" itemValue="#{b}" />
-                                
-                            </p:selectOneMenu>                                                    
+                            <p:selectBooleanCheckbox id="nr" value="#{statusManager.phaseNR}">
+                                <p:ajax  update="@form"/>
+                            </p:selectBooleanCheckbox>
+                        </p:column>
+                    </p:row>-->
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Status"/>                        
+                        </p:column>
+                        <p:column> 
+                            <p:selectOneMenu id="status1"  converter="#{statusOptionConverter}"                                            
+                                             value="#{statusManager.inputStatus}"  rendered="#{not statusManager.allPhasesOptional}">                                 
+                                <f:selectItems value="#{statusManager.statusOptions}" var="b" itemLabel="#{b.name}: #{b.description}" itemValue="#{b}" />                               
+                            </p:selectOneMenu>
+                            <p:selectOneMenu id="status2"  converter="#{statusOptionConverter}"                                            
+                                             value="#{statusManager.inputStatus}"  rendered="#{statusManager.allPhasesOptional}"> 
+                                <f:selectItem itemLabel="NR: Not Required" itemValue="#{null}" />
+                                <f:selectItems value="#{statusManager.statusOptions}" var="b" itemLabel="#{b.name}: #{b.description}" itemValue="#{b}" />                               
+                            </p:selectOneMenu>
                         </p:column>
                     </p:row>
                     <p:row>
@@ -127,9 +141,9 @@
                         <p:row>
                             <p:column colspan="2">
                                 <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
-                                                 onclick="PF('crudInputWid').hide()"/>
+                                                 actionListener="#{statusManager}" onclick="PF('crudInputWid').hide()"/>
                                 <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
-                                                 action="#{statusManager.onApprove()}"  
+                                                 action="#{statusManager.saveEntity()}"  
                                                  oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
                                                  process="@form"  update="@form :crudForm:entityTable" rendered="#{statusManager.inputAction != 'DELETE'}"/>
                                 <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"
