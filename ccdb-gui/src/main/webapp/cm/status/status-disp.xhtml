@@ -1,0 +1,53 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui" 
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:fragment  rendered="#{not empty statusRec}">
+        <ui:fragment  rendered="#{not empty statusRec.status}">
+            <h:outputText id="PhaseStat" value="#{statusRec.status.name}"/>
+
+            <!--<h:outputText id="comment" styleClass="fa fa-comment-o" rendered="#{not empty statusRec.comment}" />-->
+            <p:overlayPanel for="PhaseStat" showEvent="mouseover" hideEvent="mouseout" style="width: 15%">
+                <p:panelGrid columnClasses="phaseStatus,phaseStatus">
+                    <p:row>
+                        <p:column>
+                            <h:outputText value="Status" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{statusRec.status.description}" styleClass="phaseStatus" />
+                        </p:column>                                            
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <h:outputText value="By" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{statusRec.modifiedBy}"/>
+                        </p:column>                                           
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <h:outputText value="At" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{statusRec.modifiedAt}" styleClass="phaseStatus"  >
+                                <f:convertDateTime type="both"  pattern="#{msgs.timestampFormat}"/>
+                            </h:outputText>
+                        </p:column>                                                
+                    </p:row>
+                    <p:row rendered="#{not empty statusRec.comment}">
+                        <p:column>
+                            <h:outputText value="Comments" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{statusRec.comment}" styleClass="phaseStatus" />
+                        </p:column>                                              
+                    </p:row>
+                </p:panelGrid>
+            </p:overlayPanel>          
+        </ui:fragment>
+    </ui:fragment>
+
+    <h:outputText value="N/R" rendered="#{empty statusRec}"/>
+</ui:composition>

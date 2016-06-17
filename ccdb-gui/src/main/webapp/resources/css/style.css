@@ -192,7 +192,7 @@ a {
 .ui-datatable.ccdbDatatable td {
     font-size: 11px;
     white-space: normal; /* text wrap around */
-    
+
 }
 
 .ui-treetable.ccdbTreetable tbody,
@@ -201,7 +201,7 @@ a {
 .ui-treetable.ccdbTreetable td {
     font-size: 11px;
     white-space: normal; /* text wrap around */
-    
+
 }
 
 .ui-datatable.ccdbProperty tbody,
@@ -213,6 +213,12 @@ a {
     vertical-align: top;
 }
 
+.phaseStatus {
+    text-align:  left !important;
+    word-wrap: break-word;
+    white-space: normal !important; /* text wrap around */    
+}
+
 .horizontal { 
     display: inline;
     float : left;
@@ -221,8 +227,8 @@ a {
 }
 
 .ui-datalist-data {
-   height:20px;
-   overflow:auto;
+    height:20px;
+    overflow:auto;
 }
 
 /* -------------------------------------------------- */

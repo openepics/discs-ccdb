@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/WEB-INF/template/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"              
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content"> 
+        <f:metadata>
+            <f:viewParam name="type" value="#{statusPivotManager.selectedType}"  /> 
+            <f:viewAction action="#{statusPivotManager.initialize()}" />
+        </f:metadata>
+        <h:form id="crudForm" > 
+            <p:panel>
+                <h:outputText value="Status" styleClass="heading"/>
+                <p:dataTable var="assignment" id="entityTable" value="#{statusPivotManager.entities}" 
+                             emptyMessage="No records found." 
+                             rowKey="#{assignment.id}" 
+                             selection="#{statusPivotManager.selectedEntities}"
+                             resizableColumns="true" filteredValue="#{statusPivotManager.filteredEntities}" 
+                             currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
+                             rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">   
+
+                    <p:ajax event="rowSelectCheckbox" listener="#{statusPivotManager.onRowSelect}" update="commandButtons" />
+                    <p:ajax event="toggleSelect"  update="commandButtons" />
+                    <p:ajax event="rowUnselectCheckbox"  update="commandButtons" />
+                    <p:column selectionMode="multiple" style="width:16px;text-align:center" />
+                    <p:column headerText="Group" sortBy="#{assignment.slotGroup.name}" filterBy="#{assignment.slotGroup.name}"
+                              filterMatchMode="contains" >
+                        <h:outputText value="#{assignment.slotGroup.name}" />
+                    </p:column>
+                    <p:column headerText="Slot" sortBy="#{assignment.slot.name}" filterBy="#{assignment.slot.name}"
+                              filterMatchMode="contains" >
+                        <h:outputText value="#{assignment.slot.name}" />
+                    </p:column>
+                    <p:column headerText="Device" sortBy="#{assignment.device.serialNumber}" filterBy="#{assignment.device.serialNumber}"
+                              filterMatchMode="contains" >
+                        <h:outputText value="#{assignment.device.serialNumber}" />
+                    </p:column>
+                    <p:columns value="#{statusPivotManager.phases}" var="phase" columnIndexVar="colIndex" >
+                        <f:facet name="header">
+                            <h:outputText value="#{phase.name}" />
+                        </f:facet>
+                        <div style="text-align: center;">
+                            <ui:include src="status-disp.xhtml">
+                                <ui:param name="statusRec" value="#{statusPivotManager.getStatusRec(assignment, phase)}" />
+                            </ui:include>
+                        </div>
+                    </p:columns>
+
+                    <p:column headerText="Requestor" sortBy="#{assignment.requestor.name}" filterBy="#{assignment.requestor.name}"
+                              filterMatchMode="contains" >
+                        <h:outputText value="#{assignment.requestor.name}" />
+                    </p:column>                   
+
+                    <f:facet name="footer">
+                        <p:toolbar id="commandButtons">
+                            <f:facet name="left">
+                                <p:commandButton title="Update"  value="Modify" icon="ui-icon-document" update=":crudInputDlg" process="@form" 
+                                                 actionListener="#{statusPivotManager.onEditCommand}" oncomplete="PF('crudInputWid').show()"
+                                                 disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty statusPivotManager.selectedEntities}" />   
+
+                                <p:commandButton title="Delete" value="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
+                                                 actionListener="#{statusPivotManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
+                                                 disabled="#{true or empty statusPivotManager.selectedEntities}"/>
+                            </f:facet>
+                        </p:toolbar>
+                    </f:facet>
+                </p:dataTable>                             
+            </p:panel>
+        </h:form>
+
+        <p:dialog id="crudInputDlg" widgetVar="crudInputWid" >
+            <h:form id="objectInputForm" >              
+                <p:panelGrid >
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column colspan="2">
+                                <h:outputText value="Add" rendered="#{statusPivotManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update" rendered="#{statusPivotManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete" rendered="#{statusPivotManager.inputAction == 'DELETE'}"/>
+                            </p:column>                
+                        </p:row>
+
+                    </f:facet>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Phase"/>                        
+                        </p:column>
+                        <p:column> 
+                            <p:selectOneMenu id="phaseInp"  converter="#{phaseConverter}"  value="#{statusPivotManager.inputPhase}"  >                                 
+                                <f:selectItems value="#{statusPivotManager.phases}" var="p" itemLabel="#{p.name}: #{p.description}" itemValue="#{p}" />                               
+                            </p:selectOneMenu>                           
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Status"/>                        
+                        </p:column>
+                        <p:column> 
+                            <p:selectOneMenu id="status1"  converter="#{statusOptionConverter}"                                            
+                                             value="#{statusPivotManager.inputStatus}"  rendered="#{not statusPivotManager.allPhasesOptional}">                                 
+                                <f:selectItems value="#{statusPivotManager.statusOptions}" var="b" itemLabel="#{b.name}: #{b.description}" itemValue="#{b}" />                               
+                            </p:selectOneMenu>
+                            <p:selectOneMenu id="status2"  converter="#{statusOptionConverter}"                                            
+                                             value="#{statusPivotManager.inputStatus}"  rendered="#{statusPivotManager.allPhasesOptional}"> 
+                                <f:selectItem itemLabel="NR: Not Required" itemValue="#{null}" />
+                                <f:selectItems value="#{statusPivotManager.statusOptions}" var="b" itemLabel="#{b.name}: #{b.description}" itemValue="#{b}" />                               
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="comment" value="Comment"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea id="comment" value="#{statusPivotManager.inputComment}" 
+                                             rows="5" cols="40" counter="display" maxlength="250" 
+                                             counterTemplate="{0} characters remaining." 
+                                             autoResize="false" /> 
+                            <br/>
+                            <h:outputText id="display" />
+                        </p:column>
+                    </p:row>
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
+                                                 actionListener="#{statusPivotManager}" onclick="PF('crudInputWid').hide()"/>
+                                <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
+                                                 action="#{statusPivotManager.saveEntity()}"  
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form"  update="@form :crudForm:entityTable" rendered="#{statusPivotManager.inputAction != 'DELETE'}"/>
+                                <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"
+                                                 action="#{statusPivotManager.deleteEntity()}" 
+                                                 oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
+                                                 process="@form" update=":crudForm:entityTable" rendered="#{statusPivotManager.inputAction == 'DELETE'}"/>                                
+                            </p:column>                
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define> 
+</ui:composition>

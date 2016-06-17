@@ -75,12 +75,9 @@ public class StatusReport implements Serializable {
     private List<SlotGroup> slotGroups;
     private Set<Slot> slots;
     private Set<Device> devices;
-    private Set<String> slotNames = new HashSet<>();
+    // private Set<String> slotNames = new HashSet<>();
     private String selectedType;
-    private final static List<String> VALID_COLUMN_KEYS = Arrays.asList("ARR", "DHR");
-     
-    private String columnTemplate = "ARR DHR";
-     
+    
     private List<ColumnModel> columns;
     
     public StatusReport() {

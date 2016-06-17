@@ -70,9 +70,9 @@
 
             <p:submenu label="Checklists" icon="fa fa-list-alt">                              
                 <p:menuitem value="Assignments" icon="fa fa-list-alt" url="/cm/assignments.xhtml?type=Slot-Checklist" />   
-                <p:menuitem value="Status Update" icon="fa fa-list-alt" url="/cm/status-update.xhtml?type=Slot-Checklist" />
+                <p:menuitem value="Status Update" icon="fa fa-list-alt" url="/cm/status/update.xhtml?type=Slot-Checklist" />
                 <p:menuitem value="Slot Group" icon="fa fa-list-alt" url="/cm/slots.xhtml" />
-                <p:menuitem value="Status Report" icon="fa fa-list-alt" url="/cm/status-report.xhtml?type=Slot-Checklist" />
+                <p:menuitem value="Status Report" icon="fa fa-list-alt" url="/cm/report/status-report.xhtml?type=Slot-Checklist" />
             </p:submenu>
             <p:submenu id="cm" label="CM" icon="fa fa-crosshairs"  rendered="false"> 
                 <p:submenu label="Reviews" icon="fa fa-crosshairs">             
@@ -98,10 +98,10 @@
             <p:submenu label="Admin" icon="fa fa-cubes">               
                 <p:menuitem value="Authorizations" icon="fa fa-cubes" outcome="auth"/>        
                 <p:menuitem value="Manage Phases" icon="fa fa-list-alt" outcome="phases" />
-                <p:menuitem value="Phase Groups" icon="fa fa-crosshairs" outcome="/cm/phase-groups.xhtml" /> 
-                <p:menuitem value="Phase Membership" icon="fa fa-crosshairs" outcome="/cm/phase-group-members.xhtml" /> 
-                <p:menuitem value="Slot Groups" icon="fa fa-list-alt" url="/cm/slot-groups.xhtml" />
-                <p:menuitem value="Status Options" icon="fa fa-list-alt" url="/cm/status-options.xhtml" />
+                <p:menuitem value="Phase Groups" icon="fa fa-crosshairs" outcome="/cm/admin/phase-groups.xhtml" /> 
+                <p:menuitem value="Phase Membership" icon="fa fa-crosshairs" outcome="/cm/admin/phase-group-members.xhtml" /> 
+                <p:menuitem value="Slot Groups" icon="fa fa-list-alt" url="/cm/admin/slot-groups.xhtml" />
+                <p:menuitem value="Status Options" icon="fa fa-list-alt" url="/cm/admin/status-options.xhtml" />
             </p:submenu>
 
             <p:submenu label="Links" icon="fa fa-external-link" >
