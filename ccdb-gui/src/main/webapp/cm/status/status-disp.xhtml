@@ -47,7 +47,8 @@
                 </p:panelGrid>
             </p:overlayPanel>          
         </ui:fragment>
+        <h:outputText value="N/R" rendered="#{empty statusRec.status}"/>
     </ui:fragment>
 
-    <h:outputText value="N/R" rendered="#{empty statusRec}"/>
+    
 </ui:composition>

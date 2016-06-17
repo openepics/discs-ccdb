@@ -16,10 +16,14 @@ package org.openepics.discs.ccdb.gui.cm;
 
 import com.google.common.base.Preconditions;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -72,6 +76,36 @@ public class StatusPivotManager implements Serializable {
 //    @EJB
 //    private AuthEJB authEJB;
 
+    public static class SelectablePhase implements Serializable {
+
+        private Boolean selected = false;
+        private Phase phase;
+
+        private SelectablePhase() {
+
+        }
+
+        public SelectablePhase(Phase phase) {
+            this.phase = phase;
+        }
+
+        public Boolean getSelected() {
+            return selected;
+        }
+
+        public void setSelected(Boolean selected) {
+            this.selected = selected;
+        }
+
+        public Phase getPhase() {
+            return phase;
+        }
+
+        public void setPhase(Phase phase) {
+            this.phase = phase;
+        }
+    }
+
     @EJB
     private LifecycleEJB lcEJB;
     @Inject
@@ -83,20 +117,21 @@ public class StatusPivotManager implements Serializable {
 
     private List<SlotGroup> slotGroups;
     private List<Phase> phases;
+    private List<SelectablePhase> selectablePhases;
     private List<PhaseAssignment> entities;
     private List<PhaseAssignment> filteredEntities;
     private List<StatusOption> statusOptions;
     private PhaseAssignment inputEntity;
     // private PhaseAssignment selectedEntity;
-    private Phase inputPhase;
     private InputAction inputAction;
     private StatusOption inputStatus;
     private String selectedType;
     private String inputComment;
     // private boolean phaseNR = false; // Phase not required
     private Boolean allPhasesOptional = false;
+    private Boolean phaseSelected = false;
 
-    private List<PhaseAssignment> selectedEntities;
+    private List<PhaseAssignment> selectedEntities = new ArrayList<>();
 
     public StatusPivotManager() {
     }
@@ -105,6 +140,8 @@ public class StatusPivotManager implements Serializable {
     public void init() {
         slotGroups = lcEJB.findAllSlotGroups();
         phases = lcEJB.findAllPhases();
+        selectablePhases = phases == null ? Collections.<SelectablePhase>emptyList() : phases.stream().map(p -> new SelectablePhase(p)).collect(Collectors.toList());
+        updatePhaseSelected();
         resetInput();
     }
 
@@ -141,31 +178,33 @@ public class StatusPivotManager implements Serializable {
     }
 
     public void onRowSelect(SelectEvent event) {
-//        PhaseAssignment status = (PhaseAssignment) event.getObject();
-//        inputComment = status.getComment();
-//        inputStatus = status.getStatus();
-        // phaseNR = status.getGroupMember().getOptional() && status.getStatus() == null;
-
-        // inputRole = selectedRole;
-        // Utility.showMessage(FacesMessage.SEVERITY_INFO, "Role Selected", "");
     }
 
     /**
-     * Are all the selected group members optional?
+     * Are all the selected phases optional?
      *
      * @return
      */
     private boolean findOptional() {
         // LOGGER.log(Level.INFO, "get all optional", "enter");
-        for (PhaseAssignment record : selectedEntities) {
-            for (PhaseStatus status : record.getStatuses()) {
-                // LOGGER.log(Level.INFO, "checking {0}", status.getGroupMember().getPhase().getName());
-                if (status.getGroupMember().getOptional() == false) {
-                    return false;
+        for (SelectablePhase selectedPhase : selectablePhases) {
+            if (!selectedPhase.selected) {
+                continue;
+            }
+            for (PhaseAssignment record : selectedEntities) {
+                for (PhaseStatus status : record.getStatuses()) {
+                    // LOGGER.log(Level.INFO, "checking {0}", status.getGroupMember().getPhase().getName());
+                    if (selectedPhase.phase.equals(status.getGroupMember().getPhase()) && status.getGroupMember().getOptional() == false) {
+                        return false;
+                    }
                 }
             }
         }
         return true;
+    }
+
+    private void updatePhaseSelected() {
+        phaseSelected = selectablePhases.stream().anyMatch(p -> p.selected == true);
     }
 
     public void onAddCommand(ActionEvent event) {
@@ -233,8 +272,8 @@ public class StatusPivotManager implements Serializable {
         Integer summaryWeight = summaryWeight(summaryStatus);
         Integer inputWeight = toInt(inputStatus);
 
-        LOGGER.log(Level.INFO, "summary status {0}", summaryStatus.getStatus().getName());
-        LOGGER.log(Level.INFO, "weights summary, min: {0} {1} ", new Object[]{inputWeight, summaryWeight});
+        // LOGGER.log(Level.INFO, "summary status {0}", summaryStatus.getStatus().getName());
+        // LOGGER.log(Level.INFO, "weights summary, min: {0} {1} ", new Object[]{inputWeight, summaryWeight});
         return inputWeight <= summaryWeight;
     }
 
@@ -253,6 +292,16 @@ public class StatusPivotManager implements Serializable {
                 .get();
 
         return minWeight;
+    }
+
+    /**
+     *
+     * @param phase
+     */
+    public void onTogglePhase(Phase phase) {
+        selectablePhases.stream().filter(p -> p.phase.equals(phase)).forEach(u -> u.setSelected(!u.selected));
+        updatePhaseSelected();
+        // UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Toggle phase ", phase.getName());
     }
 
     /**
@@ -280,12 +329,30 @@ public class StatusPivotManager implements Serializable {
         return "Y";
     }
 
+    /**
+     * When a cell is clicked for edits
+     *
+     * @param assignment
+     * @param phase
+     */
+    public void onCellEdit(PhaseAssignment assignment, Phase phase) {
+        selectedEntities.clear();
+        selectedEntities.add(assignment);
+        inputStatus = getStatusRec(assignment, phase).getStatus();
+        for (SelectablePhase selectedPhase : selectablePhases) {
+            selectedPhase.setSelected(selectedPhase.phase.equals(phase));
+        }
+        allPhasesOptional = findOptional();
+    }
+
+    /**
+     *
+     */
     public void saveEntity() {
         try {
             Preconditions.checkNotNull(selectedEntities);
             if (!inputValid()) {
-                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Fix validation errors",
-                        "");
+                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Fix validation errors", "");
                 RequestContext.getCurrentInstance().addCallbackParam("success", false);
                 return;
             }
@@ -309,14 +376,19 @@ public class StatusPivotManager implements Serializable {
                 }
             }
 
-            for (PhaseAssignment record : selectedEntities) {
-                for (PhaseStatus status : record.getStatuses()) {
-                    if (inputPhase.equals(status.getGroupMember().getPhase())) {
-                        status.setModifiedAt(new Date());
-                        status.setModifiedBy(user.getUserId());
-                        status.setStatus(inputStatus);
-                        status.setComment(inputComment);
-                        lcEJB.savePhaseStatus(status);
+            for (SelectablePhase selectedPhase : selectablePhases) {
+                if (!selectedPhase.selected) {
+                    continue;
+                }
+                for (PhaseAssignment record : selectedEntities) {
+                    for (PhaseStatus status : record.getStatuses()) {
+                        if (selectedPhase.phase.equals(status.getGroupMember().getPhase())) {
+                            status.setModifiedAt(new Date());
+                            status.setModifiedBy(user.getUserId());
+                            status.setStatus(inputStatus);
+                            status.setComment(inputComment);
+                            lcEJB.savePhaseStatus(status);
+                        }
                     }
                 }
             }
@@ -388,10 +460,6 @@ public class StatusPivotManager implements Serializable {
         return slotGroups;
     }
 
-    public List<Phase> getPhases() {
-        return phases;
-    }
-
     public StatusOption getInputStatus() {
         return inputStatus;
     }
@@ -424,12 +492,16 @@ public class StatusPivotManager implements Serializable {
         return allPhasesOptional;
     }
 
-    public Phase getInputPhase() {
-        return inputPhase;
+    public List<SelectablePhase> getSelectablePhases() {
+        return selectablePhases;
     }
 
-    public void setInputPhase(Phase inputPhase) {
-        this.inputPhase = inputPhase;
+    public void setSelectablePhases(List<SelectablePhase> selectablePhases) {
+        this.selectablePhases = selectablePhases;
+    }
+
+    public Boolean getPhaseSelected() {
+        return phaseSelected;
     }
 
 }
