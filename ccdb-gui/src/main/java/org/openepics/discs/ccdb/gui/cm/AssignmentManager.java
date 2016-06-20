@@ -90,6 +90,7 @@ public class AssignmentManager implements Serializable {
 //    UserSession userSession;
       
     private String selectedType;
+    private String entityType = "g";
     private List<PhaseAssignment> entities;    
     private List<PhaseAssignment> filteredEntities;    
     private PhaseAssignment inputEntity;
@@ -133,11 +134,22 @@ public class AssignmentManager implements Serializable {
         
         if (stype == null) {
             phases = lcEJB.findAllPhases();
-            entities = lcEJB.findAllAssignments();
+            // entities = lcEJB.findAllAssignments();
         } else {         
             phases = lcEJB.findPhases(stype);
-            entities = lcEJB.findAssignments(stype);
+            // entities = lcEJB.findAssignments(stype);
         }
+        
+        switch (entityType) {
+            case "g": entities = lcEJB.findGroupAssignments();
+            break;
+            case "s": entities = lcEJB.findSlotAssignments();
+            break;
+            case "d": entities = lcEJB.findDeviceAssignments();
+            break;
+            default: entities = lcEJB.findGroupAssignments();
+        }
+    
         return nextView;
     }
     
@@ -146,10 +158,10 @@ public class AssignmentManager implements Serializable {
     }
     
     public void onRowSelect(SelectEvent event) {
-        inputApprovers.clear();
-        for (PhaseApproval approval: selectedEntity.getApprovals()) {
-            if (approval.getAssignedApprover() != null) inputApprovers.add(approval.getAssignedApprover());
-        }
+//        inputApprovers.clear();
+//        for (PhaseApproval approval: selectedEntity.getApprovals()) {
+//            if (approval.getAssignedApprover() != null) inputApprovers.add(approval.getAssignedApprover());
+//        }
         // inputRole = selectedRole;
         // Utility.showMessage(FacesMessage.SEVERITY_INFO, "Role Selected", "");
     }
@@ -325,6 +337,14 @@ public class AssignmentManager implements Serializable {
 
     public void setPhaseGroups(List<PhaseGroup> phaseGroups) {
         this.phaseGroups = phaseGroups;
+    }
+
+    public String getEntityType() {
+        return entityType;
+    }
+
+    public void setEntityType(String entityType) {
+        this.entityType = entityType;
     }
     
     

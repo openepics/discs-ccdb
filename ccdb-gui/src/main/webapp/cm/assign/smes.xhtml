@@ -15,7 +15,7 @@
         </f:metadata>
         <h:form id="crudForm" > 
             <p:panel>
-                <h:outputText value="Status" styleClass="heading"/>
+                <h:outputText value="Assign SMEs" styleClass="heading"/>
                 <p:dataTable var="assignment" id="entityTable" 
                              value="#{statusPivotManager.entities}"
                              emptyMessage="No records found."  rowSelectMode="checkbox"
@@ -31,21 +31,25 @@
                     <p:ajax event="rowUnselectCheckbox"  update="commandButtons" />
                     <p:column selectionMode="multiple" style="width:16px;text-align:center"  />
                     <p:column headerText="Group" sortBy="#{assignment.slotGroup.name}" filterBy="#{assignment.slotGroup.name}"
-                              filterMatchMode="contains" rendered="#{statusPivotManager.entityType eq  'g'}">
+                              filterMatchMode="contains"  rendered="#{statusPivotManager.entityType eq  'g'}">
                         <h:outputText value="#{assignment.slotGroup.name}" />
                     </p:column>
+                    
                     <p:column headerText="Slot" sortBy="#{assignment.slot.name}" filterBy="#{assignment.slot.name}"
                               filterMatchMode="contains" rendered="#{statusPivotManager.entityType eq  's'}">
                         <h:outputText value="#{assignment.slot.name}" />
                     </p:column>
+                  
                     <p:column headerText="Device" sortBy="#{assignment.device.serialNumber}" filterBy="#{assignment.device.serialNumber}"
                               filterMatchMode="contains" rendered="#{statusPivotManager.entityType eq  'd'}">
                         <h:outputText value="#{assignment.device.serialNumber}" />
                     </p:column>
+                    
                     <p:column headerText="Requestor" sortBy="#{assignment.requestor.name}" filterBy="#{assignment.requestor.name}"
                               filterMatchMode="contains" >
                         <h:outputText value="#{assignment.requestor.name}" />
-                    </p:column>
+                    </p:column>   
+                    
                     <p:columns value="#{statusPivotManager.selectablePhases}" var="selPhase" columnIndexVar="colIndex" >
                         <f:facet name="header">                          
                             <p:selectBooleanCheckbox>
@@ -56,14 +60,12 @@
                         <p:commandLink update=":crudInputDlg" process="@this" disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}"
                                        actionListener="#{statusPivotManager.onCellEdit(assignment, selPhase.phase)}" oncomplete="PF('crudInputWid').show()" >                      
                             <div style="text-align: center;">
-                                <ui:include src="status-disp.xhtml">
+                                <ui:include src="sme-disp.xhtml">
                                     <ui:param name="statusRec" value="#{statusPivotManager.getStatusRec(assignment, selPhase.phase)}" />
                                 </ui:include>
                             </div>
                         </p:commandLink>
-                    </p:columns>
-
-                                       
+                    </p:columns>                             
 
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
@@ -112,33 +114,17 @@
 
                     <p:row>
                         <p:column>
-                            <p:outputLabel value="Status"/>                        
+                            <p:outputLabel value="SME"/>                        
                         </p:column>
                         <p:column> 
-                            <p:selectOneMenu id="status1"  converter="#{statusOptionConverter}"                                            
-                                             value="#{statusPivotManager.inputStatus}"  rendered="#{not statusPivotManager.allPhasesOptional}">                                 
-                                <f:selectItems value="#{statusPivotManager.statusOptions}" var="b" itemLabel="#{b.name}: #{b.description}" itemValue="#{b}" />                               
-                            </p:selectOneMenu>
-                            <p:selectOneMenu id="status2"  converter="#{statusOptionConverter}"                                            
-                                             value="#{statusPivotManager.inputStatus}"  rendered="#{statusPivotManager.allPhasesOptional}"> 
-                                <f:selectItem itemLabel="NR: Not Required" itemValue="#{null}" />
-                                <f:selectItems value="#{statusPivotManager.statusOptions}" var="b" itemLabel="#{b.name}: #{b.description}" itemValue="#{b}" />                               
+                           
+                            <p:selectOneMenu id="asme"  converter="#{userConverter}" value="#{statusPivotManager.inputSME}"> 
+                                <f:selectItem itemLabel="None" itemValue="#{null}" />
+                                <f:selectItems value="#{statusPivotManager.users}" var="b" itemLabel="#{b.name}: #{b.userId}" itemValue="#{b}" />                               
                             </p:selectOneMenu>
                         </p:column>
                     </p:row>
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="comment" value="Comment"/>
-                        </p:column>
-                        <p:column>
-                            <p:inputTextarea id="comment" value="#{statusPivotManager.inputComment}" 
-                                             rows="5" cols="40" counter="display" maxlength="250" 
-                                             counterTemplate="{0} characters remaining." 
-                                             autoResize="false" /> 
-                            <br/>
-                            <h:outputText id="display" />
-                        </p:column>
-                    </p:row>
+                    
                     <f:facet name="footer">
                         <p:row>
                             <p:column colspan="2">

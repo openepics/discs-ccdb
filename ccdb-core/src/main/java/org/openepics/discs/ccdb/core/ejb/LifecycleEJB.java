@@ -113,6 +113,16 @@ public class LifecycleEJB {
         return em.createNamedQuery("PhaseAssignment.findAll", PhaseAssignment.class).getResultList();
     }
     
+    public List<PhaseAssignment> findGroupAssignments() {
+        return em.createNamedQuery("PhaseAssignment.findGroupAssignments", PhaseAssignment.class).getResultList();
+    }
+    public List<PhaseAssignment> findSlotAssignments() {
+        return em.createNamedQuery("PhaseAssignment.findSlotAssignments", PhaseAssignment.class).getResultList();
+    }
+    public List<PhaseAssignment> findDeviceAssignments() {
+        return em.createNamedQuery("PhaseAssignment.findDeviceAssignments", PhaseAssignment.class).getResultList();
+    }
+    
     /**
      * All assignments
      * 
@@ -576,6 +586,15 @@ public class LifecycleEJB {
     public List<PhaseStatus> findAllStatuses() {
         return em.createNamedQuery("PhaseStatus.findAll", PhaseStatus.class).getResultList();
     }  
+    public List<PhaseStatus> findGroupStatus() {
+        return em.createNamedQuery("PhaseStatus.findGroupStatus", PhaseStatus.class).getResultList();
+    }
+    public List<PhaseStatus> findSlotStatus() {
+        return em.createNamedQuery("PhaseStatus.findSlotStatus", PhaseStatus.class).getResultList();
+    }
+    public List<PhaseStatus> findDeviceStatus() {
+        return em.createNamedQuery("PhaseStatus.findDeviceStatus", PhaseStatus.class).getResultList();
+    }
     
     public List<PhaseStatus> findAllValidStatuses() {
         return em.createNamedQuery("PhaseStatus.findValid", PhaseStatus.class).getResultList();

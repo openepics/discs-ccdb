@@ -10,13 +10,15 @@
     <ui:define name="content"> 
         <f:metadata>
             <f:viewParam name="type" value="#{assignmentManager.selectedType}"  /> 
+            <f:viewParam name="ent" value="#{assignmentManager.entityType}"  /> 
             <f:viewAction action="#{assignmentManager.initialize()}" />
         </f:metadata>
         <h:form id="crudForm" > 
             <p:panel>
                 <h:outputText value="Checklist Assignment" styleClass="heading"/>
-                <p:dataTable id="entityTable" var="entity" value="#{assignmentManager.entities}" 
-                             emptyMessage="No records found." 
+                <p:dataTable id="entityTable" var="entity" 
+                             value="#{assignmentManager.entities}"
+                              emptyMessage="No records found." 
                              rowKey="#{entity.id}" selectionMode="single" selection="#{assignmentManager.selectedEntity}"
                              resizableColumns="true" filteredValue="#{assignmentManager.filteredEntities}" 
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
@@ -25,26 +27,22 @@
 
                     <p:ajax event="rowSelect" listener="#{assignmentManager.onRowSelect}" update="commandButtons" />
                     <p:column headerText="Group" sortBy="#{entity.slotGroup.name}" filterBy="#{entity.slotGroup.name}"
-                              filterMatchMode="contains" >
+                              filterMatchMode="contains" rendered="#{assignmentManager.entityType eq 'g'}">
                         <h:outputText value="#{entity.slotGroup.name}" />
                     </p:column>
                     <p:column headerText="Slot" sortBy="#{entity.slot.name}" filterBy="#{entity.slot.name}"
-                              filterMatchMode="contains" >
+                              filterMatchMode="contains" rendered="#{assignmentManager.entityType eq 's'}">
                         <h:outputText value="#{entity.slot.name}" />
                     </p:column>
 
                     <p:column headerText="Device" sortBy="#{entity.device.serialNumber}" filterBy="#{entity.device.serialNumber}"
-                              filterMatchMode="contains" >
+                              filterMatchMode="contains" rendered="#{assignmentManager.entityType eq 'd'}">
                         <h:outputText value="#{entity.device.serialNumber}" />
                     </p:column>
 
                     <p:column headerText="Checklist" sortBy="#{entity.phaseGroup.name}" >
                         <h:outputText value="#{entity.phaseGroup.name}" />
                     </p:column>
-
-                    <!--                    <p:column headerText="Assignees"  >                      
-                                                <h:outputText value="#{entity.approvals.stream().map(appr -> appr.assignedApprover.name).toList()}" />               
-                                        </p:column>-->
 
                     <p:column headerText="Requestor" sortBy="#{entity.requestor.name}" filterBy="#{entity.requestor.name}"
                               filterMatchMode="contains" >

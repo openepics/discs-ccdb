@@ -41,6 +41,9 @@ import org.openepics.discs.ccdb.model.auth.User;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PhaseAssignment.findAll", query = "SELECT d FROM PhaseAssignment d"),
+    @NamedQuery(name = "PhaseAssignment.findGroupAssignments", query = "SELECT d FROM PhaseAssignment d WHERE d.slotGroup IS NOT null"),
+    @NamedQuery(name = "PhaseAssignment.findSlotAssignments", query = "SELECT d FROM PhaseAssignment d WHERE d.slot IS NOT null"),
+    @NamedQuery(name = "PhaseAssignment.findDeviceAssignments", query = "SELECT d FROM PhaseAssignment d WHERE d.slot IS null AND d.device IS NOT null"),
     @NamedQuery(name = "PhaseAssignment.findByGroup", query = "SELECT d FROM PhaseAssignment d WHERE d.phaseGroup = :group"),
     @NamedQuery(name = "PhaseAssignment.findBySlotGroup", query = "SELECT d FROM PhaseAssignment d WHERE d.slotGroup = :group"),
     @NamedQuery(name = "PhaseAssignment.findBySlot", query = "SELECT d FROM PhaseAssignment d WHERE d.slot = :slot")

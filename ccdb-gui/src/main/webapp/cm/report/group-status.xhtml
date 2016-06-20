@@ -1,0 +1,52 @@
+<ui:composition template="/WEB-INF/template/template.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:viewParam name="type" value="#{statusReport.selectedType}"  /> 
+            <f:viewAction action="#{statusReport.initialize()}" />
+        </f:metadata>
+
+        <h:form id="form">  
+            <p:panel>
+                <h:outputText value="Group Status Report" styleClass="heading"/>
+
+                <p:dataTable id="groupTable" var="group" value="#{statusReport.slotGroups}" widgetVar="statusTableWid"
+                             rowKey="#{group.id}" > 
+                    <p:column headerText="Group" sortBy="#{group.name}" filterBy="#{group.name}" filterMatchMode="contains">
+                        <h:outputText value="#{group.name}" />
+                    </p:column>
+                    <p:columns value="#{statusReport.phases}" var="phase" columnIndexVar="colIndex" >
+                        <f:facet name="header">
+                            <h:outputText value="#{phase.name}" />
+                        </f:facet>
+                        <div style="text-align: center;">
+                            <ui:include src="status-disp.xhtml">
+                                <ui:param name="statusRec" value="#{statusReport.getGroupStatusRec(group, phase)}" />
+                            </ui:include>
+                        </div>
+                    </p:columns>
+                                      
+                </p:dataTable>
+
+                <h:commandLink title="Export to Excel">  
+                    <p:graphicImage value="#{resource['images/excel.png']}" />                      
+                    <p:dataExporter type="xls"  target="statusTable" fileName="status-report"  />  
+                </h:commandLink>  
+                <h:commandLink title="Export to CSV">  
+                    <p:graphicImage value="#{resource['images/csv.png']}" />  
+                    <p:dataExporter type="csv" target="statusTable" fileName="status-report"  /> 
+                </h:commandLink>  
+                <h:commandLink title="Export to XML">  
+                    <p:graphicImage value="#{resource['images/xml.png']}" />  
+                    <p:dataExporter type="xml" target="statusTable" fileName="status-report" />  
+                </h:commandLink>
+                <br/>                                
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -31,7 +31,6 @@ import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.core.security.SecurityPolicy;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
 import org.openepics.discs.ccdb.model.auth.User;
-import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
 import org.openepics.discs.ccdb.model.cm.PhaseGroup;
 import org.openepics.discs.ccdb.model.cm.PhaseStatus;
 import org.openepics.discs.ccdb.model.cm.StatusOption;
@@ -78,6 +77,7 @@ public class StatusManager implements Serializable {
 //    @Inject
 //    UserSession userSession;
 
+    private String entityType = "g";
     private List<PhaseStatus> entities;
     private List<PhaseStatus> filteredEntities;
     private List<StatusOption> statusOptions;
@@ -114,12 +114,23 @@ public class StatusManager implements Serializable {
         }
 
         if (stype == null) {
-            entities = lcEJB.findAllValidStatuses();
+            // entities = lcEJB.findAllValidStatuses();
         } else {
 //            entities = lcEJB.findAllValidStatuses();
-            entities = lcEJB.findAllStatuses(stype);
+            // entities = lcEJB.findAllStatuses(stype);
             statusOptions = lcEJB.findStatusOptions(stype);
         }
+        
+        switch (entityType) {
+            case "g": entities = lcEJB.findGroupStatus();
+            break;
+            case "s": entities = lcEJB.findSlotStatus();
+            break;
+            case "d": entities = lcEJB.findDeviceStatus();
+            break;
+            default: entities = lcEJB.findGroupStatus();
+        }
+        
         return nextView;
     }
 
@@ -447,4 +458,14 @@ public class StatusManager implements Serializable {
     public Boolean getAllPhasesOptional() {
         return allPhasesOptional;
     }
+
+    public String getEntityType() {
+        return entityType;
+    }
+
+    public void setEntityType(String entityType) {
+        this.entityType = entityType;
+    }
+    
+    
 }

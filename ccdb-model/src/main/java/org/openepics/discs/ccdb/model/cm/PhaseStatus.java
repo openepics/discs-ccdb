@@ -40,6 +40,9 @@ import org.openepics.discs.ccdb.model.auth.User;
 @NamedQueries({
     @NamedQuery(name = "PhaseStatus.findAll", query = "SELECT d FROM PhaseStatus d"),
     @NamedQuery(name = "PhaseStatus.findValid", query = "SELECT d FROM PhaseStatus d"),
+    @NamedQuery(name = "PhaseStatus.findGroupStatus", query = "SELECT d FROM PhaseStatus d WHERE d.assignment.slotGroup IS NOT null"),
+    @NamedQuery(name = "PhaseStatus.findSlotStatus", query = "SELECT d FROM PhaseStatus d WHERE d.assignment.slot IS NOT null"),
+    @NamedQuery(name = "PhaseStatus.findDeviceStatus", query = "SELECT d FROM PhaseStatus d WHERE d.assignment.slot IS null AND d.assignment.device IS NOT null"),
 //    @NamedQuery(name = "PhaseStatus.findValid", query = "SELECT d FROM PhaseStatus d WHERE d.assignment.slot is null OR d.assignment.slot.cmGroup is NOT null"),
     @NamedQuery(name = "PhaseStatus.findByGroup", query = "SELECT d FROM PhaseStatus d WHERE d.groupMember.phaseGroup = :group"),
     @NamedQuery(name = "PhaseStatus.findByAssignment", query = "SELECT d FROM PhaseStatus d WHERE d.assignment = :assignment")

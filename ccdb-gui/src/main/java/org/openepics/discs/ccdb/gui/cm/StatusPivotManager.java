@@ -31,6 +31,7 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import org.openepics.discs.ccdb.core.ejb.AuthEJB;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.core.security.SecurityPolicy;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
@@ -108,6 +109,8 @@ public class StatusPivotManager implements Serializable {
 
     @EJB
     private LifecycleEJB lcEJB;
+    @EJB
+    private AuthEJB authEJB;
     @Inject
     private SecurityPolicy securityPolicy;
 
@@ -115,18 +118,21 @@ public class StatusPivotManager implements Serializable {
 //    @Inject
 //    UserSession userSession;
 
+    private String entityType = "g";
     private List<SlotGroup> slotGroups;
     private List<Phase> phases;
     private List<SelectablePhase> selectablePhases;
     private List<PhaseAssignment> entities;
     private List<PhaseAssignment> filteredEntities;
     private List<StatusOption> statusOptions;
+    private List<User> users;
     private PhaseAssignment inputEntity;
     // private PhaseAssignment selectedEntity;
     private InputAction inputAction;
     private StatusOption inputStatus;
     private String selectedType;
     private String inputComment;
+    private User inputSME;
     // private boolean phaseNR = false; // Phase not required
     private Boolean allPhasesOptional = false;
     private Boolean phaseSelected = false;
@@ -140,6 +146,7 @@ public class StatusPivotManager implements Serializable {
     public void init() {
         slotGroups = lcEJB.findAllSlotGroups();
         phases = lcEJB.findAllPhases();
+        users = authEJB.findAllUsers();
         selectablePhases = phases == null ? Collections.<SelectablePhase>emptyList() : phases.stream().map(p -> new SelectablePhase(p)).collect(Collectors.toList());
         updatePhaseSelected();
         resetInput();
@@ -159,11 +166,21 @@ public class StatusPivotManager implements Serializable {
         }
 
         if (stype == null) {
-            entities = lcEJB.findAllAssignments();
+            // entities = lcEJB.findAllAssignments();
         } else {
 //            entities = lcEJB.findAllValidStatuses();
-            entities = lcEJB.findAssignments(stype);
+            // entities = lcEJB.findAssignments(stype);
             statusOptions = lcEJB.findStatusOptions(stype);
+        }
+        
+        switch (entityType) {
+            case "g": entities = lcEJB.findGroupAssignments();
+            break;
+            case "s": entities = lcEJB.findSlotAssignments();
+            break;
+            case "d": entities = lcEJB.findDeviceAssignments();
+            break;
+            default: entities = lcEJB.findGroupAssignments();
         }
         return nextView;
     }
@@ -229,10 +246,9 @@ public class StatusPivotManager implements Serializable {
      * @return
      */
     private boolean inputValid() {
-
         for (PhaseAssignment record : selectedEntities) {
             for (PhaseStatus status : record.getStatuses()) {
-                if (status.getGroupMember().getSummaryPhase() && !isValid(status, inputStatus)) {
+                if (status.getGroupMember().getSummaryPhase() && !isValid(status)) {
                     UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Invalid summary status",
                             "Make sure status for summary (eg AM OK) is valid.");
                     return false;
@@ -263,14 +279,22 @@ public class StatusPivotManager implements Serializable {
         return 0;
     }
 
+    private Integer toInt(PhaseStatus status) {
+        for(SelectablePhase selPhase: selectablePhases) {
+            if (selPhase.getSelected() && selPhase.getPhase().equals(status.getGroupMember().getPhase())) {
+                return toInt(inputStatus);
+            }
+        }
+        return toInt(status.getStatus());
+    }
     /**
      *
      * @param summaryStatus
      * @return
      */
-    private boolean isValid(PhaseStatus summaryStatus, StatusOption inputStatus) {
+    private boolean isValid(PhaseStatus summaryStatus) {
         Integer summaryWeight = summaryWeight(summaryStatus);
-        Integer inputWeight = toInt(inputStatus);
+        Integer inputWeight = toInt(summaryStatus);
 
         // LOGGER.log(Level.INFO, "summary status {0}", summaryStatus.getStatus().getName());
         // LOGGER.log(Level.INFO, "weights summary, min: {0} {1} ", new Object[]{inputWeight, summaryWeight});
@@ -336,9 +360,16 @@ public class StatusPivotManager implements Serializable {
      * @param phase
      */
     public void onCellEdit(PhaseAssignment assignment, Phase phase) {
+        PhaseStatus statusRec = getStatusRec(assignment, phase);
+        inputStatus = null;
+        inputSME = null;
+        if (statusRec != null) {
+            inputStatus = statusRec.getStatus();
+            inputSME = statusRec.getAssignedSME();
+        }
         selectedEntities.clear();
         selectedEntities.add(assignment);
-        inputStatus = getStatusRec(assignment, phase).getStatus();
+
         for (SelectablePhase selectedPhase : selectablePhases) {
             selectedPhase.setSelected(selectedPhase.phase.equals(phase));
         }
@@ -365,17 +396,26 @@ public class StatusPivotManager implements Serializable {
             }
             User user = new User(userId);
 
-            for (PhaseAssignment record : selectedEntities) {
-                for (PhaseStatus status : record.getStatuses()) {
-                    if (status.getAssignedSME() != null && !status.getAssignedSME().equals(user)) {
-                        UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Update Failed",
-                                "You are not authorized to update one or more of the statuses.");
-                        RequestContext.getCurrentInstance().addCallbackParam("success", false);
-                        return;
+            // ToDo: Improve. really bad code
+            for (SelectablePhase selectedPhase : selectablePhases) {
+                if (!selectedPhase.selected) {
+                    continue;
+                }
+                for (PhaseAssignment record : selectedEntities) {
+                    for (PhaseStatus status : record.getStatuses()) {
+                        if (selectedPhase.phase.equals(status.getGroupMember().getPhase())) {
+                            if (status.getAssignedSME() != null && !status.getAssignedSME().equals(user)) {
+                                UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Update Failed",
+                                        "You are not authorized to update one or more of the statuses.");
+                                RequestContext.getCurrentInstance().addCallbackParam("success", false);
+                                return;
+                            }
+                        }
                     }
                 }
             }
 
+            // ToDo: Improve. really bad code
             for (SelectablePhase selectedPhase : selectablePhases) {
                 if (!selectedPhase.selected) {
                     continue;
@@ -387,6 +427,7 @@ public class StatusPivotManager implements Serializable {
                             status.setModifiedBy(user.getUserId());
                             status.setStatus(inputStatus);
                             status.setComment(inputComment);
+                            status.setAssignedSME(inputSME);
                             lcEJB.savePhaseStatus(status);
                         }
                     }
@@ -401,7 +442,8 @@ public class StatusPivotManager implements Serializable {
             System.out.println(e);
 
         } finally {
-//            selectedApproval = null;           
+//            selectedApproval = null;        
+               resetInput();
         }
     }
 
@@ -502,6 +544,26 @@ public class StatusPivotManager implements Serializable {
 
     public Boolean getPhaseSelected() {
         return phaseSelected;
+    }
+
+    public User getInputSME() {
+        return inputSME;
+    }
+
+    public void setInputSME(User inputSME) {
+        this.inputSME = inputSME;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public String getEntityType() {
+        return entityType;
+    }
+
+    public void setEntityType(String entityType) {
+        this.entityType = entityType;
     }
 
 }

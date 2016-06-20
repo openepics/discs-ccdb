@@ -1,0 +1,12 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui" 
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:fragment  rendered="#{not empty statusRec}">
+        <h:outputText id="PhaseStat" value="#{statusRec.assignedSME.userId}" rendered="#{not empty statusRec.assignedSME}"/>
+        <h:outputText value="None" rendered="#{empty statusRec.assignedSME}"/>
+    </ui:fragment>
+
+
+</ui:composition>

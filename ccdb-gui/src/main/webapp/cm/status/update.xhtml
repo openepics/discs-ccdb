@@ -10,12 +10,14 @@
     <ui:define name="content"> 
         <f:metadata>
             <f:viewParam name="type" value="#{statusManager.selectedType}"  /> 
+            <f:viewParam name="ent" value="#{statusManager.entityType}"  /> 
             <f:viewAction action="#{statusManager.initialize()}" />
         </f:metadata>
         <h:form id="crudForm" > 
             <p:panel>
                 <h:outputText value="Status" styleClass="heading"/>
-                <p:dataTable var="stat" id="entityTable" value="#{statusManager.entities}" 
+                <p:dataTable var="stat" id="entityTable" 
+                             value="#{statusManager.entities}"
                              emptyMessage="No records found." 
                              rowKey="#{stat.id}" 
                              selection="#{statusManager.selectedEntities}"
@@ -29,15 +31,15 @@
                     <p:ajax event="rowUnselectCheckbox"  update="commandButtons" />
                     <p:column selectionMode="multiple" style="width:16px;text-align:center" />
                     <p:column headerText="Group" sortBy="#{stat.assignment.slotGroup.name}" filterBy="#{stat.assignment.slotGroup.name}"
-                              filterMatchMode="contains" >
+                              filterMatchMode="contains" rendered="#{param['ent'] == 'g'}">
                         <h:outputText value="#{stat.assignment.slotGroup.name}" />
                     </p:column>
                     <p:column headerText="Slot" sortBy="#{stat.assignment.slot.name}" filterBy="#{stat.assignment.slot.name}"
-                              filterMatchMode="contains" >
+                              filterMatchMode="contains" rendered="#{param['ent'] == 's'}">
                         <h:outputText value="#{stat.assignment.slot.name}" />
                     </p:column>
                     <p:column headerText="Device" sortBy="#{stat.assignment.device.serialNumber}" filterBy="#{stat.assignment.device.serialNumber}"
-                              filterMatchMode="contains" >
+                              filterMatchMode="contains" rendered="#{param['ent'] == 'd'}">
                         <h:outputText value="#{stat.assignment.device.serialNumber}" />
                     </p:column>
                     <p:column headerText="Phase" sortBy="#{stat.groupMember.phase.name}"  filterBy="#{stat.groupMember.phase.name}" >
