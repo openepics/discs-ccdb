@@ -450,9 +450,11 @@ public class StatusPivotManager implements Serializable {
     public PhaseStatus getStatusRec(PhaseAssignment assignment, Phase phase) {
 
         if (assignment == null || phase == null) {
+            LOGGER.log(Level.WARNING, "assignment or phase is null");
             return null;
         }
         for (PhaseStatus status : assignment.getStatuses()) {
+            // LOGGER.log(Level.INFO, "phase {0}", status.getGroupMember().getPhase());
             if (phase.equals(status.getGroupMember().getPhase())) {
                 return status;
             }
