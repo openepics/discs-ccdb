@@ -71,22 +71,11 @@
             <p:submenu label="Checklists" icon="fa fa-list-alt">                              
                 <p:menuitem value="Assignments" icon="fa fa-list-alt" url="/cm/assignments.xhtml?type=Slot-Checklist" />   
                 <p:menuitem value="Status Update" icon="fa fa-list-alt" url="/cm/status/update.xhtml?type=Slot-Checklist" />
+                <p:menuitem value="Status Update Pivot" icon="fa fa-list-alt" url="/cm/status/update-pivot.xhtml?type=Slot-Checklist" />
                 <p:menuitem value="Slot Group" icon="fa fa-list-alt" url="/cm/slots.xhtml" />
                 <p:menuitem value="Status Report" icon="fa fa-list-alt" url="/cm/report/status-report.xhtml?type=Slot-Checklist" />
             </p:submenu>
-            <p:submenu id="cm" label="CM" icon="fa fa-crosshairs"  rendered="false"> 
-                <p:submenu label="Reviews" icon="fa fa-crosshairs">             
-                    <p:menuitem value="Assignments" icon="fa fa-crosshairs" url="/cm/assignments.xhtml?type=review" />    
-                    <p:menuitem value="Approvals" icon="fa fa-crosshairs" url="/cm/status.xhtml?type=review"  />
-                </p:submenu>
-
-                <p:submenu label="Checklists" icon="fa fa-list-alt">                              
-                    <p:menuitem value="Assignments" icon="fa fa-list-alt" url="/cm/assignments.xhtml?type=Slot-Checklist" />   
-                    <p:menuitem value="Status Update" icon="fa fa-list-alt" url="/cm/status.xhtml?type=Slot-Checklist" />
-                    <p:menuitem value="Status Report" icon="fa fa-list-alt" url="/cm/status-report.xhtml?type=Slot-Checklist" />
-                </p:submenu>
-            </p:submenu>
-
+           
             <p:submenu label="Import" icon="fa fa-upload" rendered="false">               
                 <p:menuitem value="Devices" icon="fa fa-upload" url="#" disabled="true"/>
                 <p:menuitem value="Device Types" icon="fa fa-upload" url="#" disabled="true"/>
