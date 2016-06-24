@@ -39,10 +39,9 @@ import org.openepics.discs.ccdb.model.auth.Role;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PhaseGroupMember.findAll", query = "SELECT d FROM PhaseGroupMember d"),
-    @NamedQuery(name = "PhaseGroupMember.findByPhase", query = "SELECT d FROM PhaseGroupMember d WHERE d.phase = :phase"),
-    @NamedQuery(name = "PhaseGroupMember.findPhasesByGroup", query = "SELECT d.phase FROM PhaseGroupMember d WHERE d.phaseGroup = :group"),
+    @NamedQuery(name = "PhaseGroupMember.findPhasesByGroup", query = "SELECT d.phase FROM PhaseGroupMember d WHERE d.phaseGroup = :group ORDER BY d.position ASC"),
     @NamedQuery(name = "PhaseGroupMember.findDefault", query = "SELECT d.defaultStatus FROM PhaseGroupMember d WHERE d.phaseGroup = :group AND d.phase = :phase"),
-    @NamedQuery(name = "PhaseGroupMember.findByGroup", query = "SELECT d FROM PhaseGroupMember d WHERE d.phaseGroup = :group")
+    @NamedQuery(name = "PhaseGroupMember.findByGroup", query = "SELECT d FROM PhaseGroupMember d WHERE d.phaseGroup = :group ORDER BY d.position ASC")
 })
 public class PhaseGroupMember extends ConfigurationEntity {
 
@@ -58,21 +57,26 @@ public class PhaseGroupMember extends ConfigurationEntity {
     
     @ManyToOne(optional = true)
     @JoinColumn(name = "sme")
-    private Role sme;
+    private Role sme; // Subject Matter Expert
     
     @Basic(optional = false)
     @NotNull
     @Column(name = "summary_phase")
-    private Boolean summaryPhase = false;
+    private Boolean summaryPhase = false; // is this a summary phase (like 'AM OK')?
     
     @Basic(optional = false)
     @NotNull
     @Column(name = "optional")
-    private Boolean optional = true;
+    private Boolean optional = true; // can the status option be null for this phase?
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "default_status")
     private StatusOption defaultStatus;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "position")
+    private Integer position = 0; // position in the group (used for ordering the phases in a group)
     
     // --
 
@@ -122,6 +126,14 @@ public class PhaseGroupMember extends ConfigurationEntity {
 
     public void setDefaultStatus(StatusOption defaultStatus) {
         this.defaultStatus = defaultStatus;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
     }
     
 }

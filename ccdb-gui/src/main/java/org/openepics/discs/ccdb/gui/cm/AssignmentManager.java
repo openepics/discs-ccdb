@@ -12,7 +12,6 @@
  *       East Lansing, MI 48824-1321
  *        http://frib.msu.edu
  */
-
 package org.openepics.discs.ccdb.gui.cm;
 
 import java.io.Serializable;
@@ -36,7 +35,6 @@ import org.openepics.discs.ccdb.model.Device;
 import org.openepics.discs.ccdb.model.Slot;
 import org.openepics.discs.ccdb.model.auth.User;
 import org.openepics.discs.ccdb.model.cm.Phase;
-import org.openepics.discs.ccdb.model.cm.PhaseApproval;
 import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
 import org.openepics.discs.ccdb.model.cm.PhaseGroup;
 import org.openepics.discs.ccdb.model.cm.SlotGroup;
@@ -68,48 +66,50 @@ import org.primefaces.event.SelectEvent;
  * @author vuppala
  *
  */
-
 @Named
 @ViewScoped
 public class AssignmentManager implements Serializable {
 //    @EJB
 //    private AuthEJB authEJB;
+
     @EJB
     private LifecycleEJB lcEJB;
-    @EJB 
+    @EJB
     private SlotEJB slotEJB;
-    @EJB 
+    @EJB
     private DeviceEJB deviceEJB;
-    @EJB 
+    @EJB
     private AuthEJB authEJB;
     @Inject
     private SecurityPolicy securityPolicy;
-    
+
     private static final Logger LOGGER = Logger.getLogger(AssignmentManager.class.getName());
-//    @Inject
-//    UserSession userSession;
-      
+
+     // request parameters
     private String selectedType;
-    private String entityType = "g";
-    private List<PhaseAssignment> entities;    
-    private List<PhaseAssignment> filteredEntities;    
-    private PhaseAssignment inputEntity;
+    private CMEntityType entityType = CMEntityType.GROUP;
+
+    // view data
+    private List<PhaseAssignment> entities;
+    private List<PhaseAssignment> filteredEntities;
     private PhaseAssignment selectedEntity;
-    private InputAction inputAction;
-    private List<User> inputApprovers = new ArrayList<>();
-    
     private List<Slot> slots;
     private List<SlotGroup> slotGroups;
     private List<Phase> phases;
     private List<PhaseGroup> phaseGroups;
     private List<Device> devices;
     private List<User> users;
-    
+
+     // input data
+    private InputAction inputAction;
+    private PhaseAssignment inputEntity;
+    private List<User> inputApprovers = new ArrayList<>();
+
     public AssignmentManager() {
     }
-    
+
     @PostConstruct
-    public void init() { 
+    public void init() {
         devices = deviceEJB.findAll();
         slots = slotEJB.findByIsHostingSlot(true);
         slotGroups = lcEJB.findAllSlotGroups();
@@ -118,54 +118,50 @@ public class AssignmentManager implements Serializable {
         initialize();
         resetInput();
     }
-    
+
     /**
      * Initialize data in view
-     * 
-     * @return 
+     *
+     * @return
      */
     public String initialize() {
         String nextView = null;
         PhaseGroup stype = null;
-        
+
         if (selectedType != null) {
             stype = lcEJB.findPhaseGroup(selectedType);
         }
-        
+
         if (stype == null) {
             phases = lcEJB.findAllPhases();
-            // entities = lcEJB.findAllAssignments();
-        } else {         
+        } else {
             phases = lcEJB.findPhases(stype);
-            // entities = lcEJB.findAssignments(stype);
         }
-        
+
         switch (entityType) {
-            case "g": entities = lcEJB.findGroupAssignments();
-            break;
-            case "s": entities = lcEJB.findSlotAssignments();
-            break;
-            case "d": entities = lcEJB.findDeviceAssignments();
-            break;
-            default: entities = lcEJB.findGroupAssignments();
+            case GROUP:
+                entities = lcEJB.findGroupAssignments();
+                break;
+            case SLOT:
+                entities = lcEJB.findSlotAssignments();
+                break;
+            case DEVICE:
+                entities = lcEJB.findDeviceAssignments();
+                break;
+            default:
+                entities = lcEJB.findGroupAssignments();
         }
-    
+
         return nextView;
     }
-    
-    private void resetInput() {                
+
+    private void resetInput() {
         inputAction = InputAction.READ;
     }
-    
+
     public void onRowSelect(SelectEvent event) {
-//        inputApprovers.clear();
-//        for (PhaseApproval approval: selectedEntity.getApprovals()) {
-//            if (approval.getAssignedApprover() != null) inputApprovers.add(approval.getAssignedApprover());
-//        }
-        // inputRole = selectedRole;
-        // Utility.showMessage(FacesMessage.SEVERITY_INFO, "Role Selected", "");
     }
-    
+
     public void onAddCommand(ActionEvent event) {
         inputEntity = new PhaseAssignment();
         inputAction = InputAction.CREATE;
@@ -178,54 +174,54 @@ public class AssignmentManager implements Serializable {
         User user = new User(userId);
         inputEntity.setRequestor(user);
     }
-    
+
     public void onEditCommand(ActionEvent event) {
         inputAction = InputAction.UPDATE;
     }
-    
+
     public void onDeleteCommand(ActionEvent event) {
         inputAction = InputAction.DELETE;
     }
-    
+
     private boolean inputIsValid() {
-        PhaseAssignment assignment = inputAction == InputAction.CREATE? inputEntity : selectedEntity;
-        
+        PhaseAssignment assignment = inputAction == InputAction.CREATE ? inputEntity : selectedEntity;
+
         if (assignment.getDevice() == null && assignment.getSlotGroup() == null && assignment.getSlot() == null) {
             UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must specify a group, slot or a device", "");
             return false;
         }
-        
+
         if (assignment.getDevice() != null && assignment.getSlot() != null) {
             UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must not specify a slot and a device", "");
             return false;
         }
-        
+
         if (assignment.getDevice() != null && assignment.getSlotGroup() != null) {
             UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must not specify a group and a device", "");
             return false;
         }
-        
+
         if (assignment.getSlot() != null && assignment.getSlotGroup() != null) {
             UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must not specify a group and a slot", "");
             return false;
         }
-        
+
 //        if (inputApprovers == null || inputApprovers.isEmpty()) {
 //            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "You must specify a user", "");
 //            return false;
 //        }
         return true;
     }
-    
+
     public void saveEntity() {
-        try {            
-            if (! inputIsValid()) {
-               RequestContext.getCurrentInstance().addCallbackParam("success", false);
-               return; 
+        try {
+            if (!inputIsValid()) {
+                RequestContext.getCurrentInstance().addCallbackParam("success", false);
+                return;
             }
             if (inputAction == InputAction.CREATE) {
                 lcEJB.saveAssignment(inputEntity, inputApprovers);
-                entities.add(inputEntity);                
+                entities.add(inputEntity);
             } else {
                 lcEJB.saveAssignment(selectedEntity, inputApprovers);
             }
@@ -238,11 +234,11 @@ public class AssignmentManager implements Serializable {
             System.out.println(e);
         }
     }
-    
+
     public void deleteEntity() {
         try {
             lcEJB.deleteAssignment(selectedEntity);
-            entities.remove(selectedEntity);  
+            entities.remove(selectedEntity);
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Success", "Deletion was successful. However, you may have to refresh the page.");
             resetInput();
@@ -252,9 +248,8 @@ public class AssignmentManager implements Serializable {
             System.out.println(e);
         }
     }
-    
+
     //-- Getters/Setters 
-    
     public InputAction getInputAction() {
         return inputAction;
     }
@@ -339,13 +334,11 @@ public class AssignmentManager implements Serializable {
         this.phaseGroups = phaseGroups;
     }
 
-    public String getEntityType() {
+    public CMEntityType getEntityType() {
         return entityType;
     }
 
-    public void setEntityType(String entityType) {
+    public void setEntityType(CMEntityType entityType) {
         this.entityType = entityType;
     }
-    
-    
 }

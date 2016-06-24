@@ -172,6 +172,12 @@ a {
 
 .iconDisplay { 
     display: inline-block; 
+    text-decoration: none !important;
+    
+}
+
+a.iconDisplay { 
+    text-decoration: none !important; 
 }
 
 .thinPanel tr .thinPanel td {

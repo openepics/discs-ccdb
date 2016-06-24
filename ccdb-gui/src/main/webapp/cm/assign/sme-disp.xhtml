@@ -7,6 +7,6 @@
         <h:outputText id="PhaseStat" value="#{statusRec.assignedSME.userId}" rendered="#{not empty statusRec.assignedSME}"/>
         <h:outputText value="None" rendered="#{empty statusRec.assignedSME}"/>
     </ui:fragment>
-
+    <h:outputText value="NA" rendered="#{empty statusRec}" title="Not Assigned"/>
 
 </ui:composition>

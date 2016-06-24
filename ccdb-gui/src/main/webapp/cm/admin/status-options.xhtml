@@ -33,9 +33,18 @@
                         <h:outputText value="#{obj.description}" styleClass="colCenter"/>
                     </p:column>
 
-                    <p:column headerText="Logical" >
+                    <p:column headerText="Value" >
                         <h:outputText value="#{obj.logicalValue}" styleClass="colCenter"/>
                     </p:column>
+                    
+                    <p:column headerText="Weight" >
+                        <h:outputText value="#{obj.weight}" styleClass="colCenter"/>
+                    </p:column>
+                    
+                    <p:column headerText="Completed" >
+                        <h:outputText value="#{obj.completed}" styleClass="colCenter"/>
+                    </p:column>
+                    
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">
@@ -121,6 +130,27 @@
                         </p:column>
                     </p:row>
                     
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="completed"  value="Indicates Group Completion" />
+                        </p:column>
+                        <p:column>
+                            <p:selectBooleanCheckbox id="completed" value="#{statusOptionManager.inputAction == 'CREATE'? statusOptionManager.inputEntity.completed : statusOptionManager.selectedEntity.completed}" 
+                                                     required="true" 
+                                                     validatorMessage="Description required" disabled="#{statusOptionManager.inputAction == 'DELETE'}"/>                            
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="weight"  value="Relative Weight" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="weight" value="#{statusOptionManager.inputAction == 'CREATE'? statusOptionManager.inputEntity.weight : statusOptionManager.selectedEntity.weight}" 
+                                         required="true" 
+                                         validatorMessage="Description required" disabled="#{statusOptionManager.inputAction == 'DELETE'}"  converterMessage="Please enter digits only"/>
+                              
+                        </p:column>
+                    </p:row>
 
                     <f:facet name="footer">
                         <p:row>

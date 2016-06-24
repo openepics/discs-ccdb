@@ -17,7 +17,6 @@ package org.openepics.discs.ccdb.gui.cm;
 import com.google.common.base.Preconditions;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +34,6 @@ import org.openepics.discs.ccdb.core.ejb.AuthEJB;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.core.security.SecurityPolicy;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
-import org.openepics.discs.ccdb.model.Slot;
 import org.openepics.discs.ccdb.model.auth.User;
 import org.openepics.discs.ccdb.model.cm.Phase;
 import org.openepics.discs.ccdb.model.cm.PhaseAssignment;
@@ -74,8 +72,6 @@ import org.primefaces.event.SelectEvent;
 @Named
 @ViewScoped
 public class StatusPivotManager implements Serializable {
-//    @EJB
-//    private AuthEJB authEJB;
 
     public static class SelectablePhase implements Serializable {
 
@@ -83,7 +79,6 @@ public class StatusPivotManager implements Serializable {
         private Phase phase;
 
         private SelectablePhase() {
-
         }
 
         public SelectablePhase(Phase phase) {
@@ -106,6 +101,7 @@ public class StatusPivotManager implements Serializable {
             this.phase = phase;
         }
     }
+    
 
     @EJB
     private LifecycleEJB lcEJB;
@@ -115,10 +111,12 @@ public class StatusPivotManager implements Serializable {
     private SecurityPolicy securityPolicy;
 
     private static final Logger LOGGER = Logger.getLogger(StatusPivotManager.class.getName());
-//    @Inject
-//    UserSession userSession;
 
-    private String entityType = "g";
+    // request parameters
+    private CMEntityType entityType = CMEntityType.GROUP;
+    private String selectedPhaseGroup;
+    
+    // view data
     private List<SlotGroup> slotGroups;
     private List<Phase> phases;
     private List<SelectablePhase> selectablePhases;
@@ -126,30 +124,24 @@ public class StatusPivotManager implements Serializable {
     private List<PhaseAssignment> filteredEntities;
     private List<StatusOption> statusOptions;
     private List<User> users;
+    private Boolean allPhasesOptional = false; // are all selected phases optional? or is there a mandatory phase?
+    private Boolean phaseSelected = false; // is at least one phase selected?
+    private List<PhaseAssignment> selectedEntities = new ArrayList<>();
+    
+    // input data
     private PhaseAssignment inputEntity;
-    // private PhaseAssignment selectedEntity;
     private InputAction inputAction;
     private StatusOption inputStatus;
-    private String selectedType;
     private String inputComment;
     private User inputSME;
-    // private boolean phaseNR = false; // Phase not required
-    private Boolean allPhasesOptional = false;
-    private Boolean phaseSelected = false;
-
-    private List<PhaseAssignment> selectedEntities = new ArrayList<>();
-
+    
     public StatusPivotManager() {
     }
 
     @PostConstruct
     public void init() {
         slotGroups = lcEJB.findAllSlotGroups();
-        phases = lcEJB.findAllPhases();
-        users = authEJB.findAllUsers();
-        selectablePhases = phases == null ? Collections.<SelectablePhase>emptyList() : phases.stream().map(p -> new SelectablePhase(p)).collect(Collectors.toList());
-        updatePhaseSelected();
-        resetInput();
+        users = authEJB.findAllUsers();        
     }
 
     /**
@@ -161,39 +153,91 @@ public class StatusPivotManager implements Serializable {
         String nextView = null;
         PhaseGroup stype = null;
 
-        if (selectedType != null) {
-            stype = lcEJB.findPhaseGroup(selectedType);
+        if (selectedPhaseGroup != null) {
+            stype = lcEJB.findPhaseGroup(selectedPhaseGroup);
         }
 
         if (stype == null) {
-            // entities = lcEJB.findAllAssignments();
+            phases = lcEJB.findAllPhases();
         } else {
-//            entities = lcEJB.findAllValidStatuses();
-            // entities = lcEJB.findAssignments(stype);
+            phases = lcEJB.findPhases(stype);
             statusOptions = lcEJB.findStatusOptions(stype);
         }
+        selectablePhases = phases == null ? Collections.<SelectablePhase>emptyList() : phases.stream().map(p -> new SelectablePhase(p)).collect(Collectors.toList());
+        updatePhaseSelected();
         
         switch (entityType) {
-            case "g": entities = lcEJB.findGroupAssignments();
-            break;
-            case "s": entities = lcEJB.findSlotAssignments();
-            break;
-            case "d": entities = lcEJB.findDeviceAssignments();
-            break;
-            default: entities = lcEJB.findGroupAssignments();
+            case GROUP:
+                entities = lcEJB.findGroupAssignments();
+                break;
+            case SLOT:
+                entities = lcEJB.findSlotAssignments();
+                break;
+            case DEVICE:
+                entities = lcEJB.findDeviceAssignments();
+                break;
+            default:
+                entities = lcEJB.findGroupAssignments();
         }
+
         return nextView;
     }
 
+    /**
+     * Is an assignment locked/frozen i.e. its summary phase is completed (set to Y or YC?
+     * 
+     * @param assignment
+     * @return 
+     */
+    public Boolean lockedAssignment(PhaseAssignment assignment) {
+        if (assignment == null) return false;
+        // return assignment.getStatuses().stream().filter(s -> s.getGroupMember().getSummaryPhase()).allMatch(s -> s.getStatus() == null? false: s.getStatus().getCompleted());
+        Boolean hasSummary = false;
+        for(PhaseStatus status: assignment.getStatuses()) {
+            if (status.getGroupMember().getSummaryPhase() && status.getStatus() != null) {
+                hasSummary = true;
+                if (! status.getStatus().getCompleted()) {
+                    return false;
+                }
+            }
+        }
+        return hasSummary;
+    }
+    
+     /**
+     * Is a phase of an assignment locked/frozen?
+     * 
+     * @param assignment
+     * @param phase
+     * @return 
+     */
+    public Boolean lockedAssignment(PhaseAssignment assignment, Phase phase) {
+        PhaseStatus phaseStatus = getStatusRec(assignment,phase);
+        if (phaseStatus == null) return false;
+        if (phaseStatus.getGroupMember().getSummaryPhase()) return false;
+        return lockedAssignment(assignment);
+    }
+    
+    /**
+     * reset all input fields
+     * 
+     */
     public void resetInput() {
         inputAction = InputAction.READ;
         inputComment = null;
-        // phaseNR = false;
         if (statusOptions != null) {
             inputStatus = statusOptions.get(0);
         }
+        selectedEntities.clear();
+        selectablePhases.forEach(p -> {p.setSelected(false);});
+        updatePhaseSelected();
     }
 
+    /**
+     * when a row is selected
+     * 
+     * @param event 
+     */
     public void onRowSelect(SelectEvent event) {
     }
 
@@ -220,22 +264,39 @@ public class StatusPivotManager implements Serializable {
         return true;
     }
 
+    /**
+     * check if at least one phase is selected.
+     * 
+     */
     private void updatePhaseSelected() {
         phaseSelected = selectablePhases.stream().anyMatch(p -> p.selected == true);
     }
 
+    /**
+     * when 'add' button is activated
+     * 
+     * @param event 
+     */
     public void onAddCommand(ActionEvent event) {
         inputEntity = new PhaseAssignment();
         inputAction = InputAction.CREATE;
-
     }
 
+    /**
+     * when Edit button is activated
+     * 
+     * @param event 
+     */
     public void onEditCommand(ActionEvent event) {
         inputAction = InputAction.UPDATE;
         allPhasesOptional = findOptional();
         LOGGER.log(Level.INFO, "allphaseOptional {0}", allPhasesOptional);
     }
 
+    /**
+     * when delete button is activated
+     * @param event 
+     */
     public void onDeleteCommand(ActionEvent event) {
         inputAction = InputAction.DELETE;
     }
@@ -260,35 +321,32 @@ public class StatusPivotManager implements Serializable {
     }
 
     /**
-     *
+     * Convert status to 
      * @param status
      * @return
      */
     private Integer toInt(StatusOption status) {
-        switch (status.getName()) {
-            case "NR":
-                return 2;
-            case "Y":
-                return 1;
-            case "YC":
-                return 0;
-            case "N":
-                return 0;
-        }
-
-        return 0;
+        return status == null? 0: status.getWeight();
     }
 
+    /**
+     * Weight of a given phase status. If it is selected then use the input status, otherwise use the stored status.
+     * 
+     * @param status
+     * @return 
+     */
     private Integer toInt(PhaseStatus status) {
-        for(SelectablePhase selPhase: selectablePhases) {
+        for (SelectablePhase selPhase : selectablePhases) {
             if (selPhase.getSelected() && selPhase.getPhase().equals(status.getGroupMember().getPhase())) {
                 return toInt(inputStatus);
             }
         }
         return toInt(status.getStatus());
     }
+
     /**
-     *
+     * is the status of the given phase valid?
+     * 
      * @param summaryStatus
      * @return
      */
@@ -296,13 +354,12 @@ public class StatusPivotManager implements Serializable {
         Integer summaryWeight = summaryWeight(summaryStatus);
         Integer inputWeight = toInt(summaryStatus);
 
-        // LOGGER.log(Level.INFO, "summary status {0}", summaryStatus.getStatus().getName());
-        // LOGGER.log(Level.INFO, "weights summary, min: {0} {1} ", new Object[]{inputWeight, summaryWeight});
         return inputWeight <= summaryWeight;
     }
 
     /**
-     *
+     * Get the weight of the summary status
+     * 
      * @param status
      * @return
      */
@@ -319,39 +376,40 @@ public class StatusPivotManager implements Serializable {
     }
 
     /**
-     *
+     * when a phase is selected/unselected
+     * 
      * @param phase
      */
     public void onTogglePhase(Phase phase) {
-        selectablePhases.stream().filter(p -> p.phase.equals(phase)).forEach(u -> u.setSelected(!u.selected));
+        // selectablePhases.stream().filter(p -> p.phase.equals(phase)).forEach(u -> u.setSelected(!u.selected));
         updatePhaseSelected();
         // UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Toggle phase ", phase.getName());
     }
 
     /**
-     *
+     * 
      * @param status
      * @return
      */
-    public String summaryStatus(PhaseStatus status) {
-        if (!status.getGroupMember().getSummaryPhase()) {
-            return "";
-        }
-
-        for (PhaseStatus stat : lcEJB.findAllStatuses(status.getAssignment())) {
-            if (!stat.getGroupMember().getSummaryPhase() && stat.getStatus() != null && "N".equals(stat.getStatus().getName())) {
-                return "N";
-            }
-        }
-
-        for (PhaseStatus stat : lcEJB.findAllStatuses(status.getAssignment())) {
-            if (!stat.getGroupMember().getSummaryPhase() && stat.getStatus() != null && "YC".equals(stat.getStatus().getName())) {
-                return "YC";
-            }
-        }
-
-        return "Y";
-    }
+//    public String summaryStatus(PhaseStatus status) {
+//        if (!status.getGroupMember().getSummaryPhase()) {
+//            return "";
+//        }
+//
+//        for (PhaseStatus stat : lcEJB.findAllStatuses(status.getAssignment())) {
+//            if (!stat.getGroupMember().getSummaryPhase() && stat.getStatus() != null && "N".equals(stat.getStatus().getName())) {
+//                return "N";
+//            }
+//        }
+//
+//        for (PhaseStatus stat : lcEJB.findAllStatuses(status.getAssignment())) {
+//            if (!stat.getGroupMember().getSummaryPhase() && stat.getStatus() != null && "YC".equals(stat.getStatus().getName())) {
+//                return "YC";
+//            }
+//        }
+//
+//        return "Y";
+//    }
 
     /**
      * When a cell is clicked for edits
@@ -377,7 +435,8 @@ public class StatusPivotManager implements Serializable {
     }
 
     /**
-     *
+     * update status of the selected entities and phases
+     * 
      */
     public void saveEntity() {
         try {
@@ -443,10 +502,17 @@ public class StatusPivotManager implements Serializable {
 
         } finally {
 //            selectedApproval = null;        
-               resetInput();
+            resetInput();
         }
     }
 
+    /**
+     * Find  status record for the given assignment and phase
+     * 
+     * @param assignment
+     * @param phase
+     * @return 
+     */
     public PhaseStatus getStatusRec(PhaseAssignment assignment, Phase phase) {
 
         if (assignment == null || phase == null) {
@@ -462,6 +528,7 @@ public class StatusPivotManager implements Serializable {
 
         return null;
     }
+    
     //-- Getters/Setters 
 
     public InputAction getInputAction() {
@@ -524,24 +591,12 @@ public class StatusPivotManager implements Serializable {
         return statusOptions;
     }
 
-    public String getSelectedType() {
-        return selectedType;
-    }
-
-    public void setSelectedType(String selectedType) {
-        this.selectedType = selectedType;
-    }
-
     public Boolean getAllPhasesOptional() {
         return allPhasesOptional;
     }
 
     public List<SelectablePhase> getSelectablePhases() {
         return selectablePhases;
-    }
-
-    public void setSelectablePhases(List<SelectablePhase> selectablePhases) {
-        this.selectablePhases = selectablePhases;
     }
 
     public Boolean getPhaseSelected() {
@@ -560,12 +615,19 @@ public class StatusPivotManager implements Serializable {
         return users;
     }
 
-    public String getEntityType() {
+    public CMEntityType getEntityType() {
         return entityType;
     }
 
-    public void setEntityType(String entityType) {
+    public void setEntityType(CMEntityType entityType) {
         this.entityType = entityType;
     }
 
+    public String getSelectedPhaseGroup() {
+        return selectedPhaseGroup;
+    }
+
+    public void setSelectedPhaseGroup(String selectedPhaseGroup) {
+        this.selectedPhaseGroup = selectedPhaseGroup;
+    }
 }

@@ -85,7 +85,7 @@ public class CmSlotManager implements Serializable {
     public void init() {
         entities = slotEJB.findByIsHostingSlot(true);
         slotGroups = lcEJB.findAllSlotGroups();
-        selectedEntity = entities.get(0);
+        selectedEntity = (entities == null || entities.isEmpty()) ? null: entities.get(0);
         resetInput();
     }
 

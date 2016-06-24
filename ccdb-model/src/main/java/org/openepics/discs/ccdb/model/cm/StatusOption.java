@@ -71,6 +71,16 @@ public class StatusOption extends ConfigurationEntity {
     @Column(name = "logical_value")
     private Boolean logicalValue = true;
     
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "completed")
+    private Boolean completed = false; // if true for a summary phase, rest of the phases in the group are frozen.
+    
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "weight")
+    private Integer weight = 0; // relative importance of the options. summary phase must be greater than or equal to the rest of the phases.
+    
     // getters and setters
 
     public String getName() {
@@ -103,6 +113,22 @@ public class StatusOption extends ConfigurationEntity {
 
     public void setLogicalValue(Boolean logicalValue) {
         this.logicalValue = logicalValue;
+    }
+
+    public Boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
     
 }

@@ -9,61 +9,68 @@
 
     <ui:define name="content"> 
         <f:metadata>
-            <f:viewParam name="type" value="#{statusPivotManager.selectedType}"  /> 
-            <f:viewParam name="ent" value="#{statusPivotManager.entityType}"  />
+            <f:viewParam name="pg" value="#{statusPivotManager.selectedPhaseGroup}"  /> 
+            <f:viewParam name="et" value="#{statusPivotManager.entityType}"  />
             <f:viewAction action="#{statusPivotManager.initialize()}" />
         </f:metadata>
         <h:form id="crudForm" > 
             <p:panel>
-                <h:outputText value="Status" styleClass="heading"/>
+                <h:outputText value="Update Status" styleClass="heading"/>
                 <p:dataTable var="assignment" id="entityTable" 
                              value="#{statusPivotManager.entities}"
                              emptyMessage="No records found."  rowSelectMode="checkbox"
                              rowKey="#{assignment.id}" 
                              selection="#{statusPivotManager.selectedEntities}"
                              resizableColumns="true" filteredValue="#{statusPivotManager.filteredEntities}" 
+                             disabledSelection="#{statusPivotManager.lockedAssignment(assignment)}"
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
                              rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">   
 
                     <p:ajax event="rowSelectCheckbox" listener="#{statusPivotManager.onRowSelect}" update="commandButtons" />
-                    <p:ajax event="toggleSelect"  update="commandButtons" />
+                    <p:ajax event="toggleSelect"  update="commandButtons"  process="@this"/>
                     <p:ajax event="rowUnselectCheckbox"  update="commandButtons" />
                     <p:column selectionMode="multiple" style="width:16px;text-align:center"  />
                     <p:column headerText="Group" sortBy="#{assignment.slotGroup.name}" filterBy="#{assignment.slotGroup.name}"
-                              filterMatchMode="contains" rendered="#{statusPivotManager.entityType eq  'g'}">
+                              filterMatchMode="contains" rendered="#{statusPivotManager.entityType eq  'GROUP'}">
                         <h:outputText value="#{assignment.slotGroup.name}" />
                     </p:column>
                     <p:column headerText="Slot" sortBy="#{assignment.slot.name}" filterBy="#{assignment.slot.name}"
-                              filterMatchMode="contains" rendered="#{statusPivotManager.entityType eq  's'}">
+                              filterMatchMode="contains" rendered="#{statusPivotManager.entityType eq  'SLOT'}">
                         <h:outputText value="#{assignment.slot.name}" />
                     </p:column>
                     <p:column headerText="Device" sortBy="#{assignment.device.serialNumber}" filterBy="#{assignment.device.serialNumber}"
-                              filterMatchMode="contains" rendered="#{statusPivotManager.entityType eq  'd'}">
+                              filterMatchMode="contains" rendered="#{statusPivotManager.entityType eq  'DEVICE'}">
                         <h:outputText value="#{assignment.device.serialNumber}" />
                     </p:column>
                     <p:column headerText="Requestor" sortBy="#{assignment.requestor.name}" filterBy="#{assignment.requestor.name}"
                               filterMatchMode="contains" >
                         <h:outputText value="#{assignment.requestor.name}" />
                     </p:column>
-                    <p:columns value="#{statusPivotManager.selectablePhases}" var="selPhase" columnIndexVar="colIndex" >
-                        <f:facet name="header">                          
-                            <p:selectBooleanCheckbox>
-                                <p:ajax  listener="#{statusPivotManager.onTogglePhase(selPhase.phase)}" update=":crudForm:entityTable:commandButtons" />
-                            </p:selectBooleanCheckbox>
-                            <h:outputText value=" #{selPhase.phase.name}" />
-                        </f:facet>
-                        <p:commandLink update=":crudInputDlg" process="@this" disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}"
-                                       actionListener="#{statusPivotManager.onCellEdit(assignment, selPhase.phase)}" oncomplete="PF('crudInputWid').show()" >                      
-                            <div style="text-align: center;">
+
+                    <c:forEach items="#{statusPivotManager.selectablePhases}" var="selPhase" varStatus="loop">
+                        <p:column style="text-align: center">                       
+                            <f:facet name="header">                          
+                                <p:selectBooleanCheckbox value="#{selPhase.selected}"  itemLabel="#{selPhase.phase.name}">
+                                    <p:ajax  listener="#{statusPivotManager.onTogglePhase(selPhase.phase)}" update=":crudForm:entityTable:commandButtons" />
+                                </p:selectBooleanCheckbox>                              
+                            </f:facet>
+                            <div>
                                 <ui:include src="status-disp.xhtml">
                                     <ui:param name="statusRec" value="#{statusPivotManager.getStatusRec(assignment, selPhase.phase)}" />
+                                    <ui:param name="statusId" value="stat-#{loop.index}" />
                                 </ui:include>
+                                <p:spacer width="5"/>
+                                <p:commandLink update=":crudInputDlg @form" process="@this" disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}" 
+                                               rendered="#{not statusPivotManager.lockedAssignment(assignment, selPhase.phase)}"
+                                               actionListener="#{statusPivotManager.onCellEdit(assignment, selPhase.phase)}" 
+                                               oncomplete="PF('crudInputWid').show()"   styleClass="iconDisplay">                      
+                                    <i class="fa fa-pencil-square-o" title="modify" />
+                                </p:commandLink>
                             </div>
-                        </p:commandLink>
-                    </p:columns>
+                        </p:column>
 
-                                       
+                    </c:forEach>                                    
 
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
@@ -72,9 +79,9 @@
                                                  actionListener="#{statusPivotManager.onEditCommand}" oncomplete="PF('crudInputWid').show()"
                                                  disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY') or empty statusPivotManager.selectedEntities or not statusPivotManager.phaseSelected}" />   
 
-                                <p:commandButton title="Delete" value="Delete" icon="ui-icon-trash" update=":crudInputDlg" process="@this" 
-                                                 actionListener="#{statusPivotManager.onDeleteCommand}" oncomplete="PF('crudInputWid').show()" 
-                                                 disabled="#{true or empty statusPivotManager.selectedEntities}"/>
+                                <p:commandButton title="Reset" value="Reset" icon="ui-icon-refresh" update=":crudForm:entityTable" process="@this" 
+                                                 actionListener="#{statusPivotManager.resetInput()}"  
+                                                 disabled="#{empty statusPivotManager.selectedEntities and not statusPivotManager.phaseSelected}"/>
                             </f:facet>
                         </p:toolbar>
                     </f:facet>
@@ -143,7 +150,7 @@
                         <p:row>
                             <p:column colspan="2">
                                 <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
-                                                 actionListener="#{statusPivotManager}" onclick="PF('crudInputWid').hide()"/>
+                                                 onclick="PF('crudInputWid').hide()"/>
                                 <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
                                                  action="#{statusPivotManager.saveEntity()}"  
                                                  oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"

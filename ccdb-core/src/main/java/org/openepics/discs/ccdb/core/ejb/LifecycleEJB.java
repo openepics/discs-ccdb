@@ -15,8 +15,6 @@
  */
 package org.openepics.discs.ccdb.core.ejb;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -116,9 +114,11 @@ public class LifecycleEJB {
     public List<PhaseAssignment> findGroupAssignments() {
         return em.createNamedQuery("PhaseAssignment.findGroupAssignments", PhaseAssignment.class).getResultList();
     }
+    
     public List<PhaseAssignment> findSlotAssignments() {
         return em.createNamedQuery("PhaseAssignment.findSlotAssignments", PhaseAssignment.class).getResultList();
     }
+    
     public List<PhaseAssignment> findDeviceAssignments() {
         return em.createNamedQuery("PhaseAssignment.findDeviceAssignments", PhaseAssignment.class).getResultList();
     }

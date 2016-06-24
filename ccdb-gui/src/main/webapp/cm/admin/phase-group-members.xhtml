@@ -29,7 +29,7 @@
                         <h:outputText value="#{obj.phase.name}" styleClass="colCenter"/>
                     </p:column>
 
-                    <p:column headerText="SME" >
+                    <p:column headerText="SME" filterBy="#{obj.sme.roleId}" filterMatchMode="contains" >
                         <h:outputText value="#{obj.sme.roleId}" styleClass="colCenter"/>
                     </p:column>
                     <p:column headerText="Summary" >
@@ -40,6 +40,9 @@
                     </p:column>
                     <p:column headerText="Optional" >
                         <h:outputText value="#{obj.optional}" styleClass="colCenter"/>
+                    </p:column>
+                    <p:column headerText="Position"  sortBy="#{obj.position}">
+                        <h:outputText value="#{obj.position}" styleClass="colCenter"/>
                     </p:column>
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
@@ -173,6 +176,17 @@
                             <p:selectBooleanCheckbox id="phaseOpt" value="#{phaseMemberManager.inputAction == 'CREATE'? phaseMemberManager.inputEntity.optional : phaseMemberManager.selectedEntity.optional}" 
                                                      required="true" 
                                                      validatorMessage="Value Required" disabled="#{phaseMemberManager.inputAction == 'DELETE'}"/>                            
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="position"  value="Position" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="position" value="#{phaseMemberManager.inputAction == 'CREATE'? phaseMemberManager.inputEntity.position : phaseMemberManager.selectedEntity.position}" 
+                                         required="true" 
+                                         validatorMessage="Description required" disabled="#{phaseMemberManager.inputAction == 'DELETE'}"  converterMessage="Please enter digits only"/>
+                              
                         </p:column>
                     </p:row>
                     <f:facet name="footer">

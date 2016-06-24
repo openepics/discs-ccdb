@@ -9,8 +9,8 @@
 
     <ui:define name="content"> 
         <f:metadata>
-            <f:viewParam name="type" value="#{assignmentManager.selectedType}"  /> 
-            <f:viewParam name="ent" value="#{assignmentManager.entityType}"  /> 
+            <f:viewParam name="pg" value="#{assignmentManager.selectedType}"  /> 
+            <f:viewParam name="et" value="#{assignmentManager.entityType}"  /> 
             <f:viewAction action="#{assignmentManager.initialize()}" />
         </f:metadata>
         <h:form id="crudForm" > 
@@ -18,7 +18,7 @@
                 <h:outputText value="Checklist Assignment" styleClass="heading"/>
                 <p:dataTable id="entityTable" var="entity" 
                              value="#{assignmentManager.entities}"
-                              emptyMessage="No records found." 
+                             emptyMessage="No records found." 
                              rowKey="#{entity.id}" selectionMode="single" selection="#{assignmentManager.selectedEntity}"
                              resizableColumns="true" filteredValue="#{assignmentManager.filteredEntities}" 
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
@@ -27,16 +27,16 @@
 
                     <p:ajax event="rowSelect" listener="#{assignmentManager.onRowSelect}" update="commandButtons" />
                     <p:column headerText="Group" sortBy="#{entity.slotGroup.name}" filterBy="#{entity.slotGroup.name}"
-                              filterMatchMode="contains" rendered="#{assignmentManager.entityType eq 'g'}">
+                              filterMatchMode="contains" rendered="#{assignmentManager.entityType eq 'GROUP'}">
                         <h:outputText value="#{entity.slotGroup.name}" />
                     </p:column>
                     <p:column headerText="Slot" sortBy="#{entity.slot.name}" filterBy="#{entity.slot.name}"
-                              filterMatchMode="contains" rendered="#{assignmentManager.entityType eq 's'}">
+                              filterMatchMode="contains" rendered="#{assignmentManager.entityType eq 'SLOT'}">
                         <h:outputText value="#{entity.slot.name}" />
                     </p:column>
 
                     <p:column headerText="Device" sortBy="#{entity.device.serialNumber}" filterBy="#{entity.device.serialNumber}"
-                              filterMatchMode="contains" rendered="#{assignmentManager.entityType eq 'd'}">
+                              filterMatchMode="contains" rendered="#{assignmentManager.entityType eq 'DEVICE'}">
                         <h:outputText value="#{entity.device.serialNumber}" />
                     </p:column>
 
@@ -85,7 +85,7 @@
                             </p:column>                
                         </p:row>
                     </f:facet>
-                    <p:row>
+                    <p:row rendered="#{assignmentManager.entityType eq 'GROUP'}">
                         <p:column>
                             <p:outputLabel for="slotGrpList" value="Slot Group"/>
                         </p:column>
@@ -105,7 +105,7 @@
                             </p:selectOneMenu>                                                    
                         </p:column>
                     </p:row>
-                    <p:row>
+                    <p:row rendered="#{assignmentManager.entityType eq 'SLOT'}">
                         <p:column>
                             <p:outputLabel for="slotList" value="Slot"/>
                         </p:column>
@@ -126,7 +126,7 @@
                         </p:column>
                     </p:row>
 
-                    <p:row>
+                    <p:row rendered="#{assignmentManager.entityType eq 'DEVICE'}">
                         <p:column>
                             <p:outputLabel for="devices" value="Device"/>
                         </p:column>
@@ -169,25 +169,6 @@
                             </p:selectOneMenu>                                                     
                         </p:column>
                     </p:row>
-                    <!--                    <p:row>
-                                            <p:column>
-                                                <p:outputLabel for="apprList" value="Assignees"/>
-                                            </p:column>
-                                            <p:column>
-                                                <p:selectManyMenu id="apprList" var="appr" converter="#{userConverter}"
-                                                                  filter="true" showCheckbox="true" scrollHeight="100"
-                                                                  value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputApprovers : assignmentManager.inputApprovers}"                                            
-                                                                  disabled="#{assignmentManager.inputAction == 'DELETE'}">
-                                                    <f:selectItems value="#{assignmentManager.users}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
-                                                    <p:column>
-                                                        <h:outputText value="#{appr.userId}" />
-                                                    </p:column>
-                                                    <p:column rendered="false">
-                                                        <h:outputText value="#{appr.name}" />
-                                                    </p:column>
-                                                </p:selectManyMenu>                                                     
-                                            </p:column>
-                                        </p:row>-->
 
                     <f:facet name="footer">
                         <p:row>
@@ -210,5 +191,3 @@
         </p:dialog>
     </ui:define> 
 </ui:composition>
-
-
