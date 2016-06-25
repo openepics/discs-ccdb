@@ -61,7 +61,7 @@
                                     <ui:param name="statusId" value="stat-#{loop.index}" />
                                 </ui:include>
                                 <p:spacer width="5"/>
-                                <p:commandLink update=":crudInputDlg @form" process="@this" disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}" 
+                                <p:commandLink update=":crudInputDlg :crudForm:entityTable" process="@this" disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}" 
                                                rendered="#{not statusPivotManager.lockedAssignment(assignment, selPhase.phase)}"
                                                actionListener="#{statusPivotManager.onCellEdit(assignment, selPhase.phase)}" 
                                                oncomplete="PF('crudInputWid').show()"   styleClass="iconDisplay">                      

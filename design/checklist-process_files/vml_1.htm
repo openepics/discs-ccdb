@@ -1,0 +1,217 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml" 
+ xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5"/>
+<link rel="stylesheet" type="text/css" href="visio.css"/>
+<title>checklist-process</title>
+<style type="text/css">
+	 v\:* { behavior: url(#default#VML); }
+</style>
+
+<script src="vml_1.js" type="text/jscript" language="jscript"></script>
+
+<script type="text/jscript" language="jscript">
+
+	var pageID = 0;
+	var viewMgr = null;
+
+	if (parent.g_FirstPageToLoad != null && parent.g_FirstPageToLoad.length > 0)
+	{
+		if (parent.g_FileList[parent.g_CurPageIndex].PageID != pageID)
+		{
+			location.replace(parent.g_FileList[parent.g_CurPageIndex].PriImage);
+		}
+
+		parent.g_FirstPageToLoad = null;
+	}
+
+	function getPNZ()
+	{
+		var rawHTML = VMLDiv.innerHTML;
+		var strReturn = ""
+		
+		strReturn = rawHTML.slice( rawHTML.indexOf( '<v:group' ), rawHTML.indexOf( "</v:shape>" ) );
+		strReturn += "</v:shape></v:group>\n";
+				
+		return strReturn;
+	}
+	
+	function load()
+	{
+		viewMgr = new parent.CViewMgr("ConvertedImage", "arrowDiv");
+
+		viewMgr.put_Location = ViewMgrSetVMLLocation;
+
+
+		viewMgr.visBBoxLeft = 0.310833;
+		viewMgr.visBBoxRight = 10.814167;
+		viewMgr.visBBoxBottom = 0.248333;
+		viewMgr.visBBoxTop = 8.251667;
+
+		viewMgr.Zoom = VMLZoomChange;
+		viewMgr.setView= VMLSetView;
+
+		viewMgr.SupportsDetails = true;
+		viewMgr.SupportsSearch = true;
+
+		parent.viewMgr = viewMgr;
+
+		fit();
+	}
+
+	function unload()
+	{
+		viewMgr = null;
+		parent.viewMgr = null;
+	}
+
+	function fit()
+	{
+		if(parent.frmToolbar)
+		{
+			if (parent.g_WidgetsLoaded)
+			{
+				var zoom100 = parent.frmToolbar.document.all('a100');
+				if (zoom100)
+				{
+					parent.viewMgr.PostZoomProcessing = PostZoomProcessing;
+					zoom100.click();
+				}
+				else
+				{
+					parent.viewMgr.PostZoomProcessing = PostZoomProcessing;
+					viewMgr.Zoom(100);
+				}
+			}
+			else
+			{
+				window.setTimeout("fit()", 500);
+			}
+		}	
+		else
+		{
+			parent.viewMgr.PostZoomProcessing = PostZoomProcessing;
+			viewMgr.Zoom(100);
+		}
+	}
+
+	function PostZoomProcessing (newZoomLevel)
+	{
+		parent.viewMgr.PostZoomProcessing = null;
+		var pageIndex = parent.PageIndexFromID (pageID);
+		parent.viewMgr.getPNZ = getPNZ;
+		parent.CurPageUpdate (pageIndex);
+	}
+
+
+	
+	var isUpLevel = parent.isUpLevel;
+	var OnShapeClick = parent.OnShapeClick;
+	var OnShapeKey = parent.OnShapeKey;
+	var UpdateTooltip = parent.UpdateTooltip;
+	var clickMenu = parent.clickMenu;
+	var toggleMenuDiv = parent.toggleMenuDiv;
+	var toggleMenuLink = parent.toggleMenuLink;
+	var GoToPage = parent.GoToPage;
+
+	window.onload = load;
+	window.onunload = unload;
+	document.onclick = clickMenu;
+
+
+
+
+</script>
+
+</head>
+
+<body style="MARGIN:10px" onresize="VMLOnResize();" onscroll="VMLOnScroll();">
+
+<div id="arrowdiv" style="position:absolute;top:0;left:0;visibility:hidden;z-index:5">
+<img id="arrowgif" alt="Shows the location of the selected shape" src="arrow.gif"/>
+</div>
+
+<div id="menu1" onclick="clickMenu()" class="hlMenu">
+</div>
+
+
+
+
+<div id="VMLDiv" >
+
+
+<v:group  id="ConvertedImage" style="width:5.249479in;height:4.000000in;position:absolute;visibility=hidden;" coordSize="2625,2000" coordOrigin="-1000,-1000" >
+
+<v:shapetype 
+  id="VISSHAPE"
+  target="_parent"
+  coordsize="2625,2000"
+  coordorigin="-1000,-1000"
+  stroked="f"
+  strokecolor="red"
+  filled="t"
+>
+<v:fill opacity="0.0"/>
+</v:shapetype>
+
+
+<v:shape style="top:-1000.0;left:-1000.0;width:2624.7;height:2000.0;position:absolute" coordSize="2625,2000" coordOrigin="-1000,-1000" >
+<v:imagedata src="vml_1.emz"/>
+</v:shape>
+
+<v:shape type="#VISSHAPE"  origHref="slots.xhtml" style="cursor: pointer;" tabindex="1" title="Assign Slots To Groups" origTitle="Assign Slots To Groups"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m -641,-249 l -525,-249 l -524,-249 l -523,-249 l -522,-249 l -521,-249 l -520,-250 l -519,-250 l -518,-250 l -517,-251 l -517,-251 l -516,-252 l -515,-252 l -514,-253 l -514,-253 l -513,-254 l -512,-255 l -512,-256 l -511,-256 l -511,-257 l -510,-258 l -510,-259 l -510,-260 l -509,-261 l -509,-262 l -509,-263 l -509,-264 l -509,-264 l -509,-420 l -509,-421 l -509,-422 l -509,-423 l -509,-424 l -510,-425 l -510,-426 l -510,-426 l -511,-427 l -511,-428 l -512,-429 l -512,-430 l -513,-430 l -514,-431 l -514,-432 l -515,-432 l -516,-433 l -517,-433 l -517,-434 l -518,-434 l -519,-435 l -520,-435 l -521,-435 l -522,-435 l -523,-436 l -524,-436 l -525,-436 l -641,-436 l -642,-436 l -643,-436 l -644,-435 l -645,-435 l -646,-435 l -647,-435 l -648,-434 l -649,-434 l -649,-433 l -650,-433 l -651,-432 l -652,-432 l -652,-431 l -653,-430 l -654,-430 l -654,-429 l -655,-428 l -655,-427 l -656,-426 l -656,-426 l -656,-425 l -657,-424 l -657,-423 l -657,-422 l -657,-421 l -657,-420 l -657,-264 l -657,-264 l -657,-263 l -657,-262 l -657,-261 l -656,-260 l -656,-259 l -656,-258 l -655,-257 l -655,-256 l -654,-256 l -654,-255 l -653,-254 l -652,-253 l -652,-253 l -651,-252 l -650,-252 l -649,-251 l -649,-251 l -648,-250 l -647,-250 l -646,-250 l -645,-249 l -644,-249 l -643,-249 l -642,-249 l -641,-249xe" onmouseover="UpdateTooltip(this,0,20)" onclick="OnShapeClick(0,20)" onfocus="UpdateTooltip(this,0,20);" onkeyup="OnShapeKey(0,20)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="assign%5Cchecklists.xhtml?pg=Slot-Checklist&#38;et=GROUP" style="cursor: pointer;" tabindex="1" title="Assign Checklists to Groups" origTitle="Assign Checklists to Groups"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m -408,-249 l -244,-249 l -244,-436 l -408,-436 l -408,-249xe" onmouseover="UpdateTooltip(this,0,21)" onclick="OnShapeClick(0,21)" onfocus="UpdateTooltip(this,0,21);" onkeyup="OnShapeKey(0,21)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="assign%5Csmes.xhtml?pg=Slot-Checklist&#38;et=GROUP" style="cursor: pointer;" tabindex="1" title="Assign SMEs to  Groups" origTitle="Assign SMEs to  Groups"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m 98,-249 l 207,-249 l 208,-249 l 209,-249 l 210,-249 l 211,-249 l 212,-250 l 213,-250 l 214,-250 l 215,-251 l 215,-251 l 216,-252 l 217,-252 l 218,-253 l 218,-253 l 219,-254 l 220,-255 l 220,-256 l 221,-256 l 221,-257 l 221,-258 l 222,-259 l 222,-260 l 222,-261 l 223,-262 l 223,-263 l 223,-264 l 223,-264 l 223,-420 l 223,-421 l 223,-422 l 223,-423 l 222,-424 l 222,-425 l 222,-426 l 221,-426 l 221,-427 l 221,-428 l 220,-429 l 220,-430 l 219,-430 l 218,-431 l 218,-432 l 217,-432 l 216,-433 l 215,-433 l 215,-434 l 214,-434 l 213,-435 l 212,-435 l 211,-435 l 210,-435 l 209,-436 l 208,-436 l 207,-436 l 98,-436 l 97,-436 l 96,-436 l 95,-435 l 95,-435 l 94,-435 l 93,-435 l 92,-434 l 91,-434 l 90,-433 l 89,-433 l 89,-432 l 88,-432 l 87,-431 l 87,-430 l 86,-430 l 85,-429 l 85,-428 l 84,-427 l 84,-426 l 84,-426 l 83,-425 l 83,-424 l 83,-423 l 83,-422 l 83,-421 l 83,-420 l 83,-264 l 83,-264 l 83,-263 l 83,-262 l 83,-261 l 83,-260 l 84,-259 l 84,-258 l 84,-257 l 85,-256 l 85,-256 l 86,-255 l 87,-254 l 87,-253 l 88,-253 l 89,-252 l 89,-252 l 90,-251 l 91,-251 l 92,-250 l 93,-250 l 94,-250 l 95,-249 l 95,-249 l 96,-249 l 97,-249 l 98,-249xe" onmouseover="UpdateTooltip(this,0,22)" onclick="OnShapeClick(0,22)" onfocus="UpdateTooltip(this,0,22);" onkeyup="OnShapeKey(0,22)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="assign%5Cchecklists.xhtml?pg=Device-Checklist&#38;et=DEVICE" style="cursor: pointer;" tabindex="1" title="Assign Checklists to Devices" origTitle="Assign Checklists to Devices"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m -482,-52 l -482,-124 l -653,-124 l -653,62 l -482,62 l -482,-15 l -481,-15 l -481,-52 l -482,-52xe" onmouseover="UpdateTooltip(this,0,24)" onclick="OnShapeClick(0,24)" onfocus="UpdateTooltip(this,0,24);" onkeyup="OnShapeKey(0,24)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="assign%5Csmes.xhtml?pg=Device-Checklist&#38;et=DEVICE" style="cursor: pointer;" tabindex="1" title="Assign SMEs to Devices" origTitle="Assign SMEs to Devices"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m -365,62 l -248,62 l -247,62 l -246,62 l -245,62 l -244,62 l -244,62 l -243,61 l -242,61 l -241,60 l -240,60 l -239,59 l -239,59 l -238,58 l -237,58 l -237,57 l -236,56 l -235,56 l -235,55 l -234,54 l -234,53 l -234,52 l -233,51 l -233,50 l -233,49 l -233,49 l -233,48 l -233,47 l -233,-109 l -233,-110 l -233,-111 l -233,-112 l -233,-113 l -233,-114 l -234,-114 l -234,-115 l -234,-116 l -235,-117 l -235,-118 l -236,-118 l -237,-119 l -237,-120 l -238,-121 l -239,-121 l -239,-122 l -240,-122 l -241,-123 l -242,-123 l -243,-123 l -244,-124 l -244,-124 l -245,-124 l -246,-124 l -247,-124 l -248,-124 l -365,-124 l -366,-124 l -367,-124 l -368,-124 l -369,-124 l -370,-124 l -371,-123 l -371,-123 l -372,-123 l -373,-122 l -374,-122 l -375,-121 l -375,-121 l -376,-120 l -377,-119 l -377,-118 l -378,-118 l -378,-117 l -379,-116 l -379,-115 l -380,-114 l -380,-114 l -380,-113 l -380,-112 l -380,-111 l -381,-110 l -381,-109 l -381,47 l -381,48 l -380,49 l -380,49 l -380,50 l -380,51 l -380,52 l -379,53 l -379,54 l -378,55 l -378,56 l -377,56 l -377,57 l -376,58 l -375,58 l -375,59 l -374,59 l -373,60 l -372,60 l -371,61 l -371,61 l -370,62 l -369,62 l -368,62 l -367,62 l -366,62 l -365,62xe" onmouseover="UpdateTooltip(this,0,25)" onclick="OnShapeClick(0,25)" onfocus="UpdateTooltip(this,0,25);" onkeyup="OnShapeKey(0,25)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="status%5Cupdate-pivot.xhtml?pg=Slot-Checklist&#38;et=SLOT" style="cursor: pointer;" tabindex="1" title="Update Status of Slots" origTitle="Update Status of Slots"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m 834,373 l 990,373 l 990,187 l 834,187 l 834,373xe" onmouseover="UpdateTooltip(this,0,26)" onclick="OnShapeClick(0,26)" onfocus="UpdateTooltip(this,0,26);" onkeyup="OnShapeKey(0,26)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="status%5Cupdate-pivot.xhtml?pg=Slot-Checklist&#38;et=GROUP" style="cursor: pointer;" tabindex="1" title="Update Summary Status of Groups  (AM-OK)" origTitle="Update Summary Status of Groups  (AM-OK)"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m 1118,-249 l 1282,-249 l 1282,-436 l 1118,-436 l 1118,-249xe" onmouseover="UpdateTooltip(this,0,27)" onclick="OnShapeClick(0,27)" onfocus="UpdateTooltip(this,0,27);" onkeyup="OnShapeKey(0,27)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="report%5Cslot-status.xhtml?pg=Slot-Checklist" style="cursor: pointer;" tabindex="1" title="Generate Group Checklist Report" origTitle="Generate Group Checklist Report"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m 892,685 l 1095,685 l 1095,498 l 892,498 l 892,685xe" onmouseover="UpdateTooltip(this,0,28)" onclick="OnShapeClick(0,28)" onfocus="UpdateTooltip(this,0,28);" onkeyup="OnShapeKey(0,28)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="status%5Cupdate-pivot.xhtml?pg=Device-Checklist&#38;et=DEVICE" style="cursor: pointer;" tabindex="1" title="Update Status of Devices" origTitle="Update Status of Devices"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m -404,373 l -217,373 l -217,187 l -404,187 l -404,373xe" onmouseover="UpdateTooltip(this,0,33)" onclick="OnShapeClick(0,33)" onfocus="UpdateTooltip(this,0,33);" onkeyup="OnShapeKey(0,33)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="assign%5Cchecklists.xhtml?gp=Slot-Checklist&#38;amp;et=SLOT" style="cursor: pointer;" tabindex="1" title="Assign Checklists to Slots" origTitle="Assign Checklists to Slots"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m -144,-249 l 5,-249 l 5,-436 l -144,-436 l -144,-249xe" onmouseover="UpdateTooltip(this,0,34)" onclick="OnShapeClick(0,34)" onfocus="UpdateTooltip(this,0,34);" onkeyup="OnShapeKey(0,34)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="assign%5Csmes.xhtml?pg=Slot-Checklist&#38;et=SLOT" style="cursor: pointer;" tabindex="1" title="Assign SMEs to Slots" origTitle="Assign SMEs to Slots"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m 355,-249 l 464,-249 l 465,-249 l 466,-249 l 467,-249 l 468,-249 l 469,-250 l 470,-250 l 471,-250 l 471,-251 l 472,-251 l 473,-252 l 474,-252 l 475,-253 l 475,-253 l 476,-254 l 476,-255 l 477,-256 l 478,-256 l 478,-257 l 478,-258 l 479,-259 l 479,-260 l 479,-261 l 480,-262 l 480,-263 l 480,-264 l 480,-264 l 480,-420 l 480,-421 l 480,-422 l 480,-423 l 479,-424 l 479,-425 l 479,-426 l 478,-426 l 478,-427 l 478,-428 l 477,-429 l 476,-430 l 476,-430 l 475,-431 l 475,-432 l 474,-432 l 473,-433 l 472,-433 l 471,-434 l 471,-434 l 470,-435 l 469,-435 l 468,-435 l 467,-435 l 466,-436 l 465,-436 l 464,-436 l 355,-436 l 354,-436 l 353,-436 l 352,-435 l 351,-435 l 351,-435 l 350,-435 l 349,-434 l 348,-434 l 347,-433 l 346,-433 l 346,-432 l 345,-432 l 344,-431 l 344,-430 l 343,-430 l 342,-429 l 342,-428 l 341,-427 l 341,-426 l 341,-426 l 340,-425 l 340,-424 l 340,-423 l 340,-422 l 340,-421 l 340,-420 l 340,-264 l 340,-264 l 340,-263 l 340,-262 l 340,-261 l 340,-260 l 341,-259 l 341,-258 l 341,-257 l 342,-256 l 342,-256 l 343,-255 l 344,-254 l 344,-253 l 345,-253 l 346,-252 l 346,-252 l 347,-251 l 348,-251 l 349,-250 l 350,-250 l 351,-250 l 351,-249 l 352,-249 l 353,-249 l 354,-249 l 355,-249xe" onmouseover="UpdateTooltip(this,0,30)" onclick="OnShapeClick(0,30)" onfocus="UpdateTooltip(this,0,30);" onkeyup="OnShapeKey(0,30)"/> 
+
+<v:shape type="#VISSHAPE"   tabindex="1" title="" origTitle=""  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m -809,996 l -700,996 l -699,996 l -698,996 l -697,995 l -696,995 l -695,995 l -694,995 l -693,994 l -693,994 l -692,993 l -691,993 l -690,992 l -689,992 l -689,991 l -688,990 l -688,990 l -687,989 l -686,988 l -686,987 l -686,987 l -685,986 l -685,985 l -685,984 l -685,983 l -684,982 l -684,981 l -684,980 l -684,825 l -684,824 l -684,823 l -685,822 l -685,821 l -685,820 l -685,819 l -686,818 l -686,817 l -686,817 l -687,816 l -688,815 l -688,814 l -689,814 l -689,813 l -690,812 l -691,812 l -692,811 l -693,811 l -693,810 l -694,810 l -695,810 l -696,809 l -697,809 l -698,809 l -699,809 l -700,809 l -809,809 l -810,809 l -811,809 l -812,809 l -813,809 l -813,810 l -814,810 l -815,810 l -816,811 l -817,811 l -818,812 l -818,812 l -819,813 l -820,814 l -820,814 l -821,815 l -822,816 l -822,817 l -823,817 l -823,818 l -823,819 l -824,820 l -824,821 l -824,822 l -824,823 l -824,824 l -824,825 l -824,980 l -824,981 l -824,982 l -824,983 l -824,984 l -824,985 l -823,986 l -823,987 l -823,987 l -822,988 l -822,989 l -821,990 l -820,990 l -820,991 l -819,992 l -818,992 l -818,993 l -817,993 l -816,994 l -815,994 l -814,995 l -813,995 l -813,995 l -812,995 l -811,996 l -810,996 l -809,996xe" onmouseover="UpdateTooltip(this,0,35)" onclick="OnShapeClick(0,35)" onfocus="UpdateTooltip(this,0,35);" onkeyup="OnShapeKey(0,35)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="status%5Cupdate-pivot.xhtml?pg=Slot-Checklist&#38;et=GROUP" style="cursor: pointer;" tabindex="1" title="Update Status of Groups" origTitle="Update Status of Groups"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m 585,-249 l 702,-249 l 703,-249 l 704,-249 l 704,-249 l 705,-249 l 706,-250 l 707,-250 l 708,-250 l 709,-251 l 710,-251 l 711,-252 l 711,-252 l 712,-253 l 713,-253 l 713,-254 l 714,-255 l 714,-256 l 715,-256 l 715,-257 l 716,-258 l 716,-259 l 717,-260 l 717,-261 l 717,-262 l 717,-263 l 717,-264 l 717,-264 l 717,-420 l 717,-421 l 717,-422 l 717,-423 l 717,-424 l 717,-425 l 716,-426 l 716,-426 l 715,-427 l 715,-428 l 714,-429 l 714,-430 l 713,-430 l 713,-431 l 712,-432 l 711,-432 l 711,-433 l 710,-433 l 709,-434 l 708,-434 l 707,-435 l 706,-435 l 705,-435 l 704,-435 l 704,-436 l 703,-436 l 702,-436 l 585,-436 l 584,-436 l 583,-436 l 582,-435 l 581,-435 l 580,-435 l 579,-435 l 578,-434 l 578,-434 l 577,-433 l 576,-433 l 575,-432 l 575,-432 l 574,-431 l 573,-430 l 573,-430 l 572,-429 l 572,-428 l 571,-427 l 571,-426 l 570,-426 l 570,-425 l 570,-424 l 570,-423 l 569,-422 l 569,-421 l 569,-420 l 569,-264 l 569,-264 l 569,-263 l 570,-262 l 570,-261 l 570,-260 l 570,-259 l 571,-258 l 571,-257 l 572,-256 l 572,-256 l 573,-255 l 573,-254 l 574,-253 l 575,-253 l 575,-252 l 576,-252 l 577,-251 l 578,-251 l 578,-250 l 579,-250 l 580,-250 l 581,-249 l 582,-249 l 583,-249 l 584,-249 l 585,-249xe" onmouseover="UpdateTooltip(this,0,23)" onclick="OnShapeClick(0,23)" onfocus="UpdateTooltip(this,0,23);" onkeyup="OnShapeKey(0,23)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="status%5Cupdate-pivot.xhtml?pg=Slot-Checklist&#38;et=SLOT" style="cursor: pointer;" tabindex="1" title="Update Status of Slots" origTitle="Update Status of Slots"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m 846,-249 l 955,-249 l 956,-249 l 957,-249 l 958,-249 l 958,-249 l 959,-250 l 960,-250 l 961,-250 l 962,-251 l 963,-251 l 964,-252 l 964,-252 l 965,-253 l 966,-253 l 966,-254 l 967,-255 l 968,-256 l 968,-256 l 968,-257 l 969,-258 l 969,-259 l 970,-260 l 970,-261 l 970,-262 l 970,-263 l 970,-264 l 970,-264 l 970,-420 l 970,-421 l 970,-422 l 970,-423 l 970,-424 l 970,-425 l 969,-426 l 969,-426 l 968,-427 l 968,-428 l 968,-429 l 967,-430 l 966,-430 l 966,-431 l 965,-432 l 964,-432 l 964,-433 l 963,-433 l 962,-434 l 961,-434 l 960,-435 l 959,-435 l 958,-435 l 958,-435 l 957,-436 l 956,-436 l 955,-436 l 846,-436 l 845,-436 l 844,-436 l 843,-435 l 842,-435 l 841,-435 l 840,-435 l 839,-434 l 838,-434 l 838,-433 l 837,-433 l 836,-432 l 835,-432 l 835,-431 l 834,-430 l 833,-430 l 833,-429 l 832,-428 l 832,-427 l 832,-426 l 831,-426 l 831,-425 l 831,-424 l 830,-423 l 830,-422 l 830,-421 l 830,-420 l 830,-264 l 830,-264 l 830,-263 l 830,-262 l 831,-261 l 831,-260 l 831,-259 l 832,-258 l 832,-257 l 832,-256 l 833,-256 l 833,-255 l 834,-254 l 835,-253 l 835,-253 l 836,-252 l 837,-252 l 838,-251 l 838,-251 l 839,-250 l 840,-250 l 841,-250 l 842,-249 l 843,-249 l 844,-249 l 845,-249 l 846,-249xe" onmouseover="UpdateTooltip(this,0,31)" onclick="OnShapeClick(0,31)" onfocus="UpdateTooltip(this,0,31);" onkeyup="OnShapeKey(0,31)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="status%5Cupdate-pivot.xhtml?pg=Slot-Checklist&#38;et=GROUP" style="cursor: pointer;" tabindex="1" title="Update Status of Groups" origTitle="Update Status of Groups"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m 593,373 l 748,373 l 748,187 l 593,187 l 593,373xe" onmouseover="UpdateTooltip(this,0,42)" onclick="OnShapeClick(0,42)" onfocus="UpdateTooltip(this,0,42);" onkeyup="OnShapeKey(0,42)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="report%5Cgroup-status.xhtml?pg=Slot-Checklist" style="cursor: pointer;" tabindex="1" title="Generate Slot Checklist Report" origTitle="Generate Slot Checklist Report"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m 608,685 l 787,685 l 787,498 l 608,498 l 608,685xe" onmouseover="UpdateTooltip(this,0,47)" onclick="OnShapeClick(0,47)" onfocus="UpdateTooltip(this,0,47);" onkeyup="OnShapeKey(0,47)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="report%5Cdevice-status.xhtml?pg=Slot-Checklist" style="cursor: pointer;" tabindex="1" title="Generate Device Checklist Report" origTitle="Generate Device Checklist Report"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m 110,685 l 312,685 l 312,498 l 110,498 l 110,685xe" onmouseover="UpdateTooltip(this,0,48)" onclick="OnShapeClick(0,48)" onfocus="UpdateTooltip(this,0,48);" onkeyup="OnShapeKey(0,48)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="status%5Cupdate-pivot.xhtml?pg=Device-Checklist&#38;et=DEVICE" style="cursor: pointer;" tabindex="1" title="Update Summary Status (DO-OK)" origTitle="Update Summary Status (DO-OK)"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m -124,62 l 63,62 l 63,-124 l -124,-124 l -124,62xe" onmouseover="UpdateTooltip(this,0,49)" onclick="OnShapeClick(0,49)" onfocus="UpdateTooltip(this,0,49);" onkeyup="OnShapeKey(0,49)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="status%5Cupdate-pivot.xhtml?pg=Device-Checklist&#38;et=SLOT" style="cursor: pointer;" tabindex="1" title="Update  Status of Slots (DO-OK)" origTitle="Update  Status of Slots (DO-OK)"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m 842,62 l 998,62 l 998,-124 l 842,-124 l 842,62xe" onmouseover="UpdateTooltip(this,0,51)" onclick="OnShapeClick(0,51)" onfocus="UpdateTooltip(this,0,51);" onkeyup="OnShapeKey(0,51)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="status%5Cupdate-pivot.xhtml?pg=Device-Checklist&#38;et=GROUP" style="cursor: pointer;" tabindex="1" title="Update  Status of Groups (DO-OK)" origTitle="Update  Status of Groups (DO-OK)"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m 593,62 l 748,62 l 748,-124 l 593,-124 l 593,62xe" onmouseover="UpdateTooltip(this,0,52)" onclick="OnShapeClick(0,52)" onfocus="UpdateTooltip(this,0,52);" onkeyup="OnShapeKey(0,52)"/> 
+
+<v:shape type="#VISSHAPE"   tabindex="1" title="Setup Checklists" origTitle="Setup Checklists"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m -824,-560 l -675,-560 l -675,-747 l -824,-747 l -824,-560xe" onmouseover="UpdateTooltip(this,0,58)" onclick="OnShapeClick(0,58)" onfocus="UpdateTooltip(this,0,58);" onkeyup="OnShapeKey(0,58)"/> 
+
+<v:shape type="#VISSHAPE"  origHref="status%5Cupdate-pivot.xhtml?pg=Slot-Checklist&#38;et=SLOT" style="cursor: pointer;" tabindex="1" title="Update Summary Status of Slots (AM-OK)" origTitle="Update Summary Status of Slots (AM-OK)"  style="top:-1000;left:-1000;width:2625;height:2000;position:absolute" path=" m 1367,-249 l 1531,-249 l 1531,-436 l 1367,-436 l 1367,-249xe" onmouseover="UpdateTooltip(this,0,61)" onclick="OnShapeClick(0,61)" onfocus="UpdateTooltip(this,0,61);" onkeyup="OnShapeKey(0,61)"/> 
+
+</v:group>
+
+
+
+</div>
+
+
+
+</body>
+</html>
+

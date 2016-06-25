@@ -54,10 +54,9 @@
                     <c:forEach items="#{statusPivotManager.selectablePhases}" var="selPhase" varStatus="loop">
                         <p:column style="text-align: center">
                             <f:facet name="header">                          
-                                <p:selectBooleanCheckbox>
+                                <p:selectBooleanCheckbox value="#{selPhase.selected}"  itemLabel="#{selPhase.phase.name}">
                                     <p:ajax  listener="#{statusPivotManager.onTogglePhase(selPhase.phase)}" update=":crudForm:entityTable:commandButtons" />
-                                </p:selectBooleanCheckbox>
-                                <h:outputText value=" #{selPhase.phase.name}" />
+                                </p:selectBooleanCheckbox>                            
                             </f:facet>
 
                             <ui:include src="sme-disp.xhtml">
@@ -65,7 +64,7 @@
                                 <ui:param name="statusId" value="stat-#{loop.index}" />
                             </ui:include>    
                             <p:spacer width="3"/>
-                            <p:commandLink update=":crudInputDlg" process="@this" disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}"
+                            <p:commandLink update=":crudInputDlg :crudForm:entityTable" process="@this" disabled="#{not securityPolicy.getUIHint('HIERARCHY_MODIFY')}"
                                            rendered="#{not statusPivotManager.lockedAssignment(assignment, selPhase.phase)}"
                                            actionListener="#{statusPivotManager.onCellEdit(assignment, selPhase.phase)}" 
                                            oncomplete="PF('crudInputWid').show()" styleClass="iconDisplay">

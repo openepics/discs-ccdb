@@ -1,0 +1,1076 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VisioDocument>
+	<DocumentProperties>
+		<Title></Title>
+		<HyperlinkBase href=""></HyperlinkBase>
+	</DocumentProperties>
+	<Pages>
+		<Page ID="0" Name="Page-1" NameU="Page-1">
+			<Layer IX="0">
+				<Name>Flowchart</Name>
+				<NameUniv>Flowchart</NameUniv>
+				<Visible>1</Visible>
+			</Layer>
+			<Layer IX="1">
+				<Name>Connector</Name>
+				<NameUniv>Connector</NameUniv>
+				<Visible>1</Visible>
+			</Layer>
+			<Shapes>
+				<Shape ID="1" UniqueID="{9542E130-4843-44D0-80D4-0426DC9B43B1}" Name="Horizontal holder" NameU="Horizontal holder" Master="0">
+					<Text>Checklist Process Flow</Text>
+					<XForm>
+						<PinX Unit="IN">0.312500000000000</PinX>
+						<PinY Unit="IN">8.250000000000000</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="17" UniqueID="{72F0B760-DA3E-41CB-A5A2-02A24D68F0AC}" Name="Functional band.17" NameU="Functional band.17" Master="2">
+					<Text>Device Owner</Text>
+					<XForm>
+						<PinX Unit="IN">0.312500000000000</PinX>
+						<PinY Unit="IN">5.000000000000000</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="14" UniqueID="{2AF5871C-1FD1-4F05-AEF3-FA0CBE569FF0}" Name="Functional band.14" NameU="Functional band.14" Master="2">
+					<Text>Area Manager</Text>
+					<XForm>
+						<PinX Unit="IN">0.312500000000000</PinX>
+						<PinY Unit="IN">6.250000000000000</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="11" UniqueID="{2139E089-8397-4959-82D9-2DC808A7DA80}" Name="Functional band.11" NameU="Functional band.11" Master="2">
+					<Text>Subject Matter Expert</Text>
+					<XForm>
+						<PinX Unit="IN">0.312500000000000</PinX>
+						<PinY Unit="IN">3.750000000000000</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="5" UniqueID="{E8B69618-29A9-4CD1-8DF6-73DFC42C9976}" Name="Functional band" NameU="Functional band" Master="2">
+					<Text>Anyone</Text>
+					<XForm>
+						<PinX Unit="IN">0.312500000000000</PinX>
+						<PinY Unit="IN">2.500000000000000</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="8" UniqueID="{BA54B688-A52F-45CE-8B4C-2D10143DA9DB}" Name="Functional band.8" NameU="Functional band.8" Master="2">
+					<Text>Configuration Manager</Text>
+					<XForm>
+						<PinX Unit="IN">0.312500000000000</PinX>
+						<PinY Unit="IN">7.500000000000000</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="20" UniqueID="{3DFB38D8-6DD5-4D09-B00C-6FE066529F02}" Name="Process" NameU="Process" Master="3">
+					<Text>Assign Slots To Groups</Text>
+					<XForm>
+						<PinX Unit="IN">1.968800000000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Assign Slots to Groups</HLURL:Description>
+										<HLURL:Address>../slots.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo></HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\slots.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="21" UniqueID="{401351F0-4CE6-477C-A69F-B31C93C4C982}" Name="Process.21" NameU="Process.21" Master="3">
+					<Text>Assign Checklists to Groups</Text>
+					<XForm>
+						<PinX Unit="IN">3.000000000000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Assign checklists to Slot Groups</HLURL:Description>
+										<HLURL:Address>../assign\checklists.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Slot-Checklist&amp;et=GROUP</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\assign\checklists.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="22" UniqueID="{1D669DF5-19B6-4ED9-A8BD-5CD703858B37}" Name="Process.22" NameU="Process.22" Master="3">
+					<Text>Assign SMEs to  Groups</Text>
+					<XForm>
+						<PinX Unit="IN">4.921900000000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Assign SMEs to Groups</HLURL:Description>
+										<HLURL:Address>../assign\smes.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Slot-Checklist&amp;et=GROUP</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\assign\smes.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="24" UniqueID="{A75D9EBA-46F8-4AB3-8E91-72F56442FFE5}" Name="Process.24" NameU="Process.24" Master="3">
+					<Text>Assign Checklists to Devices</Text>
+					<XForm>
+						<PinX Unit="IN">2.031300000000000</PinX>
+						<PinY Unit="IN">4.375000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Assign Checklists to Devices</HLURL:Description>
+										<HLURL:Address>../assign\checklists.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Device-Checklist&amp;et=DEVICE</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\assign\checklists.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="25" UniqueID="{A69E4DEA-F40A-4DB2-86D8-5A61FA7F4D8C}" Name="Process.25" NameU="Process.25" Master="3">
+					<Text>Assign SMEs to Devices</Text>
+					<XForm>
+						<PinX Unit="IN">3.078100000000000</PinX>
+						<PinY Unit="IN">4.375000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Assign SMEs to Devices</HLURL:Description>
+										<HLURL:Address>../assign\smes.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Device-Checklist&amp;et=DEVICE</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\assign\smes.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="26" UniqueID="{1AF876F4-4A39-423B-8CC1-72FC846B2745}" Name="Process.26" NameU="Process.26" Master="3">
+					<Text>Update Status of Slots</Text>
+					<XForm>
+						<PinX Unit="IN">7.968800000000000</PinX>
+						<PinY Unit="IN">3.125000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Update Status of Slots</HLURL:Description>
+										<HLURL:Address>../status\update-pivot.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Slot-Checklist&amp;et=SLOT</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\status\update-pivot.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="27" UniqueID="{AE12DD11-D06A-4E3B-9E6F-39B862FA18F3}" Name="Process.27" NameU="Process.27" Master="3">
+					<Text>Update Summary Status of Groups 
+(AM-OK)</Text>
+					<XForm>
+						<PinX Unit="IN">9.125000000000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Update Summary Status of Groups</HLURL:Description>
+										<HLURL:Address>../status\update-pivot.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Slot-Checklist&amp;et=GROUP</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\status\update-pivot.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="28" UniqueID="{1715908A-421D-48C5-A4D9-21C2707EBC1E}" Name="Process.28" NameU="Process.28" Master="3">
+					<Text>Generate Group Checklist Report</Text>
+					<XForm>
+						<PinX Unit="IN">8.296700000000001</PinX>
+						<PinY Unit="IN">1.875000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Generate Slot Checklist Report</HLURL:Description>
+										<HLURL:Address>../report\slot-status.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Slot-Checklist</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\report\slot-status.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="29" UniqueID="{4ECB2E8E-C4B4-4010-B180-FD03F63AAA45}" Name="Directed line 1" NameU="Directed line 1" Master="6">
+					<XForm>
+						<PinX Unit="IN_F">2.468781250000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="33" UniqueID="{315B86A2-C123-4819-B317-73A625EA8FE6}" Name="Process.33" NameU="Process.33" Master="3">
+					<Text>Update Status of Devices</Text>
+					<XForm>
+						<PinX Unit="IN">3.062500000000000</PinX>
+						<PinY Unit="IN">3.125000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Update Status of Devices</HLURL:Description>
+										<HLURL:Address>../status\update-pivot.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Device-Checklist&amp;et=DEVICE</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\status\update-pivot.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="34" UniqueID="{FBB59197-B7D4-4C9E-BA61-7928BB2412BF}" Name="Process.34" NameU="Process.34" Master="3">
+					<Text>Assign Checklists to Slots</Text>
+					<XForm>
+						<PinX Unit="IN">4.029300000000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Assign Checklists to Slots</HLURL:Description>
+										<HLURL:Address>../assign\checklists.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>gp=Slot-Checklist&amp;amp;et=SLOT</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\assign\checklists.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="30" UniqueID="{8F5AE5E6-C1F8-4A74-906F-0F52631F0299}" Name="Process.30" NameU="Process.30" Master="3">
+					<Text>Assign SMEs to Slots</Text>
+					<XForm>
+						<PinX Unit="IN">5.953100000000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Assign SMEs to Slots</HLURL:Description>
+										<HLURL:Address>../assign\smes.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Slot-Checklist&amp;et=SLOT</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\assign\smes.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="35" UniqueID="{A2ABA60B-0185-48A5-B9CF-18FCA3D072E4}" Name="Process.35" NameU="Process.35" Master="3">
+					<XForm>
+						<PinX Unit="IN_F">1.281249999999999</PinX>
+						<PinY Unit="IN_F">0.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="36" UniqueID="{90F137E2-A6C4-4D2E-9402-6E17938C0AB9}" Name="Sheet.36" NameU="Sheet.36">
+					<Text>Optional </Text>
+					<XForm>
+						<PinX Unit="IN_F">1.848090277777777</PinX>
+						<PinY Unit="IN_F">0.625000000000000</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="23" UniqueID="{F614AF07-57DF-466B-99A9-74544785AB7D}" Name="Process.23" NameU="Process.23" Master="3">
+					<Text>Update Status of Groups</Text>
+					<XForm>
+						<PinX Unit="IN">6.890600000000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Update status of Groups</HLURL:Description>
+										<HLURL:Address>../status\update-pivot.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Slot-Checklist&amp;et=GROUP</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\status\update-pivot.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="31" UniqueID="{6D4292D6-44E5-41A2-BB11-97D2B77E009A}" Name="Process.31" NameU="Process.31" Master="3">
+					<Text>Update Status of Slots</Text>
+					<XForm>
+						<PinX Unit="IN">7.921800000000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Update Status of Slots</HLURL:Description>
+										<HLURL:Address>../status\update-pivot.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Slot-Checklist&amp;et=SLOT</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\status\update-pivot.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="32" UniqueID="{2AF3DD79-E504-4E44-985D-F25377EDE067}" Name="Directed line 1.32" NameU="Directed line 1.32" Master="6">
+					<XForm>
+						<PinX Unit="IN_F">3.529312500000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="37" UniqueID="{3092774C-1219-4DEF-84E7-54B624C51A63}" Name="Directed line 1.37" NameU="Directed line 1.37" Master="6">
+					<XForm>
+						<PinX Unit="IN_F">4.484387500000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="38" UniqueID="{C2CF8D0A-B752-4121-8CF3-C41415EBAFF4}" Name="Directed line 1.38" NameU="Directed line 1.38" Master="6">
+					<XForm>
+						<PinX Unit="IN_F">5.437487500000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="39" UniqueID="{631620B7-F19A-49BD-B349-492C186F8255}" Name="Directed line 1.39" NameU="Directed line 1.39" Master="6">
+					<XForm>
+						<PinX Unit="IN_F">6.414050000000001</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="40" UniqueID="{6EFDCEE1-0E6B-4556-B2E3-BDD8C16F45FB}" Name="Directed line 1.40" NameU="Directed line 1.40" Master="6">
+					<XForm>
+						<PinX Unit="IN_F">7.414024999999999</PinX>
+						<PinY Unit="IN_F">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="41" UniqueID="{F8F501E7-DD90-46B2-8312-4A682FE277CE}" Name="Directed line 1.41" NameU="Directed line 1.41" Master="6">
+					<XForm>
+						<PinX Unit="IN_F">8.499949999999998</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="42" UniqueID="{D66B0155-662C-4B74-A061-91A8FF98B8A1}" Name="Process.42" NameU="Process.42" Master="3">
+					<Text>Update Status of Groups</Text>
+					<XForm>
+						<PinX Unit="IN">7.000000000000000</PinX>
+						<PinY Unit="IN">3.125000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Update Status of Groups</HLURL:Description>
+										<HLURL:Address>../status\update-pivot.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Slot-Checklist&amp;et=GROUP</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\status\update-pivot.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="43" UniqueID="{CF65C28A-A9DE-45B3-B870-BD4F6D759A15}" Name="Directed line 1.43" NameU="Directed line 1.43" Master="6">
+					<XForm>
+						<PinX Unit="IN_F">3.070300000000000</PinX>
+						<PinY Unit="IN">3.750000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="46" UniqueID="{020957EB-941E-4413-A842-AA94BE0FBBA5}" Name="Directed line 1.46" NameU="Directed line 1.46" Master="6">
+					<XForm>
+						<PinX Unit="IN_F">2.578118750000000</PinX>
+						<PinY Unit="IN">4.375000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="47" UniqueID="{E1F6BFDE-5C25-466E-BE92-CE6CFC96CC8F}" Name="Process.47" NameU="Process.47" Master="3">
+					<Text>Generate Slot Checklist Report</Text>
+					<XForm>
+						<PinX Unit="IN">7.109300000000000</PinX>
+						<PinY Unit="IN">1.875000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Generate Group Checklist Report</HLURL:Description>
+										<HLURL:Address>../report\group-status.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Slot-Checklist</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\report\group-status.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="48" UniqueID="{1D6C02AF-112F-45A5-A111-3C2AF201CB66}" Name="Process.48" NameU="Process.48" Master="3">
+					<Text>Generate Device Checklist Report</Text>
+					<XForm>
+						<PinX Unit="IN">5.156300000000000</PinX>
+						<PinY Unit="IN">1.875000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Generate Device Checklist Report</HLURL:Description>
+										<HLURL:Address>../report\device-status.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Slot-Checklist</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\report\device-status.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="49" UniqueID="{9C149D18-FB6C-44F7-B9C1-0C144BE8B55D}" Name="Process.49" NameU="Process.49" Master="3">
+					<Text>Update Summary Status
+(DO-OK)</Text>
+					<XForm>
+						<PinX Unit="IN">4.187500000000000</PinX>
+						<PinY Unit="IN">4.375000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Update Summary Status of Devices</HLURL:Description>
+										<HLURL:Address>../status\update-pivot.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Device-Checklist&amp;et=DEVICE</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\status\update-pivot.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="50" UniqueID="{44110EFA-CA46-4A84-9136-3556CE6197F5}" Name="Directed line 1.50" NameU="Directed line 1.50" Master="6">
+					<XForm>
+						<PinX Unit="IN_F">3.593756250000000</PinX>
+						<PinY Unit="IN">4.375000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="51" UniqueID="{5C7C9062-B2AB-4295-A7C7-A60CDCB477D0}" Name="Process.51" NameU="Process.51" Master="3">
+					<Text>Update  Status of Slots
+(DO-OK)</Text>
+					<XForm>
+						<PinX Unit="IN">8.000000000000000</PinX>
+						<PinY Unit="IN">4.375000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Update Status of Slots</HLURL:Description>
+										<HLURL:Address>../status\update-pivot.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Device-Checklist&amp;et=SLOT</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\status\update-pivot.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="52" UniqueID="{43D5C00E-D78F-4D22-8D61-EE9D381231D9}" Name="Process.52" NameU="Process.52" Master="3">
+					<Text>Update  Status of Groups
+(DO-OK)</Text>
+					<XForm>
+						<PinX Unit="IN">7.000000000000000</PinX>
+						<PinY Unit="IN">4.375000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Update Status of Groups</HLURL:Description>
+										<HLURL:Address>../status\update-pivot.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Device-Checklist&amp;et=GROUP</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\status\update-pivot.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="44" UniqueID="{DE39A844-118E-4F22-8EFA-7E6954D5B755}" Name="Universal connector" NameU="Universal connector" Master="7">
+					<XForm>
+						<PinX Unit="IN_F">5.804700000000000</PinX>
+						<PinY Unit="IN">4.812500000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="45" UniqueID="{BF3803C4-196A-45B2-B44C-AA0DFCBFAC5B}" Name="Universal connector.45" NameU="Universal connector.45" Master="7">
+					<XForm>
+						<PinX Unit="IN_F">6.976550000000000</PinX>
+						<PinY Unit="IN">5.000000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="56" UniqueID="{C6D934BF-282B-4862-A735-C1EA552EB9D0}" Name="Universal connector.56" NameU="Universal connector.56" Master="7">
+					<XForm>
+						<PinX Unit="IN_F">5.804712499999999</PinX>
+						<PinY Unit="IN">4.187500000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="57" UniqueID="{49193331-A874-4C43-A113-679B3DA37205}" Name="Universal connector.57" NameU="Universal connector.57" Master="7">
+					<XForm>
+						<PinX Unit="IN_F">6.960950000000000</PinX>
+						<PinY Unit="IN">4.375000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="53" UniqueID="{2E853ECF-A083-4C0D-B5D4-7394AC61E9FF}" Name="Line connector" NameU="Line connector" Master="9">
+					<XForm>
+						<PinX Unit="IN_F">6.343749999999998</PinX>
+						<PinY Unit="IN_F">4.458300000000001</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="54" UniqueID="{4093EB10-8AE6-434A-935B-4579BBDBEC2A}" Name="Sheet.54" NameU="Sheet.54">
+					<Text>Pre-Installation</Text>
+					<XForm>
+						<PinX Unit="IN">5.875000000000000</PinX>
+						<PinY Unit="IN">7.625000000000000</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="55" UniqueID="{33F26B8D-B862-4700-87B4-7B680C9A1DC1}" Name="Sheet.55" NameU="Sheet.55">
+					<Text>Post-Installation</Text>
+					<XForm>
+						<PinX Unit="IN">6.875000000000000</PinX>
+						<PinY Unit="IN">7.625000000000000</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="58" UniqueID="{E46A4B56-5A9C-489A-956C-D421A0A24779}" Name="Process.58" NameU="Process.58" Master="3">
+					<Text>Setup Checklists</Text>
+					<XForm>
+						<PinX Unit="IN">1.298800000000000</PinX>
+						<PinY Unit="IN">6.875000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="59" UniqueID="{C918B0C8-7C1E-427A-87EC-F23578C5B478}" Name="Universal connector.59" NameU="Universal connector.59" Master="7">
+					<XForm>
+						<PinX Unit="IN_F">1.485343750000000</PinX>
+						<PinY Unit="IN">6.062500000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="60" UniqueID="{6F3B7638-1769-457C-8878-73844FBA8711}" Name="Universal connector.60" NameU="Universal connector.60" Master="7">
+					<XForm>
+						<PinX Unit="IN_F">1.493175000000000</PinX>
+						<PinY Unit="IN">5.437500000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+				<Shape ID="61" UniqueID="{404B4347-B871-4C72-9D6E-AA57197F5FF9}" Name="Process.61" NameU="Process.61" Master="3">
+					<Text>Update Summary Status of Slots
+(AM-OK)</Text>
+					<XForm>
+						<PinX Unit="IN">10.125000000000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>0</LayerMember>
+					</LayerMem>
+					<Scratch>
+						<B>
+							<SolutionXML>
+								<HLURL:Hyperlinks xmlns:HLURL="urn:schemas-microsoft-com:office:visio:dghlinkext">
+									<HLURL:Hyperlink ID="1">
+										<HLURL:Description>Update Summary Status of Slots</HLURL:Description>
+										<HLURL:Address>../status\update-pivot.xhtml</HLURL:Address>
+										<HLURL:SubAddress></HLURL:SubAddress>
+										<HLURL:ExtraInfo>pg=Slot-Checklist&amp;et=SLOT</HLURL:ExtraInfo>
+										<HLURL:Default>0</HLURL:Default>
+										<HLURL:NewWindow>0</HLURL:NewWindow>
+										<HLURL:AbsoluteURL>file://H:\dev\discs\discs-ccdb\design\status\update-pivot.xhtml</HLURL:AbsoluteURL>
+									</HLURL:Hyperlink>
+								</HLURL:Hyperlinks>
+							</SolutionXML>
+						</B>
+					</Scratch>
+					<Prop ID="1" Name="Cost" NameU="Cost">
+						<Value></Value>
+						<Label>Cost</Label>
+					</Prop>
+					<Prop ID="2" Name="Duration" NameU="Duration">
+						<Value></Value>
+						<Label>Duration</Label>
+					</Prop>
+					<Prop ID="3" Name="Resources" NameU="Resources">
+						<Value></Value>
+						<Label>Resources</Label>
+					</Prop>
+				</Shape>
+				<Shape ID="62" UniqueID="{BD37ABF7-B773-47A0-9A1E-5CEE8359B82E}" Name="Directed line 1.62" NameU="Directed line 1.62" Master="6">
+					<XForm>
+						<PinX Unit="IN_F">9.625000000000000</PinX>
+						<PinY Unit="IN">5.625000000000000</PinY>
+					</XForm>
+					<LayerMem>
+						<LayerMember>1</LayerMember>
+					</LayerMem>
+				</Shape>
+			</Shapes>
+		</Page>
+	</Pages>
+</VisioDocument>
