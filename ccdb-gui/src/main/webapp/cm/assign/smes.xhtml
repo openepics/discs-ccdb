@@ -9,8 +9,8 @@
 
     <ui:define name="content"> 
         <f:metadata>
-            <f:viewParam name="type" value="#{statusPivotManager.selectedPhaseGroup}"  /> 
-            <f:viewParam name="ent" value="#{statusPivotManager.entityType}"  />
+            <f:viewParam name="pg" value="#{statusPivotManager.selectedPhaseGroup}"  /> 
+            <f:viewParam name="et" value="#{statusPivotManager.entityType}"  />
             <f:viewAction action="#{statusPivotManager.initialize()}" />
         </f:metadata>
         <h:form id="crudForm" > 
