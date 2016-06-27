@@ -101,7 +101,8 @@
                     <p:menuitem value="For Devices" icon="fa fa-list-alt" url="/cm/report/device-status.xhtml?pg=Slot-Checklist" />
                     <p:menuitem value="For Groups" icon="fa fa-list-alt" url="/cm/report/group-status.xhtml?pg=Slot-Checklist" />
                     <p:menuitem value="For Slots" icon="fa fa-list-alt" url="/cm/report/slot-status.xhtml?pg=Slot-Checklist" />                  
-                </p:submenu>                
+                </p:submenu>    
+                <p:menuitem value="User Manual" icon="fa fa-list-alt" url="/cm/docs/usermanual.xhtml" />
             </p:submenu>
            
             <p:submenu label="Import" icon="fa fa-upload" rendered="false">               
@@ -113,11 +114,13 @@
             </p:submenu>
 
             <p:submenu label="Admin" icon="fa fa-cubes">               
-                <p:menuitem value="Authorizations" icon="fa fa-cubes" outcome="auth"/>        
-                <p:menuitem value="Manage Processes" icon="fa fa-list-alt" outcome="/cm/admin/phases.xhtml" />
-                <p:menuitem value="Process Groups" icon="fa fa-crosshairs" outcome="/cm/admin/phase-groups.xhtml" /> 
-                <p:menuitem value="Process Membership" icon="fa fa-crosshairs" outcome="/cm/admin/phase-group-members.xhtml" />                
-                <p:menuitem value="Status Options" icon="fa fa-list-alt" url="/cm/admin/status-options.xhtml" />
+                <p:menuitem value="Authorizations" icon="fa fa-cubes" outcome="auth"/>   
+                <p:submenu label="Configuration" icon="fa fa-list-alt">
+                    <p:menuitem value="Manage Processes" icon="fa fa-list-alt" outcome="/cm/admin/phases.xhtml" />
+                    <p:menuitem value="Process Groups" icon="fa fa-crosshairs" outcome="/cm/admin/phase-groups.xhtml" /> 
+                    <p:menuitem value="Process Membership" icon="fa fa-crosshairs" outcome="/cm/admin/phase-group-members.xhtml" />                
+                    <p:menuitem value="Status Options" icon="fa fa-list-alt" url="/cm/admin/status-options.xhtml" />
+                </p:submenu>
             </p:submenu>
 
             <p:submenu label="Links" icon="fa fa-external-link" >
