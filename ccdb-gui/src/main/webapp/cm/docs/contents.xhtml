@@ -31,7 +31,7 @@
             </p>
             <p>
                 During its life cycle,  a device or slot undergoes a number of processes such as Mechanical Inspection, Electrical Inspection, and Device Hazard Review.
-                CCDB captures the final status of these processes, for a device or a slot, using <e>Readiness Checklists</e>.
+                CCDB captures the final status of these processes using <e>Readiness Checklists</e>.
 
                 Readiness Checklists are used by Device
                 Owners and Area Managers to collect input from Subject Matter Experts (SME), and to 
@@ -47,29 +47,15 @@
                 Readiness Checklists
             </h2>
             <p>               
-                CCDB Implementation Plan [1], the verbatim source of this section,  
-                describes Readiness Checklists in all their gory.
+                Readiness Checklists are described in detail in CCDB Implementation Plan [1], the verbatim source of this section.
                 Readiness Checklists provide a top-down review with Subject Matter Experts (SME) 
                 to verify that a device, slot, or subsystem is ready for use, and to ensure that
                 higher-level performance and safety requirements that are not specifically part of 
                 the configuration attributes will be met.
             </p>
             <p>
-                Readiness Checklists can be associated with devices (a physical item that gets installed), 
-                slots (the space where a device gets installed; in this context a slot checklist is for the 
-                installed device including its interfaces), or groups of slots (a collection of slots with their installed devices, defined by the Area Manager).
-                It should be noted that some devices may contain other devices, in an assembly.  
-            </p>
-            <p>
-                One example is cryomodules: the cryomodule itself is a device, and gets installed into a cryomodule slot.  
-                Within that physical space is also where the superconducting cavities will reside.  
-                Due to the nature of the configuration data that will get collected in the CCDB, both the cavity devices 
-                and cryomodule device will have entries in the database, since some important information is associated 
-                with the particular cavity, and other information is pertinent to the entire cryomodule assembly.  
-                Assemblies in the CCDB relate the parent-child hierarchies so that when a cryomodule device gets installed, 
-                the cavity devices that are within it automatically fill the appropriate cavity slots.  
-            </p>
-            <p>
+                Readiness Checklists can be associated with devices, 
+                slots, or groups of slots.
                 Assemblies are not not the same as Groups: assemblies store the physical relationship of devices within a 
                 larger device, so those internal devices can move with the larger device and fill appropriate slots when 
                 the larger device gets installed; groups are arbitrary collections of slots defined by a user, so those 
@@ -83,14 +69,11 @@
             <p>
                 Area Managers own Slot and Group Readiness Checklists and their supporting data; Device Owners own 
                 Device Readiness Checklists and their supporting data.
-                Readiness Checklists will contain a status for each of several categories, defined in section 3.2.   
-                Sample values are shown in Figure 1 for three Readiness Checklists, displayed in a table format.
-                Readiness Checklists may be associated with devices, slots, or groups, at the Area Manager’s discretion 
-                and with proper concurrence described in section 4.  The planned checklists at the time of this document’s writing are listed in section 3.4.
+                Readiness Checklists may be associated with devices, slots, or groups, at the Area Manager’s discretion.  
             </p>
             <p>
-                Checklists for devices—typically critical and complex beamline devices such as cryomodules or 
-                magnet assemblies—are primarily to assess the devices’ suitability for installation or as a spare.  
+                Checklists for devices —typically critical and complex beamline devices such as cryomodules or 
+                magnet assemblies— are primarily to assess the devices’ suitability for installation or as a spare.  
                 Area Managers are encouraged to request Readiness Checklists from Device Owners for chosen devices as necessary 
                 criteria for that device’s installation or replacement.
             </p>
@@ -98,7 +81,6 @@
                 Checklists for slots and groups are to verify that the devices installed in their slots, and their 
                 interfaces to the larger subsystem, are ready for operation.  Checklists for slots and groups are typically a 
                 verification that the critical and complex beamline devices are now properly installed and configured for use.
-
             </p>
 
             <h2 id='roles'>
@@ -201,6 +183,9 @@
             <h2 id='references'>
                 References
             </h2>
+            <ol>
+                <li>CCDB Implementation Plan, DCC Document, FRIB Portal</li>
+            </ol>
         </p:panel>
     </h:form>
 
