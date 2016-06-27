@@ -45,6 +45,9 @@
                         <h:outputText value="#{obj.completed}" styleClass="colCenter"/>
                     </p:column>
                     
+                    <p:column headerText="Comment Required" >
+                        <h:outputText value="#{obj.commentRequired}" styleClass="colCenter"/>
+                    </p:column>
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">
@@ -137,7 +140,17 @@
                         <p:column>
                             <p:selectBooleanCheckbox id="completed" value="#{statusOptionManager.inputAction == 'CREATE'? statusOptionManager.inputEntity.completed : statusOptionManager.selectedEntity.completed}" 
                                                      required="true" 
-                                                     validatorMessage="Description required" disabled="#{statusOptionManager.inputAction == 'DELETE'}"/>                            
+                                                     validatorMessage="Field is required" disabled="#{statusOptionManager.inputAction == 'DELETE'}"/>                            
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="creq"  value="Comment Required" />
+                        </p:column>
+                        <p:column>
+                            <p:selectBooleanCheckbox id="creq" value="#{statusOptionManager.inputAction == 'CREATE'? statusOptionManager.inputEntity.commentRequired : statusOptionManager.selectedEntity.commentRequired}" 
+                                                     required="true" 
+                                                     validatorMessage="Required" disabled="#{statusOptionManager.inputAction == 'DELETE'}"/>                            
                         </p:column>
                     </p:row>
                     <p:row>

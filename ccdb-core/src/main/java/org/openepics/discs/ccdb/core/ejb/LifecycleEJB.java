@@ -15,6 +15,7 @@
  */
 package org.openepics.discs.ccdb.core.ejb;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -188,14 +189,18 @@ public class LifecycleEJB {
             em.merge(assignment);
         }
         
+        List<PhaseStatus> statuses = new ArrayList<>();
+        
         for(PhaseGroupMember pog : assignment.getPhaseGroup().getPhases()) {
             PhaseStatus phaseStatus = new PhaseStatus();
             phaseStatus.setAssignment(assignment);
             phaseStatus.setGroupMember(pog);
             phaseStatus.setStatus(pog.getDefaultStatus());
             em.persist(phaseStatus);
+            statuses.add(phaseStatus);
         }
 
+        assignment.setStatuses(statuses);
 //        if (assignment.getApprovals() != null && approvers != null) {
 //            Iterator<PhaseApproval> iterator =  assignment.getApprovals().iterator();
 //            while (iterator.hasNext()) {

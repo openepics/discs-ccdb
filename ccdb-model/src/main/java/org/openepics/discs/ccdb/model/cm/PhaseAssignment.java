@@ -132,4 +132,9 @@ public class PhaseAssignment extends ConfigurationEntity {
     public List<PhaseStatus> getStatuses() {
         return statuses;
     }
+
+    public void setStatuses(List<PhaseStatus> statuses) {
+        this.statuses = statuses;
+    }
+    
 }
