@@ -19,6 +19,8 @@ package org.openepics.discs.ccdb.model.cm;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -26,6 +28,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.openepics.discs.ccdb.model.ConfigurationEntity;
+import org.openepics.discs.ccdb.model.auth.Role;
 
 /**
  * A group of slots (for configuration management)
@@ -55,6 +58,10 @@ public class SlotGroup extends ConfigurationEntity {
     @Column(name = "description")
     private String description;
     
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "owner")
+    private Role owner; 
+    
     // getters and setters
 
     public String getName() {
@@ -71,5 +78,13 @@ public class SlotGroup extends ConfigurationEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Role getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Role owner) {
+        this.owner = owner;
     }
 }

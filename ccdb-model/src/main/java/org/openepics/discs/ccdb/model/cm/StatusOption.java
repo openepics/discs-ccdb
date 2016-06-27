@@ -81,6 +81,12 @@ public class StatusOption extends ConfigurationEntity {
     @Column(name = "weight")
     private Integer weight = 0; // relative importance of the options. summary phase must be greater than or equal to the rest of the phases.
     
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "comment_req")
+    private Boolean commentRequired = false; // if true for an explanation is required
+    
+    
     // getters and setters
 
     public String getName() {
@@ -129,6 +135,14 @@ public class StatusOption extends ConfigurationEntity {
 
     public void setWeight(Integer weight) {
         this.weight = weight;
+    }
+
+    public Boolean getCommentRequired() {
+        return commentRequired;
+    }
+
+    public void setCommentRequired(Boolean commentRequired) {
+        this.commentRequired = commentRequired;
     }
     
 }

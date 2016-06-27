@@ -24,8 +24,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.openepics.discs.ccdb.core.ejb.AuthEJB;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
 import org.openepics.discs.ccdb.gui.ui.util.UiUtility;
+import org.openepics.discs.ccdb.model.auth.Role;
 import org.openepics.discs.ccdb.model.cm.SlotGroup;
 
 import org.primefaces.context.RequestContext;
@@ -63,6 +65,8 @@ public class SlotGroupManager implements Serializable {
 //    private AuthEJB authEJB;
     @EJB
     private LifecycleEJB lcEJB;
+     @EJB
+    private AuthEJB authEJB;
             
     private static final Logger LOGGER = Logger.getLogger(SlotGroupManager.class.getName());
 //    @Inject
@@ -70,6 +74,7 @@ public class SlotGroupManager implements Serializable {
       
     private List<SlotGroup> entities;    
     private List<SlotGroup> filteredEntities;    
+    private List<Role> roles ;
     private SlotGroup inputEntity;
     private SlotGroup selectedEntity;
     private InputAction inputAction;
@@ -80,7 +85,8 @@ public class SlotGroupManager implements Serializable {
     
     @PostConstruct
     public void init() {      
-        entities = lcEJB.findAllSlotGroups();     
+        entities = lcEJB.findAllSlotGroups(); 
+        roles = authEJB.findAllRoles();
         resetInput();
     }
     
@@ -170,5 +176,9 @@ public class SlotGroupManager implements Serializable {
 
     public void setSelectedEntity(SlotGroup selectedEntity) {
         this.selectedEntity = selectedEntity;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
     }
 }

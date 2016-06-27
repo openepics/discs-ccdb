@@ -1,0 +1,59 @@
+
+/* 
+    Document   : Layout
+    Created on : Oct 16, 2013, 3:48:17 PM
+    Author     : Vasu V <vuppala@frib.msu.org>
+    Description:
+        Purpose of the stylesheet follows.
+
+   TODO: move font-family to one class
+*/
+
+.userManual {
+    font-family: "Times New Roman", Georgia, Serif;
+    font-size: 14pt;
+}
+
+.userManual h1 {
+    font-family: "Times New Roman", Georgia, Serif !important;
+    text-align: center;
+    font-size:   32pt;
+    color:  cadetblue;
+}
+
+.userManual h2 {
+    font-size:   24pt;
+    font-family: "Times New Roman", Georgia, Serif !important;
+    /*font-variant:  small-caps;*/
+    color:  cadetblue;
+}
+
+.userManual blockquote {
+    font-size:   12pt;
+    text-align: right;
+}
+
+.userManual q {
+    font-style: italic;
+}
+
+.userManual p {
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    /*font-family: "Times New Roman", Georgia, Serif;*/
+    font-size:   12pt;
+    text-align: justify;
+}
+
+.toc {
+    position:  fixed;
+    font-family: "Times New Roman", Georgia, Serif !important;
+    /*top: 0;*/
+}
+
+.toc a {
+    text-align: left;
+    font-size:   16pt;
+    color:  deepskyblue; 
+    text-decoration: none;
+    display:  block;
+}

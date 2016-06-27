@@ -28,6 +28,10 @@
                               filterBy="#{obj.description}" filterMatchMode="contains" >
                         <h:outputText value="#{obj.description}" styleClass="colCenter"/>
                     </p:column>
+                     <p:column headerText="Owner" sortBy="#{obj.owner}" 
+                              filterBy="#{obj.owner}" filterMatchMode="contains" >
+                        <h:outputText value="#{obj.owner}" styleClass="colCenter"/>
+                    </p:column>
 
 <!--                     <p:column headerText="Options" >
                          <ui:repeat value="#{obj.options}" var="opt">
@@ -89,6 +93,26 @@
                         </p:column>
                     </p:row>
 
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="smeInp"  value="SME" />
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="smeInp" var="role" converter="#{roleConverter}"
+                                             filter="true"
+                                             value="#{slotGroupManager.inputAction == 'CREATE'? slotGroupManager.inputEntity.owner : slotGroupManager.selectedEntity.owner}"                                            
+                                             disabled="#{slotGroupManager.inputAction == 'DELETE'}">
+
+                                <f:selectItems value="#{slotGroupManager.roles}" var="b" itemLabel="#{b.roleId}" itemValue="#{b}" />
+                                <p:column>
+                                    <h:outputText value="#{role.roleId}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{role.description}" />
+                                </p:column>
+                            </p:selectOneMenu>                            
+                        </p:column>
+                    </p:row>
                     <f:facet name="footer">
                         <p:row>
                             <p:column colspan="2">
