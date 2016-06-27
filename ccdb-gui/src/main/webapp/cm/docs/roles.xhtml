@@ -1,0 +1,40 @@
+<ui:composition  
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+
+    <p:panelGrid style="text-align: left" styleClass="userManual">  
+        <f:facet name="header">  
+            <p:row>  
+                <p:column>Role</p:column>  
+                <p:column>Responsibility</p:column>  
+
+            </p:row>  
+        </f:facet>  
+
+        <p:row>  
+            <p:column>Area Manager</p:column>  
+            <p:column>Assigns checklists and SMEs to slots and slot groups. Updates the summary status (e.g. AM-OK).
+            </p:column>  
+        </p:row> 
+        <p:row>  
+            <p:column>Configuration Manager</p:column>  
+            <p:column>
+                Configures the status options, processes (fields), and process groups (checklists)
+            </p:column> 
+        </p:row>
+        <p:row>  
+            <p:column>Device Owner</p:column>  
+            <p:column>Assigns checklists and SMEs to devices. Updates the status (e.g. DO-OK) of devices, slots, and slot groups.
+            </p:column>  
+
+        </p:row>
+        <p:row>  
+            <p:column>SME</p:column>  
+            <p:column>Updates the  status of devices, slots, and slot groups.</p:column>  
+        </p:row>
+    </p:panelGrid>
+</ui:composition>

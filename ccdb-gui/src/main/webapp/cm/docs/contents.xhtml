@@ -104,35 +104,8 @@
             <h2 id='roles'>
                 Roles and Responsibilities
             </h2>
-            <p>
-            Device Owners (typically CAMs) will provide slot lists to the Chief Engineer or delegate, with DHR and ARR association. 
-            The Area Manager will verify this association.  Note that this step is already planned in order to populate the Central Configuration Database 
-            (CCDB), part of the Global Database (GDB) [2].
-            
-Area Managers, the Commissioning Manager, Division Directors, and the Chief Engineer agree upon checklist items/attributes, 
-and assign subject matter experts (SMEs) in this document.  Subject matter experts are assigned in Appendix A.
-Each Area Manager will author a document stating which devices, slots, and/or groups will get checklists, 
-and what a “Yes” means for each category for each device or system type. The Area Manager will work with 
-SME’s to define required data to be gathered for each device type or subsystem, informed by DHR criteria [4].  
-The document must be approved by the  Division Director, the Commissioning Manager, the ESHQ manager, 
-and shall get concurrence from the SMEs.  
+            <ui:include src="roles.xhtml" />
 
-Checklist owners are responsible for Readiness Checklist Travelers in the e-Traveler system to
-collect the data outlined in the Area Managers’ documents. 
-For devices that have Readiness Checklists, Device Owners will coordinate subject matter input 
-and load the SME input (Y, N, etc.) into the CCDB prior to device installation.  
-A collaborative process such as an SME meeting is envisioned, where checklist categories can be reviewed and discussed by the group.
-Device Owners will install devices and gather data required in the Readiness Checklist Travelers.
-
-For slots and groups that have Readiness Checklists, Area Managers will coordinate subject matter 
-input and load the SME input (Y, N, etc.) into the CCDB after installation and preliminary testing is complete. 
-The Area Manager’s approval of the checklist is the final approval, and supercedes individual SME inputs. 
-The installed devices shall not be operated as a system unless the Area Manager’s OK is Y or YC (yes with comments).
-
-The Chief Engineer owns the Readiness Checklist system, and will define checklist usage and requirements 
-in this document, guide the implementation of the system, and assist checklist owners in proper usage of the system.
-
-            </p>
             <h2 id='process'>
                 Process Flow
             </h2>
@@ -174,15 +147,16 @@ in this document, guide the implementation of the system, and assist checklist o
                     <li>It works the same way for devices when Device Owner sets the summary field (e.g. DO-OK) to Y or YC</li>
                 </ul> 
             </p>
-            
+
             <h2 id='operation'>
                 Operation
             </h2>
             <p>
                 Most of the operations to manage checklists are available under the
                 Checklist pull-down menu from CCDB's main menubar located on the top of the page.
-                <p:graphicImage value="#{resource['images/cm/checklist-menu.png']}"/> 
             </p>
+            <p:graphicImage value="#{resource['images/cm/checklist-menu.png']}"/> 
+
             <p>
                 Use the Checklist pull-down menu to perform the following tasks:
                 <ul>                  
@@ -197,6 +171,15 @@ in this document, guide the implementation of the system, and assist checklist o
                 Besides the checklist menus, you may use the 
                 <p:link href="/cm/docs/checklist-proc.xhtml" value="Process Diagram"/> to navigate to the desired page.
             </p>
+
+            <p>
+                To configure checklists (Configuration Manager), use 'Configuration' item under 'Admin' menu.
+            </p>
+            <p:graphicImage value="#{resource['images/cm/cm-menu.png']}"/> 
+
+            <h2 id='authorization'>
+                Authorization
+            </h2>
             
             <h2 id='faqs'>
                 FAQs
