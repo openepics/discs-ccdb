@@ -11,7 +11,7 @@
 
         <h:form id="crudForm" > 
             <p:panel>
-                <h:outputText value="Manage Phases" styleClass="heading"/>
+                <h:outputText value="Manage Process" styleClass="heading"/>
                 <p:dataTable id="entityTable" value="#{phaseManager.entities}" var="obj" 
                              sortMode="multiple"
                              rowKey="#{obj.id}" selectionMode="single" selection="#{phaseManager.selectedEntity}"                          
@@ -60,9 +60,9 @@
                     <f:facet name="header">
                         <p:row>
                             <p:column colspan="2">
-                                <h:outputText value="New Phase" rendered="#{phaseManager.inputAction == 'CREATE'}"/>
-                                <h:outputText value="Update Existing Phase" rendered="#{phaseManager.inputAction == 'UPDATE'}"/>
-                                <h:outputText value="Delete Phase" rendered="#{phaseManager.inputAction == 'DELETE'}"/>
+                                <h:outputText value="New Process" rendered="#{phaseManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update Existing Process" rendered="#{phaseManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete Process" rendered="#{phaseManager.inputAction == 'DELETE'}"/>
                             </p:column>                
                         </p:row>
                     </f:facet>

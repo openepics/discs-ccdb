@@ -37,9 +37,9 @@
     font-style: italic;
 }
 
-.userManual p {
-    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
-    /*font-family: "Times New Roman", Georgia, Serif;*/
+.userManual p,ul {
+    /*font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;*/
+    font-family: "Times New Roman", Georgia, Serif;
     font-size:   12pt;
     text-align: justify;
 }

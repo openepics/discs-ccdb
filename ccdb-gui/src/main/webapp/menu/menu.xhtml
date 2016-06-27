@@ -87,12 +87,16 @@
                     <p:menuitem value="Of Slots" icon="fa fa-list-alt" url="/cm/status/update-pivot.xhtml?pg=Slot-Checklist&amp;et=SLOT" />                    
                 </p:submenu>
                 
-                <p:submenu label="Update Status L" icon="fa fa-list-alt">
+                <p:submenu label="Update Status L" icon="fa fa-list-alt" rendered="false">
                     <p:menuitem value="Of Devices" icon="fa fa-list-alt" url="/cm/status/update.xhtml?pg=Slot-Checklist&amp;et=DEVICE" />
                     <p:menuitem value="Of Groups" icon="fa fa-list-alt" url="/cm/status/update.xhtml?pg=Slot-Checklist&amp;et=GROUP" />
                     <p:menuitem value="Of Slots" icon="fa fa-list-alt" url="/cm/status/update.xhtml?pg=Slot-Checklist&amp;et=SLOT" />                    
                 </p:submenu>
-                <p:menuitem value="Slot Group" icon="fa fa-list-alt" url="/cm/slots.xhtml" />
+                <p:submenu label="Slot Groups" icon="fa fa-list-alt">
+                    <p:menuitem value="Manage Groups" icon="fa fa-list-alt" url="/cm/admin/slot-groups.xhtml" />
+                    <p:menuitem value="Assign Slots" icon="fa fa-list-alt" url="/cm/slots.xhtml" />                   
+                </p:submenu>
+                
                <p:submenu label="Status Report" icon="fa fa-list-alt">
                     <p:menuitem value="For Devices" icon="fa fa-list-alt" url="/cm/report/device-status.xhtml?pg=Slot-Checklist" />
                     <p:menuitem value="For Groups" icon="fa fa-list-alt" url="/cm/report/group-status.xhtml?pg=Slot-Checklist" />
@@ -110,10 +114,9 @@
 
             <p:submenu label="Admin" icon="fa fa-cubes">               
                 <p:menuitem value="Authorizations" icon="fa fa-cubes" outcome="auth"/>        
-                <p:menuitem value="Manage Phases" icon="fa fa-list-alt" outcome="/cm/admin/phases.xhtml" />
-                <p:menuitem value="Phase Groups" icon="fa fa-crosshairs" outcome="/cm/admin/phase-groups.xhtml" /> 
-                <p:menuitem value="Phase Membership" icon="fa fa-crosshairs" outcome="/cm/admin/phase-group-members.xhtml" /> 
-                <p:menuitem value="Slot Groups" icon="fa fa-list-alt" url="/cm/admin/slot-groups.xhtml" />
+                <p:menuitem value="Manage Processes" icon="fa fa-list-alt" outcome="/cm/admin/phases.xhtml" />
+                <p:menuitem value="Process Groups" icon="fa fa-crosshairs" outcome="/cm/admin/phase-groups.xhtml" /> 
+                <p:menuitem value="Process Membership" icon="fa fa-crosshairs" outcome="/cm/admin/phase-group-members.xhtml" />                
                 <p:menuitem value="Status Options" icon="fa fa-list-alt" url="/cm/admin/status-options.xhtml" />
             </p:submenu>
 

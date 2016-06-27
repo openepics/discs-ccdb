@@ -30,17 +30,19 @@
                 and experimental systems. It is part of <h:outputLink value="#{msgs.discs}" target="_blank">DISCS</h:outputLink>.                   
             </p>
             <p>
-                Part of the CCDB configuration data are the verification results that equipment is 
-                suitable for operation: Readiness Checklists.  Readiness Checklists are used by Device
+                During its life cycle,  a device or slot undergoes a number of processes such as Mechanical Inspection, Electrical Inspection, and Device Hazard Review.
+                CCDB captures the final status of these processes, for a device or a slot, using <e>Readiness Checklists</e>.
+
+                Readiness Checklists are used by Device
                 Owners and Area Managers to collect input from Subject Matter Experts (SME), and to 
                 decide and document device and slot readiness for installation, integrated testing, and/or beam.  
             </p>
             <h2 id='terminology'>
                 Terminology
             </h2>
-            
+
             <ui:include src='terminology.xhtml'/>
-            
+
             <h2 id='checklist'>
                 Readiness Checklists
             </h2>
@@ -102,14 +104,82 @@
             <h2 id='roles'>
                 Roles and Responsibilities
             </h2>
-            <h2 id='processFlow'>
+            <h2 id='process'>
                 Process Flow
             </h2>
+            <p>
+                The following figure illustrates the process for managing checklists. As the first step, Configuration Manager
+                defines checklists by setting up status options ('Yes', 'No', 'Yes with Comments' etc), processes ('ME OK', 'EE OK' etc), 
+                and process groups (i.e. checklists). Once checklists are defined, a typical work flow goes like thus:
+                <ul>
+                    <li>For Devices</li>
+                    <ol>
+                        <li>Device Owner assigns checklists to devices</li>
+                        <li>Device Owner optionally assigns SMEs to devices</li>
+                        <li>SME updates the status of devices</li>
+                        <li>Device Owner sets the summary status (e.g. DO-OK) of devices</li>
+                    </ol>
+                    <li>For Slots</li>
+                    <ol>
+                        <li>Area Manager optionally defines Slot Groups</li>
+                        <li>Area Manager assigns checklists to Groups and/or Slots</li>
+                        <li>Area Manager optionally assigns SMEs to  Groups and/or Slots</li>
+                        <li>SME updates the status of Groups and/or Slots</li>
+                        <li>Device Owner sets status (e.g. DO-OK) of installed Groups and/or Slots</li>
+                        <li>Area Manager sets summary status (e.g. AM-OK) of Groups and/or Slots</li>
+                    </ol>
+                </ul>
+
+            </p>
             <ui:include src="procdiag.xhtml" />
-            <h2>
+            <p>
+                Notes:
+                <ul>
+                    <li> When a checklist is assigned, all the fields will get a default status value. 
+                        This is defined by the Configuration Manager during setup of checklists.</li>
+                    <li>An Area Manager or Device Owner can set certain fields to NR ('Not Required'). 
+                        However, this cannot be done for some fields (such as AM-OK or DO-OK).</li>
+                    <li>Once an Area Manager sets the summary fields (e.g. AM-OK) to a final status (e.g. Y or YC),
+                        the Group or Slot is frozen i.e the status of the rest of the fields cannot be updated. Area Manager 
+                        can reset this by setting the status to N</li>
+                    <li>It works the same way for devices when Device Owner sets the summary field (e.g. DO-OK) to Y or YC</li>
+                </ul> 
+            </p>
+            
+            <h2 id='operation'>
+                Operation
+            </h2>
+            <p>
+                Most of the operations to manage checklists are available under the
+                Checklist pull-down menu from CCDB's main menubar located on the top of the page.
+                <p:graphicImage value="#{resource['images/cm/checklist-menu.png']}"/> 
+            </p>
+            <p>
+                Use the Checklist pull-down menu to perform the following tasks:
+                <ul>                  
+                    <li>Assign Checklists: Assign checklists to devices, groups, and slots</li>
+                    <li>Assign SMEs: Assign SMEs to devices, groups, and slots</li>
+                    <li>Update Status: Update status of devices, groups, and slots</li>
+                    <li>Slot Groups: Manage slot groups</li>
+                    <li>Status Reports: Generate reports for devices, groups, or slots</li>
+                </ul>
+            </p>
+            <p>
+                Besides the checklist menus, you may use the 
+                <p:link href="/cm/docs/checklist-proc.xhtml" value="Process Diagram"/> to navigate to the desired page.
+            </p>
+            
+            <h2 id='faqs'>
                 FAQs
             </h2>
-            <h2>
+            <ul>
+                <li>Why can't I set certain fields to NR?</li>
+                <li>Why can't I update status of certain slots, groups, or devices?</li>
+                <li>Why are some slots not listed when updating slot status?</li>
+                <li>How can I unfreeze a slot, group, or device?</li>
+            </ul>
+
+            <h2 id='references'>
                 References
             </h2>
         </p:panel>

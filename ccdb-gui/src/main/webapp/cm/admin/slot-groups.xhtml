@@ -11,7 +11,7 @@
 
         <h:form id="crudForm" > 
             <p:panel>
-                <h:outputText value="Manage Phase Status Types" styleClass="heading"/>
+                <h:outputText value="Manage Slot Groups" styleClass="heading"/>
                 <p:dataTable id="entityTable" value="#{slotGroupManager.entities}" var="obj" 
                              sortMode="multiple"
                              rowKey="#{obj.id}" selectionMode="single" selection="#{slotGroupManager.selectedEntity}"                          
@@ -33,12 +33,6 @@
                         <h:outputText value="#{obj.owner}" styleClass="colCenter"/>
                     </p:column>
 
-<!--                     <p:column headerText="Options" >
-                         <ui:repeat value="#{obj.options}" var="opt">
-                             <h:outputText value="#{opt.name} " />
-                             <br/>
-                         </ui:repeat>
-                    </p:column>-->
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">

@@ -11,7 +11,7 @@
 
         <h:form id="crudForm" > 
             <p:panel>
-                <h:outputText value="Manage Phase Groups" styleClass="heading"/>
+                <h:outputText value="Manage Process Groups" styleClass="heading"/>
                 <p:dataTable id="entityTable" value="#{phaseGroupManager.entities}" var="obj" 
                              sortMode="multiple"
                              rowKey="#{obj.id}" selectionMode="single" selection="#{phaseGroupManager.selectedEntity}"                          
@@ -19,7 +19,9 @@
                              currentPageReportTemplate="Displaying {startRecord} - {endRecord} of {totalRecords}. Page: {currentPage}/{totalPages}"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
                              rows="25" paginator="true" rowsPerPageTemplate="25,50,100" styleClass="ccdbDatatable">  
+                    
                     <p:ajax event="rowSelect" listener="#{phaseGroupManager.onRowSelect}" update="commandButtons" />
+                    
                     <p:column headerText="Name" sortBy="#{obj.name}" 
                               filterBy="#{obj.name}" filterMatchMode="contains" > 
                         <h:outputText value="#{obj.name}" styleClass="colCenter"/>
@@ -60,9 +62,9 @@
                     <f:facet name="header">
                         <p:row>
                             <p:column colspan="2">
-                                <h:outputText value="New Process" rendered="#{phaseGroupManager.inputAction == 'CREATE'}"/>
-                                <h:outputText value="Update Existing Process" rendered="#{phaseGroupManager.inputAction == 'UPDATE'}"/>
-                                <h:outputText value="Delete Process" rendered="#{phaseGroupManager.inputAction == 'DELETE'}"/>
+                                <h:outputText value="New Process Group" rendered="#{phaseGroupManager.inputAction == 'CREATE'}"/>
+                                <h:outputText value="Update Existing Process Group" rendered="#{phaseGroupManager.inputAction == 'UPDATE'}"/>
+                                <h:outputText value="Delete Process Group" rendered="#{phaseGroupManager.inputAction == 'DELETE'}"/>
                             </p:column>                
                         </p:row>
                     </f:facet>
