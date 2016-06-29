@@ -11,6 +11,7 @@
         <f:metadata>
             <f:viewParam name="pg" value="#{statusPivotManager.selectedPhaseGroup}"  /> 
             <f:viewParam name="et" value="#{statusPivotManager.entityType}"  />
+
             <f:viewAction action="#{statusPivotManager.initialize()}" />
         </f:metadata>
         <h:form id="crudForm" > 
@@ -95,9 +96,9 @@
                     <f:facet name="header">
                         <p:row>
                             <p:column colspan="2">
-                                <h:outputText value="Add" rendered="#{statusPivotManager.inputAction == 'CREATE'}"/>
-                                <h:outputText value="Update" rendered="#{statusPivotManager.inputAction == 'UPDATE'}"/>
-                                <h:outputText value="Delete" rendered="#{statusPivotManager.inputAction == 'DELETE'}"/>
+                                <!--<h:outputText value="Add" rendered="#{statusPivotManager.inputAction == 'CREATE'}"/>-->
+                                <h:outputText value="Update SME" />
+                                <!--<h:outputText value="Delete" rendered="#{statusPivotManager.inputAction == 'DELETE'}"/>-->
                             </p:column>                
                         </p:row>
 
@@ -122,9 +123,9 @@
                             <p:outputLabel value="SME"/>                        
                         </p:column>
                         <p:column> 
-                            <p:selectOneMenu id="asme"  converter="#{userConverter}" value="#{statusPivotManager.inputSME}"> 
-                                <f:selectItem itemLabel="None" itemValue="#{null}" />
-                                <f:selectItems value="#{statusPivotManager.users}" var="b" itemLabel="#{b.name}: #{b.userId}" itemValue="#{b}" />                               
+                            <p:selectOneMenu id="asme"  converter="#{userConverter}" value="#{statusPivotManager.inputSME}"  style="width: 200px;"> 
+                                <f:selectItem itemLabel="Default" itemValue="#{null}" />
+                                <f:selectItems value="#{statusPivotManager.users}" var="b" itemLabel="#{b.name}" itemValue="#{b}"/>                               
                             </p:selectOneMenu>
                         </p:column>
                     </p:row>
@@ -135,7 +136,7 @@
                                 <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
                                                  actionListener="#{statusPivotManager}" onclick="PF('crudInputWid').hide()"/>
                                 <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
-                                                 action="#{statusPivotManager.saveEntity()}"  
+                                                 action="#{statusPivotManager.saveEntity('sme')}"  
                                                  oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
                                                  process="@form"  update="@form :crudForm:entityTable" rendered="#{statusPivotManager.inputAction != 'DELETE'}"/>
                                 <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"

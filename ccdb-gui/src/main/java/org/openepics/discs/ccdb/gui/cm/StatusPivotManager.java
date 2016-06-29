@@ -424,6 +424,9 @@ public class StatusPivotManager implements Serializable {
         if (statusRec != null) {
             inputStatus = statusRec.getStatus();
             inputSME = statusRec.getAssignedSME();
+            inputComment = statusRec.getComment();
+        } else {
+            LOGGER.log(Level.WARNING,"Status record not found!");
         }
         selectedEntities.clear();
         selectedEntities.add(assignment);
@@ -435,10 +438,23 @@ public class StatusPivotManager implements Serializable {
     }
 
     /**
-     * update status of the selected entities and phases
+     * Check if user is authorized to update the status
      * 
+     * ToDo: check roles and permissions
+     * 
+     * @param status
+     * @param user
+     * @return 
      */
-    public void saveEntity() {
+    private boolean isAuthorized(String view, PhaseStatus status, User user) {
+        return "sme".equals(view) || status.getAssignedSME() == null || status.getAssignedSME().equals(user);
+    }
+    
+    /**
+     * Update status of the selected entities and phases
+     * ToDo: Remove 'view' parameter
+     */
+    public void saveEntity(String view) {
         try {
             Preconditions.checkNotNull(selectedEntities);
             if (!inputValid()) {
@@ -463,7 +479,7 @@ public class StatusPivotManager implements Serializable {
                 for (PhaseAssignment record : selectedEntities) {
                     for (PhaseStatus status : record.getStatuses()) {
                         if (selectedPhase.phase.equals(status.getGroupMember().getPhase())) {
-                            if (status.getAssignedSME() != null && !status.getAssignedSME().equals(user)) {
+                            if (! isAuthorized(view, status, user)) {
                                 UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Update Failed",
                                         "You are not authorized to update one or more of the statuses.");
                                 RequestContext.getCurrentInstance().addCallbackParam("success", false);
@@ -488,6 +504,7 @@ public class StatusPivotManager implements Serializable {
                             status.setComment(inputComment);
                             status.setAssignedSME(inputSME);
                             lcEJB.savePhaseStatus(status);
+                            status = lcEJB.findPhaseStatus(status.getId()); // ToDo: to update the version field
                         }
                     }
                 }
@@ -496,12 +513,11 @@ public class StatusPivotManager implements Serializable {
             UiUtility.showMessage(FacesMessage.SEVERITY_INFO, UiUtility.MESSAGE_SUMMARY_SUCCESS,
                     "Update successful.");
         } catch (Exception e) {
-            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not complete approval", e.getMessage());
+            UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Error. Could not update status.", e.getMessage());
             RequestContext.getCurrentInstance().addCallbackParam("success", false);
             System.out.println(e);
 
-        } finally {
-//            selectedApproval = null;        
+        } finally {   
             resetInput();
         }
     }

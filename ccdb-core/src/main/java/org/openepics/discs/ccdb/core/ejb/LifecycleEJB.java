@@ -17,12 +17,15 @@ package org.openepics.discs.ccdb.core.ejb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.openepics.discs.ccdb.model.Device;
+import org.openepics.discs.ccdb.model.Slot;
 import org.openepics.discs.ccdb.model.auth.User;
 import org.openepics.discs.ccdb.model.cm.Phase;
 import org.openepics.discs.ccdb.model.cm.PhaseApproval;
@@ -45,8 +48,7 @@ public class LifecycleEJB {
     private static final Logger LOGGER = Logger.getLogger(LifecycleEJB.class.getName());   
     @PersistenceContext private EntityManager em;
     
-     
-    
+
     /**
      * All reviews
      * 
@@ -143,6 +145,24 @@ public class LifecycleEJB {
         }
     }
     
+    public PhaseAssignment findAssignment(Slot slot) {
+        List<PhaseAssignment> result = em.createNamedQuery("PhaseAssignment.findBySlot", PhaseAssignment.class).setParameter("slot", slot).getResultList();
+        if (result == null || result.isEmpty()) {
+            return null;
+        } else {
+            return result.get(0);
+        }
+    }
+    
+    /**
+     * ToDo: either make a named query or move to another module
+     * 
+     * @param groups
+     * @return 
+     */
+    public List<Slot> findSlots(Set<SlotGroup> groups) {
+        return em.createQuery("SELECT s FROM Slot s where s.cmGroup IN :groups", Slot.class).setParameter("groups", groups).getResultList();
+    }
     /**
      * save a process
      *
@@ -181,14 +201,7 @@ public class LifecycleEJB {
      * @param assignment
      * @param approvers 
      */
-    public void saveAssignment(PhaseAssignment assignment, List<User> approvers) {
-
-        if (assignment.getId() == null) {
-            em.persist(assignment);
-        } else {
-            em.merge(assignment);
-        }
-        
+    public void saveAssignment(PhaseAssignment assignment, List<User> approvers) {       
         List<PhaseStatus> statuses = new ArrayList<>();
         
         for(PhaseGroupMember pog : assignment.getPhaseGroup().getPhases()) {
@@ -196,44 +209,16 @@ public class LifecycleEJB {
             phaseStatus.setAssignment(assignment);
             phaseStatus.setGroupMember(pog);
             phaseStatus.setStatus(pog.getDefaultStatus());
-            em.persist(phaseStatus);
+            // em.persist(phaseStatus);
             statuses.add(phaseStatus);
         }
 
         assignment.setStatuses(statuses);
-//        if (assignment.getApprovals() != null && approvers != null) {
-//            Iterator<PhaseApproval> iterator =  assignment.getApprovals().iterator();
-//            while (iterator.hasNext()) {
-//                PhaseApproval approval = iterator.next();
-//                
-//                LOGGER.log(Level.INFO, "checking for removed approvers {0}", approval.getAssignedApprover());
-//                if (! approvers.contains(iterator.next().getApproved_by())) {
-//                if (! approvers.contains(approval.getAssignedApprover())) {
-//                    iterator.remove();
-//                    em.remove(approval);
-//                    LOGGER.log(Level.INFO, "removed approval record {0}", approval.getAssignedApprover());
-//                }
-//            }
-//        }
-//
-//        if (approvers != null) {
-//            if (assignment.getApprovals() == null) {
-//                assignment.setApprovals(new ArrayList<>());
-//            }
-//            for(User user : approvers) {
-//                LOGGER.log(Level.INFO, "checking for new approver {0}", user.getName());
-//                if (!isAnApprover(assignment.getApprovals(), user)) {
-//                    PhaseApproval approval = new PhaseApproval();
-//                    approval.setAssignedApprover(user);
-//                    approval.setAssignment(assignment);
-//                    em.persist(approval);
-//                    assignment.getApprovals().add(approval);
-//                    LOGGER.log(Level.INFO, "added approver {0}", user.getName());
-//                }
-//            }
-//        }
-//        
-//        em.flush(); // ToDo: should not be needed
+        if (assignment.getId() == null) {
+            em.persist(assignment);
+        } else {
+            em.merge(assignment);
+        }
     }
 
     /**
@@ -374,6 +359,17 @@ public class LifecycleEJB {
         return em.createNamedQuery("SlotGroup.findAll", SlotGroup.class).getResultList();
     } 
     
+    public List<SlotGroup> findUnassignedGroups() {
+        return em.createNamedQuery("PhaseAssignment.findUnassignedGroups", SlotGroup.class).getResultList();
+    }
+    
+    public List<Slot> findUnassignedSlots() {
+        return em.createNamedQuery("PhaseAssignment.findUnassignedSlots", Slot.class).getResultList();
+    }
+    
+    public List<Device> findUnassignedDevices() {
+        return em.createNamedQuery("PhaseAssignment.findUnassignedDevices", Device.class).getResultList();
+    }
     /**
      * PHase type 
      * 

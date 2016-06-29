@@ -14,16 +14,15 @@
                 <p:column>Examples</p:column>                  
             </p:row>  
         </f:facet>  
-         
+
         <p:row>  
-            
             <p:column>Device</p:column>  
-            <p:column>A device can be independently installed and de-installed as a single unit. It must be measured, tested, tracked, and serialized. 
-                It is generally the final product from an engineering group. Devices may be controlled by the control system. A device may contain other devices.
+            <p:column>A physical entity that implements a functionality useful for a facility. See below.
+                
             </p:column>  
             <p:column>A magnet or RF amplifier</p:column>                             
         </p:row> 
-       
+
         <p:row>  
             <p:column>Slot</p:column>  
             <p:column>A slot is a uniquely identifiable space.  A device, subsystem, or system is 
@@ -36,8 +35,21 @@
             <p:column>A set of slots.</p:column>  
             <p:column> </p:column>                             
         </p:row>
-        
+
     </p:panelGrid>   
 
+    <p>
+        The term device is used in various contexts and may have different aspects based on the context. 
+                In general, we use it to mean a physical equipment (engineering perspective).
+                A device can be independently installed and de-installed as a single unit. 
+                It must be measured, tested, tracked, and serialized. 
+                It is generally the final product from an engineering group. 
+                If there is a one-to-one correspondence between an element and a device, the term device 
+                may also be used to mean an element (beam-physics perspective). 
+                A device may be composed of other devices. 
+                For example, a cryomodule has several cavities and solenoids. 
+                This composition is mostly relevant from engineering and operations perspectives, 
+                and may not have any significance from beam-physics or controls perspectives.
+    </p>
 
 </ui:composition>

@@ -72,7 +72,7 @@ public class StatusReport implements Serializable {
     private List<PhaseStatus> statusList;
     private List<PhaseStatus> filteredStatus;
     private List<Phase> phases;
-    private List<SlotGroup> slotGroups;
+    private Set<SlotGroup> slotGroups;
     private Set<Slot> slots;
     private Set<Device> devices;
     // private Set<String> slotNames = new HashSet<>();
@@ -89,7 +89,7 @@ public class StatusReport implements Serializable {
      */
     @PostConstruct
     public void init() {
-        slotGroups = lcEJB.findAllSlotGroups();
+        // slotGroups = lcEJB.findAllSlotGroups();
         initialize();
         
     }
@@ -114,74 +114,16 @@ public class StatusReport implements Serializable {
             statusList = lcEJB.findAllStatuses(stype); 
             phases = lcEJB.findPhases(stype);
         }
+        slotGroups = statusList.stream().filter(stat -> stat.getAssignment().getSlotGroup() != null).map(stat -> stat.getAssignment().getSlotGroup()).collect(Collectors.toSet());
         slots = statusList.stream().filter(stat -> stat.getAssignment().getSlot() != null).map(stat -> stat.getAssignment().getSlot()).collect(Collectors.toSet());
+        if (slotGroups != null && !slotGroups.isEmpty()) slots.addAll(lcEJB.findSlots(slotGroups));
+ 
         devices = statusList.stream().filter(stat -> stat.getAssignment().getDevice() != null).map(stat -> stat.getAssignment().getDevice()).collect(Collectors.toSet());
-//        for(PhaseStatus lcstat: statusList) {
-//              if (lcstat.getAssignment().getSlot() != null) {
-//                  slotNames.add(lcstat.getAssignment().getSlot().getName());
-//              }
-//          }
-//        createDynamicColumns();
+
         return nextView;
     }
     
-//    public void updateColumns() {
-//        //reset table state
-//        UIComponent table = FacesContext.getCurrentInstance().getViewRoot().findComponent(":form:cars");
-//        table.setValueExpression("sortBy", null);
-//         
-//        //update columns
-//        createDynamicColumns();
-//    }
-//    
-//    private void createDynamicColumns() {
-//        String[] columnKeys = columnTemplate.split(" ");
-//        columns = new ArrayList<>();   
-//        
-//        phases.stream().map(phase -> phase.getName())
-//        for(String columnKey : columnKeys) {
-//            String key = columnKey.trim();
-//             
-//            if(VALID_COLUMN_KEYS.contains(key)) {
-//                columns.add(new ColumnModel(columnKey.toUpperCase(), columnKey));
-//            }
-//        }
-//    }
-    
-//    public String getSlotSumOk(Slot slot) {
-//       
-//          if (slot == null ) {
-//              return "";
-//          }
-//          
-//          for(PhaseStatus lcstat: statusList) {
-//              if (slot.equals(lcstat.getAssignment().getSlot())) {
-//                  if (lcstat.getStatus() == null || "No".equals(lcstat.getStatus().getName())) {
-//                      return "No";
-//                  }                
-//             }
-//          }
-//          
-//        return "Yes";
-//    }
-//
-//    public String getDeviceSumOk(Device device) {
-//       
-//          if (device == null ) {
-//              return "";
-//          }
-//          
-//          for(PhaseStatus lcstat: statusList) {
-//              if (device.equals(lcstat.getAssignment().getDevice())) {
-//                  if (lcstat.getStatus() == null || "No".equals(lcstat.getStatus().getName())) {
-//                      return "No";
-//                  }                
-//             }
-//          }
-//          
-//        return "Yes";
-//    }   
-//    
+
     public PhaseStatus getStatusRec(Slot slot, Phase phase) {
        
           if (slot == null || phase == null ) {
@@ -215,21 +157,7 @@ public class StatusReport implements Serializable {
         return null;
     }
     
-//    public String getDeviceStatus(Device device, Phase phase) {
-//       
-//          if (device == null || phase == null ) {
-//              return "";
-//          }
-//          
-//          for(PhaseStatus lcstat: statusList) {
-//              if (device.equals(lcstat.getAssignment().getDevice()) && phase.equals(lcstat.getAssignment().getPhase())) {
-//                  return lcstat.getStatus() == null? "" : lcstat.getStatus().getName();
-//             }
-//          }
-//          
-//        return "N/R";
-//    }
-//    
+
     public PhaseStatus getDeviceStatusRec(Device device, Phase phase) {
        
           if (device == null || phase == null ) {
@@ -275,12 +203,7 @@ public class StatusReport implements Serializable {
         return devices;
     }
 
-    public List<SlotGroup> getSlotGroups() {
+    public Set<SlotGroup> getSlotGroups() {
         return slotGroups;
     }
-
-    public void setSlotGroups(List<SlotGroup> slotGroups) {
-        this.slotGroups = slotGroups;
-    }
-    
 }

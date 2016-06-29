@@ -33,12 +33,6 @@
                         <h:outputText value="#{obj.cmGroup.name}" styleClass="colCenter"/>
                     </p:column>
 
-<!--                     <p:column headerText="Options" >
-                         <ui:repeat value="#{obj.options}" var="opt">
-                             <h:outputText value="#{opt.name} " />
-                             <br/>
-                         </ui:repeat>
-                    </p:column>-->
                     <f:facet name="footer">
                         <p:toolbar id="commandButtons">
                             <f:facet name="left">
@@ -98,10 +92,9 @@
                             <p:outputLabel for="slotGrp"  value="Group" />
                         </p:column>
                         <p:column>
-                            <p:selectOneMenu id="slotGrp" converter="#{slotGroupConverter}"
-                                            
+                            <p:selectOneMenu id="slotGrp" converter="#{slotGroupConverter}"                                           
                                              value="#{cmSlotManager.inputAction == 'CREATE'? cmSlotManager.inputEntity.cmGroup : cmSlotManager.selectedEntity.cmGroup}"                                            
-                                             disabled="#{cmSlotManager.inputAction == 'DELETE'}">
+                                             disabled="#{cmSlotManager.inputAction == 'DELETE'}"  valueChangeListener="#{cmSlotManager.onGroupChange}">
                                 <f:selectItem itemLabel="None"  itemValue="#{null}"/>
                                 <f:selectItems value="#{cmSlotManager.slotGroups}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
                                 

@@ -14,12 +14,14 @@
         <h:form id="form">  
             <p:panel>
                 <h:outputText value="Slot Status Report" styleClass="heading"/>
-
-  
+                
                 <p:dataTable id="statusTable" var="slot" value="#{statusReport.slots}" widgetVar="statusTableWid"
                              rowKey="#{slot.id}" > 
                     <p:column headerText="Slot" sortBy="#{slot.name}" filterBy="#{slot.name}" filterMatchMode="contains">
                         <h:outputText value="#{slot.name}" />
+                    </p:column>
+                    <p:column headerText="Group" sortBy="#{slot.cmGroup.name}" filterBy="#{slot.cmGroup.name}" filterMatchMode="contains">
+                        <h:outputText value="#{slot.cmGroup.name}" />
                     </p:column>
                     <p:columns value="#{statusReport.phases}" var="phase" columnIndexVar="colIndex" >
                         <f:facet name="header">
@@ -30,14 +32,7 @@
                                 <ui:param name="statusRec" value="#{statusReport.getStatusRec(slot, phase)}" />
                             </ui:include>
                         </div>
-                    </p:columns>
-                    
-<!--                        <p:column headerText="Sum OK"  width="5%" rendered="false">
-                            <div style="text-align: center;">
-                            <h:outputText value="#{statusReport.getSlotSumOk(slot)}" />
-                             </div>
-                        </p:column>-->
-                   
+                    </p:columns>                  
                 </p:dataTable>
 
                 <h:commandLink title="Export to Excel">  

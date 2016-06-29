@@ -47,6 +47,9 @@ import org.openepics.discs.ccdb.model.auth.User;
     @NamedQuery(name = "PhaseAssignment.findDeviceAssignments", query = "SELECT d FROM PhaseAssignment d WHERE d.slot IS null AND d.device IS NOT null"),
     @NamedQuery(name = "PhaseAssignment.findByGroup", query = "SELECT d FROM PhaseAssignment d WHERE d.phaseGroup = :group"),
     @NamedQuery(name = "PhaseAssignment.findBySlotGroup", query = "SELECT d FROM PhaseAssignment d WHERE d.slotGroup = :group"),
+    @NamedQuery(name = "PhaseAssignment.findUnassignedGroups", query = "SELECT g FROM SlotGroup g WHERE g NOT IN (SELECT a.slotGroup FROM PhaseAssignment a WHERE a.slotGroup IS NOT NULL)"),
+    @NamedQuery(name = "PhaseAssignment.findUnassignedDevices", query = "SELECT d FROM Device d WHERE d NOT IN (SELECT a.device FROM PhaseAssignment a WHERE a.device IS NOT NULL)"),
+    @NamedQuery(name = "PhaseAssignment.findUnassignedSlots", query = "SELECT s FROM Slot s WHERE s NOT IN (SELECT a.slot FROM PhaseAssignment a WHERE a.slot IS NOT NULL)"),
     @NamedQuery(name = "PhaseAssignment.findBySlot", query = "SELECT d FROM PhaseAssignment d WHERE d.slot = :slot")
 })
 public class PhaseAssignment extends ConfigurationEntity {

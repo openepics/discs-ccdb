@@ -94,7 +94,6 @@
                                              filter="true"
                                              value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputEntity.slotGroup : assignmentManager.selectedEntity.slotGroup}"                                            
                                              disabled="#{assignmentManager.inputAction == 'DELETE'}">
-                                <f:selectItem itemLabel="N/A" itemValue="#{null}" />
                                 <f:selectItems value="#{assignmentManager.slotGroups}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
                                 <p:column>
                                     <h:outputText value="#{grp.name}" />
@@ -114,7 +113,6 @@
                                              filter="true"
                                              value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputEntity.slot : assignmentManager.selectedEntity.slot}"                                            
                                              disabled="#{assignmentManager.inputAction == 'DELETE'}">
-                                <f:selectItem itemLabel="N/A" itemValue="#{null}" />
                                 <f:selectItems value="#{assignmentManager.slots}" var="b" itemLabel="#{b.name}" itemValue="#{b}" />
                                 <p:column>
                                     <h:outputText value="#{slot.name}" />
@@ -135,7 +133,6 @@
                                              filter="true"
                                              value="#{assignmentManager.inputAction == 'CREATE'? assignmentManager.inputEntity.device : assignmentManager.selectedEntity.device}"                                            
                                              disabled="#{assignmentManager.inputAction == 'DELETE'}">
-                                <f:selectItem itemLabel="N/A" itemValue="#{null}" />
                                 <f:selectItems value="#{assignmentManager.devices}" var="b" itemLabel="#{b.serialNumber}" itemValue="#{b}" />
                                 <p:column>
                                     <h:outputText value="#{dev.serialNumber}" />

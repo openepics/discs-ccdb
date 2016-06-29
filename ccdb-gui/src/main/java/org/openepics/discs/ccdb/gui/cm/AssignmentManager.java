@@ -110,9 +110,9 @@ public class AssignmentManager implements Serializable {
 
     @PostConstruct
     public void init() {
-        devices = deviceEJB.findAll();
-        slots = slotEJB.findByIsHostingSlot(true);
-        slotGroups = lcEJB.findAllSlotGroups();
+        devices = lcEJB.findUnassignedDevices();
+        slots = lcEJB.findUnassignedSlots();
+        slotGroups = lcEJB.findUnassignedGroups();
         users = authEJB.findAllUsers();
         phaseGroups = lcEJB.findAllPhaseGroups();
         initialize();

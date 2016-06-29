@@ -21,6 +21,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.openepics.discs.ccdb.core.ejb.LifecycleEJB;
@@ -102,6 +103,7 @@ public class CmSlotManager implements Serializable {
 //        inputEntity = new Slot();
 //        inputAction = InputAction.CREATE;       
 //    }
+    
     public void onEditCommand(ActionEvent event) {
         inputAction = InputAction.UPDATE;
     }
@@ -110,6 +112,17 @@ public class CmSlotManager implements Serializable {
         inputAction = InputAction.DELETE;
     }
 
+    public void onGroupChange(ValueChangeEvent event) {
+        SlotGroup oldGroup = (SlotGroup) event.getOldValue();
+        SlotGroup newGroup = (SlotGroup) event.getNewValue();
+        
+        if (newGroup == null) {
+            UiUtility.showMessage(FacesMessage.SEVERITY_WARN, "Removed from Group", "Make sure that the slots' checklist(s) are updated.");           
+        } else if (lcEJB.findAssignment(selectedEntity) != null) {
+           UiUtility.showMessage(FacesMessage.SEVERITY_WARN, "Slot already has a checklist", "Slots' checklists will be masked by the group's checklist."); 
+        }
+    }
+    
     public void saveEntity() {
         try {
             Slot slot; 
@@ -121,16 +134,9 @@ public class CmSlotManager implements Serializable {
                 slotEJB.save(selectedEntity);
                 slot = selectedEntity;
             }
-//            if (slot.getCmGroup() == null) {
-//                UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Make sure that corresponding checklist is updated", "");
-//            } else {
-//                if (lcEJB.findAssignment(slot.getCmGroup()) != null) {
-//                    
-//                }
-//            }
             resetInput();
             RequestContext.getCurrentInstance().addCallbackParam("success", true);
-            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Make sure that corresponding checklist is updated", "");
+            UiUtility.showMessage(FacesMessage.SEVERITY_INFO, "Updated", "");
         } catch (Exception e) {
             UiUtility.showMessage(FacesMessage.SEVERITY_ERROR, "Could not save ", e.getMessage());
             RequestContext.getCurrentInstance().addCallbackParam("success", false);

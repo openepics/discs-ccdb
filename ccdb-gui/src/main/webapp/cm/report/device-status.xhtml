@@ -15,8 +15,6 @@
             <p:panel>
                 <h:outputText value="Device Status Report" styleClass="heading"/>
 
-               
-
                 <p:dataTable id="statusDevTable" var="device" value="#{statusReport.devices}" 
                              rowKey="#{device.id}" > 
                     <p:column headerText="Device" sortBy="#{device.serialNumber}" filterBy="#{device.serialNumber}" filterMatchMode="contains">
@@ -31,12 +29,7 @@
                                 <ui:param name="statusRec" value="#{statusReport.getDeviceStatusRec(device, phase)}" />
                             </ui:include>
                         </div>
-                    </p:columns>
-                    <p:column headerText="Sum OK" width="5%" rendered="false">
-                        <div style="text-align: center;">
-                            <h:outputText value="#{statusReport.getDeviceSumOk(device)}" />
-                        </div>
-                    </p:column>
+                    </p:columns>              
                 </p:dataTable>
 
                 <h:commandLink title="Export to Excel">  

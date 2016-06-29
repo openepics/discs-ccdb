@@ -95,9 +95,9 @@
                     <f:facet name="header">
                         <p:row>
                             <p:column colspan="2">
-                                <h:outputText value="Add" rendered="#{statusPivotManager.inputAction == 'CREATE'}"/>
-                                <h:outputText value="Update" rendered="#{statusPivotManager.inputAction == 'UPDATE'}"/>
-                                <h:outputText value="Delete" rendered="#{statusPivotManager.inputAction == 'DELETE'}"/>
+                                <!--<h:outputText value="Add" rendered="#{statusPivotManager.inputAction == 'CREATE'}"/>-->
+                                <h:outputText value="Update Status" />
+                                <!--<h:outputText value="Delete" rendered="#{statusPivotManager.inputAction == 'DELETE'}"/>-->
                             </p:column>                
                         </p:row>
 
@@ -105,7 +105,7 @@
 
                     <p:row>
                         <p:column>
-                            <p:outputLabel value="Phases"/>                        
+                            <p:outputLabel value="Fields"/>                        
                         </p:column>
                         <p:column> 
                             <ui:repeat var="sp" value="#{statusPivotManager.selectablePhases}" >
@@ -124,10 +124,12 @@
                         <p:column> 
                             <p:selectOneMenu id="status1"  converter="#{statusOptionConverter}"                                            
                                              value="#{statusPivotManager.inputStatus}"  rendered="#{not statusPivotManager.allPhasesOptional}">                                 
-                                <f:selectItems value="#{statusPivotManager.statusOptions}" var="b" itemLabel="#{b.name}: #{b.description}" itemValue="#{b}" />                               
+                                <f:selectItems value="#{statusPivotManager.statusOptions}" var="b" itemLabel="#{b.name}: #{b.description}" itemValue="#{b}" />
+                                <p:ajax update="comment" process="status1"/>
                             </p:selectOneMenu>
                             <p:selectOneMenu id="status2"  converter="#{statusOptionConverter}"                                            
                                              value="#{statusPivotManager.inputStatus}"  rendered="#{statusPivotManager.allPhasesOptional}"> 
+                                <p:ajax update="comment" process="status2"/>
                                 <f:selectItem itemLabel="NR: Not Required" itemValue="#{null}" />
                                 <f:selectItems value="#{statusPivotManager.statusOptions}" var="b" itemLabel="#{b.name}: #{b.description}" itemValue="#{b}" />                               
                             </p:selectOneMenu>
@@ -141,7 +143,7 @@
                             <p:inputTextarea id="comment" value="#{statusPivotManager.inputComment}" 
                                              rows="5" cols="40" counter="display" maxlength="250" 
                                              counterTemplate="{0} characters remaining." 
-                                             autoResize="false" /> 
+                                             autoResize="false"  required="#{statusPivotManager.inputStatus.commentRequired}"/> 
                             <br/>
                             <h:outputText id="display" />
                         </p:column>
@@ -152,7 +154,7 @@
                                 <p:commandButton type="button" icon="ui-icon-close" value="Cancel" style="float: left;" 
                                                  onclick="PF('crudInputWid').hide()"/>
                                 <p:commandButton icon="ui-icon-disk" value="Save" style="float: right;"
-                                                 action="#{statusPivotManager.saveEntity()}"  
+                                                 action="#{statusPivotManager.saveEntity('status')}"  
                                                  oncomplete="if (!args.validationFailed &amp;&amp; args.success) PF('crudInputWid').hide()"
                                                  process="@form"  update="@form :crudForm:entityTable" rendered="#{statusPivotManager.inputAction != 'DELETE'}"/>
                                 <p:commandButton icon="ui-icon-trash" value="Confirm Delete" style="float: right;"

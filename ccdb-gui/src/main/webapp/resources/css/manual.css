@@ -4,7 +4,7 @@
     Created on : Oct 16, 2013, 3:48:17 PM
     Author     : Vasu V <vuppala@frib.msu.org>
     Description:
-        Purpose of the stylesheet follows.
+        For User Manual.
 
    TODO: move font-family to one class
 */
@@ -52,7 +52,7 @@
 
 .toc a {
     text-align: left;
-    font-size:   16pt;
+    font-size:   14pt;
     color:  deepskyblue; 
     text-decoration: none;
     display:  block;
